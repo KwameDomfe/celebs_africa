@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 
 def populate_slugs(apps, schema_editor):
-    Star = apps.get_model('celebs', 'Celebs')
+    Star = apps.get_model('celebs', 'Star')
     for star in Star.objects.all():
         base_slug = slugify(star.name) or f"star-{star.pk}"
         slug = base_slug
