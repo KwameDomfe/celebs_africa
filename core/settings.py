@@ -16,6 +16,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -81,10 +82,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Use PostgreSQL in production, SQLite for local development
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+db_info = urlparse(DATABASE_URL) if DATABASE_URL else None
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2' if db_info else 'django.db.backends.sqlite3',
+        'NAME': db_info.path[1:] if db_info else BASE_DIR / 'db.sqlite3',
+        'USER': db_info.username if db_info else '',
+        'PASSWORD': db_info.password if db_info else '',
+        'HOST': db_info.hostname if db_info else '',
+        'PORT': db_info.port if db_info else '',
+        'OPTIONS': {
+            'sslmode': 'require'} if db_info else {}
     }
 }
 
