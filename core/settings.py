@@ -80,19 +80,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# htt
+# s://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# Use PostgreSQL in production, SQLite for local development
-
+# Use PostgreSQL in production (DATABASE_URL env var), SQLite locally
 DATABASE_URL = os.environ.get('DATABASE_URL')
-
 db_info = urlparse(DATABASE_URL) if DATABASE_URL else None
 
 DATABASES = {
@@ -103,8 +95,7 @@ DATABASES = {
         'PASSWORD': db_info.password if db_info else '',
         'HOST': db_info.hostname if db_info else '',
         'PORT': db_info.port if db_info else '',
-        'OPTIONS': {
-            'sslmode': 'require'} if db_info else {}
+        'OPTIONS': {'sslmode': 'require'} if db_info else {}
     }
 }
 
