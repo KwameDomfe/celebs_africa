@@ -1,5 +1,5 @@
 asgiref==3.11.1
-Django==6.0.4
+Django==5.2.12
 gunicorn==26.0.0
 packaging==26.2
 pillow==12.2.0
