@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Delete Celeb | African Celebs{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Delete Celeb</h1>
+        <p>Are you sure you want to delete "{{ celeb.name }}"?</p>
+        <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'celebs_home' %}">Cancel</a>
+        </form>
+    </div>
+{% endblock %}

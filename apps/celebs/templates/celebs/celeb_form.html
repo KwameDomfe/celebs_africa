@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %} | African Celebs{% endblock %}
+{% block content %}
+<div>
+    <h1>{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data" autocomplete="off"
+    >{% csrf_token %}
+        <label>Name:</label><br>
+        <input type="text" name="name" value="{{ celeb.name|default:'' }}"><br>
+        <label>Category / Family / Type:</label><br>
+        <select name="type" required>
+            <option value="">-- Select type --</option>
+            {% for typ in types %}
+            <option value="{{ typ.pk }}" {% if celeb.type_id == typ.pk %}selected{% endif %}>{{ typ }}</option>
+            {% endfor %}
+        </select><br>
+        <label>Street Name:</label><br>
+        <input type="text" name="street_name" value="{{ celeb.street_name|default:'' }}"><br>
+        <label>Bio:</label><br>
+        <textarea name="bio" rows="4" style="width:100%; max-width:480px;">{{ celeb.bio|default:'' }}</textarea><br>
+        <label>Nationality:</label><br>
+        <select name="nationality">
+            <option value="">-- Select country --</option>
+            {% for country in countries %}
+            <option value="{{ country.pk }}" {% if celeb.nationality_id == country.pk %}selected{% endif %}>{{ country }}</option>
+            {% endfor %}
+        </select><br>
+        <label>Date of Birth:</label><br>
+        <input type="date" name="date_of_birth" value="{{ celeb.date_of_birth|default:'' }}"><br>
+        <label>Discovered:</label><br>
+        <input type="date" name="discovered" value="{{ celeb.discovered|default:'' }}"><br><br>
+        <label>Image:</label><br>
+        <input type="file" name="image"><br>
+        {% if celeb and celeb.image %}
+        <img src="{{ celeb.image.url }}" alt="Celeb Image" style="max-width:200px;"><br>
+        {% endif %}
+        <button type="submit">Save</button>
+        <a href="{% url 'celebs_home' %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}

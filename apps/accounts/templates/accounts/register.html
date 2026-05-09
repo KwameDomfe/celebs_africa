@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Register | African Celebs{% endblock %}
+{% block content %}
+<div>
+    <h1>Register</h1>
+    <div class="flex ggap2-00 items-center justify-center">
+        <div class="ba w-50 pa2-00 flex">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div class="ba w-50 pa2-00 h-100 flex">
+            Already have an account?
+            <a href="{% url 'login' %}" class="blue0">Login</a>
+        </div>
+    </div>
+    <div class="mt1-00">
+        <a href="{% url 'home' %}" class="blue0">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Accounts | African Celebs{% endblock %}
+{% block content %}
+<div>
+  <h1>Welcome to Accounts!</h1>
+  {% if user.is_authenticated %}
+  <p>You are logged in as {{ user.username }}.</p>
+  <p>Would you like to logout ?</p>
+  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+    Yes, <button type="submit">Logout.</button>
+  </form>
+  {% else %}
+  <a href="{% url 'login' %}"
+    class="blue0"
+  >Login</a> |
+  <a href="{% url 'register' %}"
+    class="blue0"
+  >Register</a>
+  {% endif %}
+</div>
+{% endblock %}

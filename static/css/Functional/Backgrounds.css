@@ -1,0 +1,123 @@
+/*----- BACKGROUNDS -----*/
+
+/*----- Background Size -----*/
+.cover{background-size:cover!important}
+.contain{background-size:contain!important}
+
+/*----- Background Repeat -----*/
+.bg-center,.bg-top{background-repeat:no-repeat}
+.bg-bottom,.bg-right{background-repeat:no-repeat}
+
+.bg-left{
+    background-repeat:no-repeat;
+    background-position:0}
+.bg-center{background-position:50%}
+.bg-top{background-position:top}
+.bg-right{background-position:100%}
+.bg-bottom{background-position:bottom}
+
+/*----- Background Colours -----*/
+/* Black Series */
+.bg-black{background-color:rgba(0, 0, 0, 1)}
+.bg-black-90{background-color:rgba(0,0,0,.9)}
+.bg-black-80{background-color:rgba(0,0,0,.8)}
+.bg-black-70{background-color:rgba(0,0,0,.7)}
+.bg-black-60{background-color:rgba(0,0,0,.6)}
+.bg-black-50{background-color:rgba(0,0,0,.5)}
+.bg-black-40{background-color:rgba(0,0,0,.4)}
+.bg-black-30{background-color:rgba(0,0,0,.3)}
+.bg-black-20{background-color:rgba(0,0,0,.2)}
+.bg-black-10{background-color:rgba(0,0,0,.1)}
+.bg-black-05{background-color:rgba(0,0,0,.05)}
+
+/* White Series */
+.bg-white{background-color:rgba(255, 255, 255,1)}
+.bg-white-90{background-color:rgba(255, 255, 255,.9)}
+.bg-white-80{background-color:rgba(255, 255, 255,.8)}
+.bg-white-70{background-color:rgba(255, 255, 255,.7)}
+.bg-white-60{background-color:rgba(255, 255, 255,.6)}
+.bg-white-50{background-color:rgba(255, 255, 255,.5)}
+.bg-white-40{background-color:rgba(255, 255, 255,.4)}
+.bg-white-30{background-color:rgba(255, 255, 255,.3)}
+.bg-white-20{background-color:rgba(255, 255, 255,.2)}
+.bg-white-10{background-color:rgba(255, 255, 255,.1)}
+.bg-white-05{background-color:rgba(255, 255, 255,.05)}
+
+/* Neutral Series */
+.bg-near-black{background-color:#111}
+.bg-dark-gray{background-color:#333}
+.bg-mid-gray{background-color:#555}
+.bg-gray{background-color:#777}
+.bg-silver{background-color:#999}
+.bg-light-silver{background-color:#aaa}
+.bg-moon-gray{background-color:#ccc}
+.bg-light-gray{background-color:#eee}
+.bg-near-white{background-color:#f4f4f4}
+
+.bg-transparent{background-color:transparent}
+
+.bg-greenT{background-color:rgba(0, 255, 0, 0.75)}
+.bg-green0{background-color:rgb(46, 192, 2)}
+
+.bg-gold0{background-color:rgb(253, 235, 185)}
+.bg-gold1{background-color:rgba(229, 164, 11)}
+.bg-gold2{background-color:rgb(252, 187, 9)}
+.bg-gold3{background-color: rgb(250, 223, 150);}
+.bg-gold4{background-color: rgb(250, 223, 150);}
+.bg-gold5{background-color: rgb(250, 223, 150);}
+
+.bg-red{background-color:red}
+
+/* Theme Colours */
+/* .bg-blue0-10{background-color:rgba(0, 78, 124, 0.1)}
+.bg-blue0-80{background-color:rgba(0, 78, 124, 0.8)}
+.bg-blue0{background-color:rgb(0, 78, 124)} */
+
+.bg-brown0{background-color:rgb(140, 40, 15)}
+.bg-brown1{background-color:rgb(140, 40, 15)}
+.bg-brown2{background-color:rgb(111, 18, 1)}
+
+
+
+.bg-blue1{background-color:rgb(0, 125, 197)}
+.bg-blue2{background-color:rgb(56, 182, 255)}
+.bg-blue3{background-color:rgb(124, 207, 255)}
+.bg-blue4{background-color:rgba(181, 228, 255, 0.5)}
+
+.bg-blue5{background-color:rgb(0, 78, 124)}
+.bg-blue1t1{background-color:rgba(0, 125, 197, 0.932)}
+.bg-blue1t2{background-color:rgb(0, 125, 197, 0.5)}
+.bg-blue1t3{background-color:rgb(0, 125, 197)}
+
+.bg-gradientLR{background: linear-gradient(90deg, rgb(0, 78, 124) 30%, transparent )}
+.bg-gradientRL{background: linear-gradient(270deg, rgb(0, 78, 124) 30%, transparent )}
+.bg-gradient1TB{background: linear-gradient(180deg, rgb(0, 78, 124) 15%, transparent )}
+.bg-gradient1BT{background: linear-gradient(0deg, rgb(0, 78, 124) 15%, transparent )}
+.bg-gradient2{background: linear-gradient(90deg, rgb(128, 0, 0) 30%, transparent )}
+.bg-gradient3{background: linear-gradient(90deg, rgb(1, 6, 255) 30%, transparent )}
+.bg-gradient4{background: linear-gradient(90deg, rgb(0, 255, 0) 30%, transparent )}
+.bg-gradient5{background: linear-gradient(90deg, rgb(0, 0, 0) 30%, transparent )}
+
+.bg-inherit{background-color:inherit}
+
+.striped--light-silver:nth-child(odd){background-color:#aaa}
+
+/* ----- Mobo First Media Queries -----*/       
+
+@media(min-width:512px) { 
+    
+} 
+
+@media(min-width:768px){ 
+.bg-transparent-m{background-color:transparent}
+}
+
+@media(min-width:1024px) {
+
+}
+
+@media(min-width:1280px) { 
+
+}
+
+/* --x-- Mobo First Media Queries --x--*/

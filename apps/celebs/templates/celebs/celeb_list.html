@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% block title %}Celebs | African Celebs{% endblock %}
+{% block content %}
+<div class="grid gtc12 ggap2-00">
+    <header class="gc1s12 mb2-00">
+        <h2>African Celebs</h2>
+        <p>Browse and discover celebrated personalities from across the continent.</p>
+    </header>
+
+    <aside class="gc1s4 bg-black-20" style="position:sticky; top:80px; align-self:start;">
+        <div>
+            <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <label>
+                    Search:
+                    <input type="text" name="q" value="{{ q }}" placeholder="Name or street name..." style="padding:4px 8px;">
+                </label>
+                <label>
+                    Category:
+                    <select name="category" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    Family:
+                    <select name="family" onchange="this.form.submit()">
+                        <option value="">All Families</option>
+                        {% for cat in categories %}
+                        <optgroup label="{{ cat.name }}">
+                            {% for fam in cat.families.all %}
+                            <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>
+                    Type:
+                    <select name="type" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        {% for cat in categories %}
+                        {% for fam in cat.families.all %}
+                        <optgroup label="{{ cat.name }} / {{ fam.name }}">
+                            {% for typ in fam.types.all %}
+                            <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                        {% endfor %}
+                    </select>
+                </label>
+                <button type="submit">Search</button>
+                {% if q or selected_category or selected_family or selected_type %}
+                <a href="{% url 'celebs_home' %}">Clear</a>
+                {% endif %}
+            </form>
+            <script>
+            (function(){
+                var t;
+                var inp = document.querySelector('input[name="q"]');
+                if(!inp) return;
+                if(inp.value.length > 0){
+                    inp.focus();
+                    var len = inp.value.length;
+                    inp.setSelectionRange(len, len);
+                }
+                inp.addEventListener('input', function(){
+                    clearTimeout(t);
+                    var v = inp.value;
+                    if(v.length >= 2 || v.length === 0){
+                        t = setTimeout(function(){ inp.form.submit(); }, 300);
+                    }
+                });
+            })();
+            </script>
+        </div>
+    </aside>
+
+    <main class="gc5s8">
+        {% if user.is_staff %}
+        <div style="margin-bottom:16px;">
+            <a href="{% url 'celeb_create' %}"
+                class="bg-red white-90 pa0-50 br0-25"
+            >+ Add New Celeb</a>
+        </div>
+        {% endif %}
+
+        <style>
+        .fam-tabs { display:flex; gap:0; flex-wrap:wrap; border-bottom:2px solid #333; margin-bottom:0; }
+        .fam-tab-btn {
+            background:none; border:none; cursor:pointer;
+            padding:8px 18px; font-size:1rem; color:#aaa;
+            border-bottom:2px solid transparent; margin-bottom:-2px;
+            transition:color 0.15s, border-color 0.15s;
+        }
+        .fam-tab-btn.active { color:red; border-bottom-color:#e55; }
+        .fam-tab-btn:hover { color:#fff; }
+        .fam-tab-panel { display:none; padding-top:12px; }
+        .fam-tab-panel.active { display:block; }
+        </style>
+
+        {% regroup celebs by type.family.category as category_groups %}
+        {% for group in category_groups %}
+            <div class="mb2-00">
+                <div class="mb1-00 bg-black-80 red pa0-50 f1-75">
+                    <h3>{{ group.grouper|default:"Uncategorised" }}</h3>
+                </div>
+                {% regroup group.list by type.family as family_groups %}
+                {% with cat_idx=forloop.counter %}
+                <div class="fam-tabs" id="tabs-cat-{{ cat_idx }}">
+                    {% for famgroup in family_groups %}
+                    <button class="fam-tab-btn{% if forloop.first %} active{% endif %}"
+                        data-tab="fam-{{ cat_idx }}-{{ forloop.counter }}">
+                        {{ famgroup.grouper.name|default:"—" }}
+                    </button>
+                    {% endfor %}
+                </div>
+                {% for famgroup in family_groups %}
+                <div class="fam-tab-panel{% if forloop.first %} active{% endif %}"
+                    id="fam-{{ cat_idx }}-{{ forloop.counter }}">
+                    {% regroup famgroup.list by type as type_groups %}
+                    {% for typegroup in type_groups %}
+                        <h5 class="gray f1-25 mb0-25" style="padding-left:0.5rem; margin-top:12px;">
+                            {{ typegroup.grouper.name|default:"—" }}
+                        </h5>
+                        <ul style="list-style:none; padding:0; margin:0 0 8px 0;">
+                        {% for celeb in typegroup.list %}
+                        <li class="mb1-00">
+                            <div class="flex bg-black-80 white-90 pa1-00 br0-25" style="gap:16px; align-items:center;">
+                                <div style="flex-shrink:0;">
+                                    {% if celeb.image %}
+                                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
+                                        class="br0-25"
+                                        style="width:80px; height:80px; object-fit:cover;">
+                                    {% else %}
+                                    <div style="width:80px; height:80px; background:#444; border-radius:4px;"></div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex flex-column w-100">
+                                    <div class="flex justify-between items-center w-100">
+                                        <a href="{{ celeb.get_absolute_url }}" class="white-90" style="font-size:1.2rem; font-weight:bold;">
+                                            {{ celeb.name }}
+                                        </a>
+                                        {% if celeb.nationality %}
+                                        <span title="{{ celeb.nationality.name }}" style="font-size:1.5rem;">{{ celeb.nationality.flag }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <p style="margin:4px 0 0 0;">
+                                        {{ celeb.street_name }}
+                                        {% if celeb.date_of_birth %}&nbsp;·&nbsp;<span style="color:#aaa;">{{ celeb.date_of_birth|date:"j M" }}</span>{% endif %}
+                                    </p>
+                                    <p style="margin:6px 0 0 0;">
+                                        {% if celeb.avg_rating %}
+                                        <span style="color:#f5a623; font-weight:bold;">★ {{ celeb.avg_rating|floatformat:1 }}</span>
+                                        {% else %}
+                                        <span style="color:#666;">No ratings yet</span>
+                                        {% endif %}
+                                        &nbsp;·&nbsp;
+                                        <span style="color:#e55; font-weight:bold;">{{ celeb.follower_count }}</span>
+                                        follower{{ celeb.follower_count|pluralize }}
+                                        {% if user.is_staff %}
+                                        &nbsp;·&nbsp;
+                                        <a href="{% url 'celeb_update' celeb.slug %}" style="color:#aaa;">Edit</a>
+                                        &nbsp;
+                                        <a href="{% url 'celeb_delete' celeb.pk %}" style="color:#e55;">Delete</a>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                {% endwith %}
+            </div>
+        {% empty %}
+            <p>No celebs found.</p>
+        {% endfor %}
+
+        <script>
+        (function(){
+            document.querySelectorAll('.fam-tabs').forEach(function(tabBar){
+                tabBar.querySelectorAll('.fam-tab-btn').forEach(function(btn){
+                    btn.addEventListener('click', function(){
+                        var targetId = btn.getAttribute('data-tab');
+                        tabBar.querySelectorAll('.fam-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+                        btn.classList.add('active');
+                        var container = tabBar.parentElement;
+                        container.querySelectorAll('.fam-tab-panel').forEach(function(panel){
+                            panel.classList.toggle('active', panel.id === targetId);
+                        });
+                    });
+                });
+            });
+        })();
+        </script>
+    </main>
+</div>
+{% endblock %}

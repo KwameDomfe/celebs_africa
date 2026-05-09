@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Login | African Celebs{% endblock %}
+{% block content %}
+<div class="ba pa2-00 mv4-00">
+    <header>
+        <h1>Login</h1>
+    </header>
+    <div class="flex justify-center items-center ggap2-00 vh-50"
+    >
+        <div class="ba w-50 pa2-00 h-100 flex">
+            <form method="post"
+                class=""
+            >
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div class="ba w-50 pa2-00 h-100 flex">
+            Don't have an account? 
+            <a href="{% url 'register' %}"
+                class="blue0"
+            >
+                 Register
+            </a>
+        </div>
+    </div>
+    <footer class="mt1-00">
+        <a href="{% url 'home' %}"
+            class="blue0"
+        >
+            Back to Home
+        </a>
+    </footer>
+</div>
+
+{% endblock %}

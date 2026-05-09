@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %}Home | African Celebs{% endblock %}
+{% block content %}
+<div class="grid gtc12 ggap2-00">
+    <header class="gc1s12 mb2-00">
+        <h2>Celebs of the African Continent</h2>
+        <p>Discover and explore celebrated celebs from across Africa.</p>
+    </header>
+
+    <aside class="gc1s4 pa1-00 bg-black-80 vh-100 sticky" 
+        style="top:80px; align-self:start;"
+    >
+        <div>
+            <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <label>
+                Search:
+                <input type="text" name="q" value="{{ q }}" placeholder="Name or street name..." style="padding:4px 8px;">
+                </label>
+                <label>
+                Category:
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                </label>
+                <label>
+                Family:
+                <select name="family" onchange="this.form.submit()">
+                    <option value="">All Families</option>
+                    {% for cat in categories %}
+                    <optgroup label="{{ cat.name }}">
+                        {% for fam in cat.families.all %}
+                        <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    {% endfor %}
+                </select>
+                </label>
+                <label>
+                Type:
+                <select name="type" onchange="this.form.submit()">
+                    <option value="">All Types</option>
+                    {% for cat in categories %}
+                    {% for fam in cat.families.all %}
+                    <optgroup label="{{ cat.name }} / {{ fam.name }}">
+                        {% for typ in fam.types.all %}
+                        <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    {% endfor %}
+                    {% endfor %}
+                </select>
+                </label>
+                <button type="submit">Search</button>
+                {% if q or selected_category or selected_family or selected_type %}
+                    <a href="{% url 'home' %}">Clear</a>
+                {% endif %}
+            </form>
+            <script>
+            (function(){
+                var t;
+                var inp = document.querySelector('input[name="q"]');
+                if(!inp) return;
+                // Restore focus and cursor position after page reload
+                if(inp.value.length > 0){
+                inp.focus();
+                var len = inp.value.length;
+                inp.setSelectionRange(len, len);
+                }
+                inp.addEventListener('input', function(){
+                clearTimeout(t);
+                var v = inp.value;
+                if(v.length >= 2 || v.length === 0){
+                    t = setTimeout(function(){ inp.form.submit(); }, 300);
+                }
+                });
+            })();
+            </script>
+        </div>
+    </aside>
+    <main class="gc5s8">
+        <div>
+            <h3>All Celebs</h3>
+            <p>Browse the complete list of celebs from our database.</p>
+        {% regroup celebs by type.family.category as category_groups %}
+        {% for group in category_groups %}
+            <div class="mb1-00 bg-black-80 red pa0-50 f1-75">
+                <h3>
+                    {{ group.grouper|default:"Uncategorised" }}
+                </h3>
+            </div>
+            <ul>
+                {% for celeb in group.list %}
+                    <li class="mb2-00">
+                        <div class="flex bg-black-80 white-90 pa1-00">
+                            <div>
+                                {% if celeb.image %}
+                                <img src="{{ celeb.image.url }}"
+                                    alt="Celeb Image"
+                                    class="w20-00 h16-00 br0-25 cover"
+                                    style="vertical-align:middle"
+                                >
+                                {% endif %}
+                            </div>
+                            <div class="flex flex-column w-100 h-100 ml1-00">
+                                <div class="flex justify-between items-center w-100">
+                                    <h2 class="mb0-00">
+                                        {{ celeb.name }}
+                                    
+                                    </h2>
+                                    {% if celeb.nationality %} 
+                                    <p title="{{ celeb.nationality.name }}"
+                                        class="f2-00 mb0-00"
+                                    >
+                                        {{ celeb.nationality.flag }}
+                                    </p>
+                                    {% endif %} 
+                                </div>
+                                <p class="">|| {{ celeb.street_name }} ||{% if celeb.age %} <span style="color:#aaa;">{{ celeb.age }} yrs</span>{% endif %} ({% if celeb.avg_rating %}
+                                    <span class="b" >★ {{ celeb.avg_rating|floatformat:1 }}</span>,
+                                    {% endif %}
+                                <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
+                                <div class="flex flex-column justify-between">
+                                    {% if celeb.bio %}
+                                        <p class="mb1-00 lh-copy tj"
+                                        >
+                                            {{ celeb.bio|truncatewords:30 }}
+                                        </p>
+                                    {% endif %} 
+                                    <div>
+                                        <a href="{{ celeb.get_absolute_url }}" 
+                                            class="ba br0-25 pa0-25">
+                                            View Details
+                                        </a> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% empty %}
+            <p>No celebs found.</p>
+        {% endfor %}
+       
+    </main>
+</div>
+{% endblock %}

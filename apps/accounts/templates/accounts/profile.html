@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Profile | African Celebs{% endblock %}
+{% block content %}
+<h1>{{ user.get_full_name|default:user.username }}</h1>
+
+{% if user.profile.avatar %}
+  <img src="{{ user.profile.avatar.url }}" alt="Avatar" style="width:100px; height:100px; object-fit:cover; border-radius:50%; margin-bottom:12px;">
+{% endif %}
+
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email|default:"—" }}</p>
+{% if user.profile.bio %}<p><strong>Bio:</strong> {{ user.profile.bio }}</p>{% endif %}
+
+<p>
+  <a href="{% url 'profile_edit' %}" class="blue0">Edit Profile</a> &nbsp;|&nbsp;
+  <a href="{% url 'password_change' %}" class="blue0">Change Password</a>
+</p>
+
+<h2>Following ({{ following|length }})</h2>
+{% if following %}
+  <ul>
+    {% for f in following %}
+      <li><a href="{{ f.celeb.get_absolute_url }}" class="blue0">{{ f.celeb.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You're not following any celebs yet.</p>
+{% endif %}
+
+<hr>
+<h2>My Likes</h2>
+{% if likes %}
+  <ul>
+    {% for like in likes %}
+      <li><a href="{{ like.celeb.get_absolute_url }}" class="blue0">{{ like.celeb.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You haven't liked any celebs yet.</p>
+{% endif %}
+
+<h2>My Comments</h2>
+{% if comments %}
+  <ul>
+    {% for comment in comments %}
+      <li>
+        <a href="{{ comment.celeb.get_absolute_url }}" class="blue0">{{ comment.celeb.name }}</a>:
+        "{{ comment.text }}"
+        <small style="color:#888;">{{ comment.created_at|date:"d M Y" }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You haven't commented on any celebs yet.</p>
+{% endif %}
+
+<p><a href="{% url 'account_home' %}" class="blue0">Back to Account</a></p>
+{% endblock %}

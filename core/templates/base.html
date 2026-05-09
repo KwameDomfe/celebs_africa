@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Celebs Africa {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gdb_normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <style>
+    .user-dropdown { position: relative; }
+    .user-dropdown__trigger {
+        background: none; border: none; cursor: pointer;
+        color: inherit; font: inherit; padding: 4px 8px;
+        display: flex; align-items: center; gap: 4px;
+        border-radius: 4px;
+    }
+    .user-dropdown__trigger:hover { background: rgba(255,255,255,0.1); }
+    .user-dropdown__menu {
+        display: none;
+        position: fixed;
+        background: #333; border-radius: 6px;
+        min-width: 180px; z-index: 99999;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        padding: 6px 0;
+        flex-direction: column;
+    }
+    .user-dropdown__menu.open { display: flex; }
+    .user-dropdown__menu a,
+    .user-dropdown__menu button {
+        display: block; width: 100%; text-align: left;
+        padding: 8px 16px; color: #fff; text-decoration: none;
+        background: none; border: none; cursor: pointer;
+        font: inherit; box-sizing: border-box;
+    }
+    .user-dropdown__menu a:hover,
+    .user-dropdown__menu button:hover { background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="vh-100 flex flex-column justify-between">
+    <header class="bg-gray text-white db w-100 fixed top-0 left-0 z-999" style="height:64px; overflow:visible;">
+        <nav class="flex justify-between items-center container container90 bg-gray text-white pv1-00 r1-00 m1-00 h-100">
+            <div class="flex items-center justify-center"><a href="/">CelebsAfrica</a></div>
+            <div class="menu-icon" id="menuToggle" tabindex="0" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="flex ggap1-00 nav-items" id="navItems">
+                <div class="flex items-center justify-center"><a href="/celebs/">Celebs</a></div>
+                <div class="flex items-center justify-center"><a href="{% url 'top_celebs' %}">⭐ Top</a></div>
+                {% if user.is_authenticated %}
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-dropdown__trigger" id="userDropdownBtn" aria-haspopup="true" aria-expanded="false" type="button">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="avatar" style="width:28px; height:28px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:4px;">
+                            {% endif %}
+                            {{ user.username }} ▾
+                        </button>
+                        <div class="user-dropdown__menu" id="userDropdownMenu" role="menu">
+                            <a href="{% url 'profile' %}" role="menuitem">My Profile</a>
+                            <a href="{% url 'profile_edit' %}" role="menuitem">Edit Profile</a>
+                            <a href="{% url 'password_change' %}" role="menuitem">Change Password</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'celeb_create' %}" role="menuitem">Add Celeb</a>
+                            {% endif %}
+                            <hr style="margin:4px 0; border-color:rgba(255,255,255,0.2);">
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" role="menuitem">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div><a href="{% url 'login' %}">Login</a></div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <main class="flex-auto overflow-auto" style="min-height:0; margin-top:80px; margin-bottom:64px;">
+        <div class="container container90 pb4-00" style="overflow:visible;">
+            {% if messages %}
+            <div style="margin-bottom:16px;">
+                {% for message in messages %}
+                <div style="padding:10px 16px; border-radius:4px; margin-bottom:6px;
+                    background:{% if message.tags == 'error' %}#fdd{% elif message.tags == 'success' %}#dfd{% else %}#eef{% endif %};
+                    border:1px solid {% if message.tags == 'error' %}#e88{% elif message.tags == 'success' %}#8c8{% else %}#aac{% endif %};">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+    <footer class="bg-gray white db w-100 fixed bottom-0 left-0 z-999" style="height:64px;">
+        <p class="mv0 flex items-center justify-center h-100">
+            &copy; {{ year|default:2026 }} CelebsAfrica . All rights reserved.
+        </p>
+    </footer>
+    <script>
+    // Hamburger menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navItems = document.getElementById('navItems');
+    if (menuToggle && navItems) {
+        menuToggle.addEventListener('click', function() {
+            navItems.classList.toggle('open');
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !expanded);
+        });
+        menuToggle.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                navItems.classList.toggle('open');
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', !expanded);
+            }
+        });
+    }
+    // User dropdown toggle
+    const dropdownBtn = document.getElementById('userDropdownBtn');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    if (dropdownBtn && dropdownMenu) {
+        function positionMenu() {
+            const rect = dropdownBtn.getBoundingClientRect();
+            dropdownMenu.style.top = (rect.bottom + 6) + 'px';
+            dropdownMenu.style.right = (window.innerWidth - rect.right) + 'px';
+        }
+        dropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const open = dropdownMenu.classList.toggle('open');
+            if (open) positionMenu();
+            dropdownBtn.setAttribute('aria-expanded', open);
+        });
+        document.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            dropdownBtn.setAttribute('aria-expanded', false);
+        });
+        dropdownMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+    }
+    </script>
+</body>
+</html>

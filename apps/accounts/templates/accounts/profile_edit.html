@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile | African Celebs{% endblock %}
+{% block content %}
+<h1>Edit Profile</h1>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <p>
+    <label>First Name:<br>
+      <input type="text" name="first_name" value="{{ u.first_name }}">
+    </label>
+  </p>
+  <p>
+    <label>Last Name:<br>
+      <input type="text" name="last_name" value="{{ u.last_name }}">
+    </label>
+  </p>
+  <p>
+    <label>Email:<br>
+      <input type="email" name="email" value="{{ u.email }}">
+    </label>
+  </p>
+  <p>
+    <label>Bio:<br>
+      <textarea name="bio" rows="4" cols="40">{{ profile.bio }}</textarea>
+    </label>
+  </p>
+  <p>
+    <label>Avatar:<br>
+      {% if profile.avatar %}
+        <img src="{{ profile.avatar.url }}" alt="Current avatar" style="width:64px; height:64px; object-fit:cover; border-radius:50%; display:block; margin-bottom:8px;">
+      {% endif %}
+      <input type="file" name="avatar" accept="image/*">
+    </label>
+  </p>
+  <button type="submit">Save Changes</button>
+  <a href="{% url 'profile' %}" class="blue0" style="margin-left:12px;">Cancel</a>
+</form>
+{% endblock %}
