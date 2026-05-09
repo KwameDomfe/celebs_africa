@@ -10,17 +10,7 @@
 	/* --x-- SYMBOLS / OTHER FONTS --x-- */
    
 	/* ----- CUSTOM COMPONENT STYLES  ----- */
-	 /* @import url("../CSS/Components/GDT_avatars. css");
-	@import url("../CSS/Components/GDT_thumbnails.css");
-    @import url("../CSS/Components/GDT_buttons.css");
-	@import url("./CSS/Components/GDT_dropdown.css");
-	@import url("../CSS/Components/GDT_cards.css");
-	@import url("../CSS/Components/GDT_badges.css");
-	@import url("../CSS/Components/GDT_tabs.css");
-	@import url("../CSS/Components/GDT_lists.css");
-	@import url("../CSS/Components/GDT_cascade_menu.css");
-	@import url("../CSS/Components/GDT_forms.css"); 
-    @import url("../CSS/Components/GDT_banners.css");                   
+	/* GDT_avatars.css — disabled, file does not exist */
 	/* --x-- CUSTOM COMPONENT STYLES  --x-- */
 
     /* ----- UTILITY STYLES ----- */
@@ -99,11 +89,9 @@
 /*.mainNav__Logo{
      background: 
     rgb(41, 41, 41) 
-    url(../Reosurces/Images/Logo_Images/GDB_Logo--large.png) 
     no-repeat center right;
-    background-size: cover; */
-    /* text-indent: -90rem; 
-
+    background-size: cover;
+    text-indent: -90rem; 
 }*/
 
 /*--x-- Main Headear Styles --x--*/
@@ -328,71 +316,71 @@
 
 .o__banner__homepage
 {
-    /* background-image: url(../media/images/Landscape_Images/main_banner_2.jpg); */
+    /* background-image: none; */
     background-position: top right;
 	
 }
 
 
 .o__banner__homepage--countdown{
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_03.png); */
+    /* background-image: none; */
     background-position: center center;
 }
 .o__banner__homepage--core_capabilities{
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_03.png); */
+    /* background-image: none; */
     background-position: center center;
 }
 
 .o__banner__homepage--operating_models{
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_04.png); */
+    /* background-image: none; */
     background-position: center right;
 }
 
 .o__banner__homepage--talent_transformations{
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_02.png); */
+    /* background-image: none; */
     background-position: center right;
 }
 .o__banner--aboutUs
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_03.png); */
+    /* background-image: none; */
     background-position: center right;
 	
 }
 .o__banner--services
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_02.png); */
+    /* background-image: none; */
     background-position: center right;
 	
 }
 .o__banner--products
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_03.png); */
+    /* background-image: none; */
     background-position: center left;
 	
 }
 
 .o__banner--projects
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_04.png); */
+    /* background-image: none; */
     background-position: center left;
 	
 }
 .o__banner--contactUs
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_05.png); */
+    /* background-image: none; */
     background-position: center left;
 	
 }
 
 .o__banner--careers
 {
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_05.png); */
+    /* background-image: none; */
     background-position: center left;
 	
 }
 
 .o-banner--aboutUs{
-    /* background-image: url(../media/images/Autodesk/Infotainment_2016_05.png); */
+    /* background-image: none; */
     background-position: center left;
 }
 /*.mainFooter .footerNav {
