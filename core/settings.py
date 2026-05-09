@@ -136,22 +136,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files — local dev uses local filesystem, production uses DigitalOcean Spaces
+# Media files — always define MEDIA_ROOT for local dev fallback
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+# DigitalOcean Spaces (S3-compatible) for production media storage
 AWS_ACCESS_KEY_ID = os.environ.get('SPACES_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('SPACES_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('SPACES_BUCKET_NAME', '')
-AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT_URL', '')  # e.g. https://nyc3.digitaloceanspaces.com
-AWS_S3_CUSTOM_DOMAIN = os.environ.get('SPACES_CUSTOM_DOMAIN', '')  # e.g. your-bucket.nyc3.digitaloceanspaces.com
+AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT_URL', '')  # e.g. https://fra1.digitaloceanspaces.com
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 if AWS_ACCESS_KEY_ID and AWS_STORAGE_BUCKET_NAME:
     # Production: store and serve media via DigitalOcean Spaces
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+    STORAGES = {
+        'default': {'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage'},
+        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+    }
 else:
-    # Local development: serve media from local filesystem
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+    # Local development: local filesystem + whitenoise for static
+    STORAGES = {
+        'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+        'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+    }

@@ -77,7 +77,7 @@ class Celeb(models.Model):
 	rating = models.FloatField(default=0.0, help_text="Legacy field; rating now computed from reviews")
 	discovered = models.DateField(null=True, blank=True)
 	date_of_birth = models.DateField(null=True, blank=True)
-	image = models.ImageField(upload_to='media/celebs/', null=True, blank=True)
+	image = models.ImageField(upload_to='celebs/', null=True, blank=True)
 
 	@property
 	def age(self):
