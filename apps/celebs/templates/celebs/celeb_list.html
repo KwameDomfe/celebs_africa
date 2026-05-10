@@ -1,31 +1,113 @@
 {% extends 'base.html' %}
-{% block title %}Celebs | African Celebs{% endblock %}
+{% block title %}Celebs | CelebsAfrica{% endblock %}
 {% block content %}
+<style>
+@media (max-width: 767px) {
+    .cl-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
+    .cl-main  { grid-column: 1 / -1 !important; }
+    .cl-filters { display: none; }
+    .cl-filters.open { display: block; }
+}
+@media (min-width: 768px) {
+    .cl-filter-toggle { display: none !important; }
+    .cl-filters { display: block !important; }
+}
+.cl-filters form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.cl-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.cl-filter-field:last-of-type { border-bottom: none; }
+.cl-filter-field label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #aaa;
+    font-weight: 600;
+}
+.cl-filter-field input,
+.cl-filter-field select {
+    width: 100%;
+    padding: 8px 10px;
+    background: #1a1a1a;
+    color: #f0f0f0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.cl-filter-field input:focus,
+.cl-filter-field select:focus {
+    outline: none;
+    border-color: #e55;
+}
+.cl-filter-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+}
+.cl-filter-actions button,
+.cl-filter-actions a {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+}
+.cl-filter-actions button {
+    background: #e55;
+    color: #fff;
+    font-weight: 600;
+}
+.cl-filter-actions button:hover { background: #c33; }
+.cl-filter-actions a {
+    background: #444;
+    color: #ccc;
+}
+.cl-filter-actions a:hover { background: #555; color: #fff; }
+</style>
 <div class="grid gtc12 ggap2-00">
-    <header class="gc1s12 mb2-00">
-        <h2>African Celebs</h2>
-        <p>Browse and discover celebrated personalities from across the continent.</p>
+    <header class="gc1s12 tc bg-black-80 white-90 pa2-00">
+        <h2 class="f4-00">African Celebs</h2>
+        <p class="f2-50">Browse and discover celebrated personalities from across the continent.</p>
     </header>
 
-    <aside class="gc1s4 bg-black-20" style="position:sticky; top:80px; align-self:start;">
-        <div>
-            <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                <label>
-                    Search:
-                    <input type="text" name="q" value="{{ q }}" placeholder="Name or street name..." style="padding:4px 8px;">
-                </label>
-                <label>
-                    Category:
-                    <select name="category" onchange="this.form.submit()">
+    <aside class="gc1s4 pa1-00 bg-black-80 sticky cl-aside" style="top:80px; align-self:start;">
+        <button class="cl-filter-toggle"
+            style="width:100%; padding:8px 12px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; text-align:left; margin-bottom:8px;"
+            onclick="var f=document.getElementById('cl-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';">
+            Filters ▼
+        </button>
+        <div id="cl-filters" class="cl-filters w-100">
+            <form method="get" class="w-100">
+                <div class="cl-filter-field">
+                    <label for="cl-q">Search</label>
+                    <input id="cl-q" type="text" name="q" value="{{ q }}" placeholder="Name or street name...">
+                </div>
+                <div class="cl-filter-field">
+                    <label for="cl-cat">Category</label>
+                    <select id="cl-cat" name="category" onchange="this.form.submit()">
                         <option value="">All Categories</option>
                         {% for cat in categories %}
                         <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
                         {% endfor %}
                     </select>
-                </label>
-                <label>
-                    Family:
-                    <select name="family" onchange="this.form.submit()">
+                </div>
+                <div class="cl-filter-field">
+                    <label for="cl-fam">Family</label>
+                    <select id="cl-fam" name="family" onchange="this.form.submit()">
                         <option value="">All Families</option>
                         {% for cat in categories %}
                         <optgroup label="{{ cat.name }}">
@@ -35,10 +117,10 @@
                         </optgroup>
                         {% endfor %}
                     </select>
-                </label>
-                <label>
-                    Type:
-                    <select name="type" onchange="this.form.submit()">
+                </div>
+                <div class="cl-filter-field">
+                    <label for="cl-type">Type</label>
+                    <select id="cl-type" name="type" onchange="this.form.submit()">
                         <option value="">All Types</option>
                         {% for cat in categories %}
                         {% for fam in cat.families.all %}
@@ -50,26 +132,23 @@
                         {% endfor %}
                         {% endfor %}
                     </select>
-                </label>
-                <button type="submit">Search</button>
-                {% if q or selected_category or selected_family or selected_type %}
-                <a href="{% url 'celebs_home' %}">Clear</a>
-                {% endif %}
+                </div>
+                <div class="cl-filter-actions">
+                    <button type="submit">Search</button>
+                    {% if q or selected_category or selected_family or selected_type %}
+                    <a href="{% url 'celebs_home' %}">Clear</a>
+                    {% endif %}
+                </div>
             </form>
             <script>
             (function(){
                 var t;
                 var inp = document.querySelector('input[name="q"]');
                 if(!inp) return;
-                if(inp.value.length > 0){
-                    inp.focus();
-                    var len = inp.value.length;
-                    inp.setSelectionRange(len, len);
-                }
+                if(inp.value.length > 0){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
                 inp.addEventListener('input', function(){
                     clearTimeout(t);
-                    var v = inp.value;
-                    if(v.length >= 2 || v.length === 0){
+                    if(inp.value.length >= 2 || inp.value.length === 0){
                         t = setTimeout(function(){ inp.form.submit(); }, 300);
                     }
                 });
@@ -78,7 +157,7 @@
         </div>
     </aside>
 
-    <main class="gc5s8">
+    <main class="gc5s8 cl-main">
         {% if user.is_staff %}
         <div style="margin-bottom:16px;">
             <a href="{% url 'celeb_create' %}"

@@ -1,62 +1,147 @@
 {% extends 'base.html' %}
 {% block title %}Home | African Celebs{% endblock %}
 {% block content %}
+<style>
+@media (max-width: 767px) {
+    .home-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
+    .home-main  { grid-column: 1 / -1 !important; }
+    .home-filters { display: none; }
+    .home-filters.open { display: block; }
+}
+@media (min-width: 768px) {
+    .home-filter-toggle { display: none !important; }
+    .home-filters { display: block !important; }
+}
+.home-filters form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.home-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.home-filter-field:last-of-type { border-bottom: none; }
+.home-filter-field label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #aaa;
+    font-weight: 600;
+}
+.home-filter-field input,
+.home-filter-field select {
+    width: 100%;
+    padding: 8px 10px;
+    background: #1a1a1a;
+    color: #f0f0f0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.home-filter-field input:focus,
+.home-filter-field select:focus {
+    outline: none;
+    border-color: #e55;
+}
+.home-filter-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+}
+.home-filter-actions button,
+.home-filter-actions a {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+}
+.home-filter-actions button {
+    background: #e55;
+    color: #fff;
+    font-weight: 600;
+}
+.home-filter-actions button:hover { background: #c33; }
+.home-filter-actions a {
+    background: #444;
+    color: #ccc;
+}
+.home-filter-actions a:hover { background: #555; color: #fff; }
+</style>
 <div class="grid gtc12 ggap2-00">
     <header class="gc1s12 tc bg-black-80 white-90 pa2-00">
-        <h2 class="f4-00">Celebrities of <br>African Descent</h2>
-        <p class="f2-50">Discover and explore celebrated celebs from across Africa.</p>
+        <h2 class="f4-00">Celebrities <br>of Africa</h2>
+        <p class="f2-50">Discover and explore celebrated celebrities from across Africa.</p>
     </header>
 
-    <aside class="gc1s4 pa1-00 bg-black-80 vh-100 sticky" 
+    <aside class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
         style="top:80px; align-self:start;"
     >
-        <div>
-            <form method="get" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                <label>
-                Search:
-                <input type="text" name="q" value="{{ q }}" placeholder="Name or street name..." style="padding:4px 8px;">
-                </label>
-                <label>
-                Category:
-                <select name="category" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                </select>
-                </label>
-                <label>
-                Family:
-                <select name="family" onchange="this.form.submit()">
-                    <option value="">All Families</option>
-                    {% for cat in categories %}
-                    <optgroup label="{{ cat.name }}">
+        <button class="home-filter-toggle" 
+            style="width:100%; padding:8px 12px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; text-align:left; margin-bottom:8px;"
+            onclick="var f=document.getElementById('home-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';"
+        >
+            Filters ▼
+        </button>
+        <div id="home-filters" class="home-filters w-100">
+            <form method="get" class="w-100">
+                <div class="home-filter-field">
+                    <label for="home-q">Search</label>
+                    <input id="home-q" type="text" name="q" value="{{ q }}" placeholder="Name or Street Name...">
+                </div>
+                <div class="home-filter-field">
+                    <label for="home-cat">Category</label>
+                    <select id="home-cat" name="category" onchange="this.form.submit()">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="home-filter-field">
+                    <label for="home-fam">Family</label>
+                    <select id="home-fam" name="family" onchange="this.form.submit()">
+                        <option value="">All Families</option>
+                        {% for cat in categories %}
+                        <optgroup label="{{ cat.name }}">
+                            {% for fam in cat.families.all %}
+                            <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="home-filter-field">
+                    <label for="home-type">Type</label>
+                    <select id="home-type" name="type" onchange="this.form.submit()">
+                        <option value="">All Types</option>
+                        {% for cat in categories %}
                         {% for fam in cat.families.all %}
-                        <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
+                        <optgroup label="{{ cat.name }} / {{ fam.name }}">
+                            {% for typ in fam.types.all %}
+                            <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
+                            {% endfor %}
+                        </optgroup>
                         {% endfor %}
-                    </optgroup>
-                    {% endfor %}
-                </select>
-                </label>
-                <label>
-                Type:
-                <select name="type" onchange="this.form.submit()">
-                    <option value="">All Types</option>
-                    {% for cat in categories %}
-                    {% for fam in cat.families.all %}
-                    <optgroup label="{{ cat.name }} / {{ fam.name }}">
-                        {% for typ in fam.types.all %}
-                        <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
                         {% endfor %}
-                    </optgroup>
-                    {% endfor %}
-                    {% endfor %}
-                </select>
-                </label>
-                <button type="submit">Search</button>
-                {% if q or selected_category or selected_family or selected_type %}
+                    </select>
+                </div>
+                <div class="home-filter-actions">
+                    <button type="submit">Search</button>
+                    {% if q or selected_category or selected_family or selected_type %}
                     <a href="{% url 'home' %}">Clear</a>
-                {% endif %}
+                    {% endif %}
+                </div>
             </form>
             <script>
             (function(){
@@ -80,10 +165,12 @@
             </script>
         </div>
     </aside>
-    <main class="gc5s8">
-        <div>
+    <main class="gc5s8 home-main">
+        <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00">
             <h3>All Celebs</h3>
             <p>Browse the complete list of celebs from our database.</p>
+        </div>
+        <div>
         {% regroup celebs by type.family.category as category_groups %}
         {% for group in category_groups %}
             <div class="mb1-00 bg-black-80 red pa0-50 f1-75">
@@ -94,7 +181,7 @@
             <ul>
                 {% for celeb in group.list %}
                     <li class="mb2-00">
-                        <div class="flex bg-black-80 white-90 pa1-00">
+                        <div class="flex flex-column flex-row-m bg-black-80 white-90 pa1-00">
                             <div>
                                 {% if celeb.image %}
                                 <img src="{{ celeb.image.url }}"

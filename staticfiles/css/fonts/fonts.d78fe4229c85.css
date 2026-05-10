@@ -1,0 +1,26 @@
+
+/* font-family I*/
+@font-face{
+    font-family: 'Courier New', Courier, monospace;
+    src: url() format();
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* font-family II*/
+@font-face{
+    font-family: 'Courier New', Courier, monospace;
+    src: url() format()
+}
+
+/* font-family III*/
+@font-face{
+    font-family: 'Courier New', Courier, monospace;
+    src: url() format()
+}
+
+/* font-family IV*/
+@font-face{
+    font-family: 'Courier New', Courier, monospace;
+    src: url() format()
+}

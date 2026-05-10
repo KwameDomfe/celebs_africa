@@ -1,0 +1,162 @@
+/* ---XXXXXXXXXX--- GEOLO GLOBAL STYLES ---XXXXXXXXX--- */
+
+/* -----01 Universal Selectors ----- */
+*,::after,::before{
+    margin:  0px;
+    padding: 0px;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+/* -----01 Tags ----- */
+html{
+    font-family:sans-serif; 
+    font-family:roboto,"Segoe UI","Helvetica Neue","Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; 
+    font-size:16px;
+
+}
+
+body{
+    width: 100vw;
+    max-width: 100%;
+    min-width:384px;
+    min-height: 100vh;
+    
+}
+
+article,aside,figcaption,figure,footer,header,hgroup,main,nav,section{
+    display:block
+}
+
+h1{
+    margin-bottom:1rem;
+}
+
+h2{
+    margin-bottom:0.75rem;
+}
+
+h3{
+    margin-bottom:0.5rem;
+}
+
+p{
+    margin-bottom:1rem;
+}
+
+a  {
+     margin:0;
+     text-decoration: none;
+     color:rgb(255, 255, 255);
+}
+
+/* hgroup .hgroup-1{
+
+} */
+
+ul, ol {
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 4px;
+}
+ 
+img{
+    width: 100%;
+    display: block;
+}
+
+.active {
+    border-style: none;
+    /* background-color: gold; */
+    /* transform: scale(0.9); */
+    
+}
+
+.toggle{
+    display: none;
+}
+
+
+/* a:visited{
+    color: rgba(143, 1, 1, 0.938);
+} */
+
+a:hover{
+    opacity: 0.75;
+    color: gold;
+    font-weight: 600;
+}
+
+/* --x-- 01 TAGS --x-- */
+
+/* ----- 02 UTILITY CLASSES ----- */
+.container{
+    margin: 0 auto;  
+    max-width: 1280px;  
+    overflow: auto;
+}
+.container50{
+    width: 50%;
+    max-width: 1280px;  
+}
+.container75{
+    width: 75%;
+    max-width: 1280px;  
+}
+.container80{
+    width: 80%;
+    max-width: 1280px;  
+}
+.container90{
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* ----- SPACING ----- */
+
+/* --- Margins --- */
+
+/* --xxxxxxxxxx-- GLOBAL STYLES --xxxxxxxxxx-- */
+
+/* ----- Mobo First Media Queries -----*/       
+
+@media(min-width:512px) { 
+.container90-s{
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1024px;  
+    overflow: auto;     
+}
+    
+} 
+
+@media(min-width:768px){ 
+.container90-m{
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1024px;  
+    overflow: auto; 
+}
+
+.container90-ma{
+    width: 90%;
+    min-width: 380px;
+    max-width: 1024px;  
+    overflow: auto;      
+}
+}
+
+@media(min-width:1024px) {
+
+}
+
+
+
+@media(min-width:1280px) { 
+
+}
+
+/* --x-- Mobo First Media Queries --x--*/

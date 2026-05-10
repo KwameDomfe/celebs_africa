@@ -1,0 +1,231 @@
+/*----- POSITION -----*/
+.static{position:static}
+.relative{position:relative}
+.absolute{position:absolute}
+.fixed{position:fixed}
+.sticky{position:sticky}
+
+.top-0{top:0}
+.top-1{top:1rem}
+.top-2{top:2rem}
+.top-3{top:3rem}
+.top-4{top:4rem}
+.top-5{top:5rem}
+.top-6{top:6rem}
+.top-7{top:7rem}
+.top-8{top:8rem}
+.top-9{top:9rem}
+.top-10{top:10rem}
+.top-5-vh{top:5vh}
+.top-10-vh{top:10vh}
+.top-25-vh{top:25vh}
+.top-50-vh{top:50vh}
+.top--1{top:-1rem}
+.top--2{top:-2rem}
+
+.right-0{right:0}
+.right-1{right:1rem}
+.right-2{right:2rem}
+.right-3{right:3rem}
+.right-4{right:4rem}
+.right-5{right:5rem}
+.right-6{right:6rem}
+
+.right--1{right:-1rem}
+.right--2{right:-2rem}
+
+.bottom-0{bottom:0}
+.bottom-1{bottom:1rem}
+.bottom-2{bottom:2rem}
+.bottom-3{bottom:3rem}
+.bottom-4{bottom:4rem}
+.bottom-5{bottom:5rem}
+.bottom-6{bottom:6rem}
+
+.bottom--1{bottom:-1rem}
+.bottom--2{bottom:-2rem}
+
+.left-0{left:0}
+.left-1{left:1rem}
+.left-2{left:2rem}
+.left--1{left:-1rem}
+.left--2{left:-2rem}
+
+.cover{
+    object-fit: cover;
+}
+.contain{
+    object-fit: contain;
+}
+.fill{
+    object-fit:fill;
+}
+.object-fit-none{
+    object-fit:none;
+}
+
+.absolute--fill{top:0;right:0;bottom:0;left:0}
+
+
+.cf:after,.cf:before{content:" ";display:table}
+.cf:after{clear:both}
+.cf{*zoom:1}
+
+.cl{clear:left}
+.cr{clear:right}
+.cb{clear:both}
+.cn{clear:none}
+
+/*----- Z-INDEX -----*/
+.z-0{z-index:0}
+.z-1{z-index:1}
+.z-2{z-index:2}
+.z-3{z-index:3}
+.z-4{z-index:4}
+.z-5{z-index:5}
+.z-999{z-index:999}
+.z-9999{z-index:9999}
+.z-max{z-index:2147483647}
+.z-inherit{z-index:inherit}
+.z-initial{z-index:auto}
+.z-unset{z-index:unset}
+
+
+/*----- TRANSFORMATIONS -----*/
+
+.trans-x-00 {transform:translateX(0)}
+.trans-x-100{transform:translateX(100%)}
+
+
+
+
+
+
+
+
+/* ----- Mobo First Media Queries -----*/       
+
+@media(min-width:512px) { 
+    .static-s{position:static}
+    .relative-s{position:relative}
+    .absolute-s{position:absolute}
+    .fixed-s{position:fixed}
+    .sticky-s{position:sticky}
+    
+    .top-0-s{top:0}
+    .top-1-s{top:1rem}
+    .top-2-s{top:2rem}
+    .top-3-s{top:3rem}
+    .top-4-s{top:4rem}
+    .top-5-s{top:5rem}
+    .top-6-s{top:6rem}
+    .top-7-s{top:7rem}
+    .top-8-s{top:8rem}
+    .top-9-s{top:9rem}
+    .top-10-s{top:10rem}
+    .top-5-vh-s{top:5vh}
+    .top-10-vh-s{top:10vh}
+    .top-25-vh-s{top:25vh}
+    .top-50-vh-s{top:50vh}
+    .top--1-s{top:-1rem}
+    .top--2-s{top:-2rem}  
+    
+    .right-0-s{right:0}
+    .right-1-s{right:1rem}
+    .right-2-s{right:2rem}
+    .right-3-s{right:3rem}
+    .right-4-s{right:4rem}
+    .right-5-s{right:5rem}
+    .right-6-s{right:6rem}
+} 
+
+@media(min-width:768px){ 
+    .static-m{position:static}
+    .relative-m{position:relative}
+    .absolute-m{position:absolute}
+    .fixed-m{position:fixed}
+    .sticky-m{position:sticky}
+    
+    .top-0-m{top:0}
+    .top-1-m{top:1rem}
+    .top-2-m{top:2rem}
+    .top-3-m{top:3rem}
+    .top-4-m{top:4rem}
+    .top-5-m{top:5rem}
+    .top-6-m{top:6rem}
+    .top-7-m{top:7rem}
+    .top-8-m{top:8rem}
+    .top-9-m{top:9rem}
+    .top-10-m{top:10rem}
+    .top-5-vh-m{top:5vh}
+    .top-10-vh-m{top:10vh}
+    .top-25-vh-m{top:25vh}
+    .top-50-vh-m{top:50vh}
+    .top--1-m{top:-1rem}
+    .top--2-m{top:-2rem}
+
+    .trans-x-00-m {transform:translateX(0)}
+    .trans-x-100-m {transform:translateX(100%)}
+
+    .right-0{right:0}
+    .right-1-m{right:1rem}
+    .right-2-m{right:2rem}
+    .right-3-m{right:3rem}
+    .right-4-m{right:4rem}
+    .right-5-m{right:5rem}
+    .right-6-m{right:6rem}
+}
+
+@media(min-width:1024px) {
+    .static-l{position:static}
+    .relative-l{position:relative}
+    .absolute-l{position:absolute}
+    .fixed-l{position:fixed}
+    .sticky-l{position:sticky}
+    
+    .top-0-l{top:0}
+    .top-1-l{top:1rem}
+    .top-2-l{top:2rem}
+    .top-3-l{top:3rem}
+    .top-4-l{top:4rem}
+    .top-5-l{top:5rem}
+    .top-6-l{top:6rem}
+    .top-7-l{top:7rem}
+    .top-8-l{top:8rem}
+    .top-9-l{top:9rem}
+    .top-10-l{top:10rem}
+    .top-5-vh-l{top:5vh}
+    .top-10-vh-l{top:10vh}
+    .top-25-vh-l{top:25vh}
+    .top-50-vh-l{top:50vh}
+    .top--1-l{top:-1rem}
+    .top--2-l{top:-2rem}
+}
+
+@media(min-width:1280px) { 
+    .static-xl{position:static}
+    .relative-xl{position:relative}
+    .absolute-xl{position:absolute}
+    .fixed-xl{position:fixed}
+    .sticky-xl{position:sticky}
+    
+    .top-0-xl{top:0}
+    .top-1-xl{top:1rem}
+    .top-2-xl{top:2rem}
+    .top-3-xl{top:3rem}
+    .top-4-xl{top:4rem}
+    .top-5-xl{top:5rem}
+    .top-6-xl{top:6rem}
+    .top-7-xl{top:7rem}
+    .top-8-xl{top:8rem}
+    .top-9-xl{top:9rem}
+    .top-10-xl{top:10rem}
+    .top-5-vh-xl{top:5vh}
+    .top-10-vh-xl{top:10vh}
+    .top-25-vh-xl{top:25vh}
+    .top-50-vh-xl{top:50vh}
+    .top--1-xl{top:-1rem}
+    .top--2-xl{top:-2rem}
+}
+
+/* --x-- Mobo First Media Queries --x--*/

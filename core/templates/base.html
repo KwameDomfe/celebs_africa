@@ -3,81 +3,200 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Celebs Africa {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}CelebsAfrica{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Discover and explore celebrated personalities from across Africa — musicians, athletes, actors and more.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}African celebrities, African musicians, African athletes, African actors, Africa{% endblock %}">
+    <meta name="author" content="CelebsAfrica">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical %}https://celebs-africa-o3zfi.ondigitalocean.app{{ request.path }}{% endblock %}">
+
+    {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="CelebsAfrica">
+    <meta property="og:title" content="{% block og_title %}{% block title2 %}CelebsAfrica{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover and explore celebrated personalities from across Africa.{% endblock %}">
+    <meta property="og:url" content="https://celebs-africa-o3zfi.ondigitalocean.app{{ request.path }}">
+    <meta property="og:image" content="{% block og_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
+    <meta property="og:locale" content="en_GB">
+
+    {# Twitter / X card #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}CelebsAfrica{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Discover and explore celebrated personalities from across Africa.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
+
+    {# Theme / PWA hints #}
+    <meta name="theme-color" content="#333333">
+    <meta name="color-scheme" content="dark">
+
+    {# Performance #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fra1.digitaloceanspaces.com">
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/gdb_normalize.css' %}">
     <link rel="stylesheet" href="{% static 'css/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <style>
-    .user-dropdown { position: relative; }
-    .user-dropdown__trigger {
-        background: none; border: none; cursor: pointer;
-        color: inherit; font: inherit; padding: 4px 8px;
-        display: flex; align-items: center; gap: 4px;
-        border-radius: 4px;
-    }
-    .user-dropdown__trigger:hover { background: rgba(255,255,255,0.1); }
-    .user-dropdown__menu {
-        display: none;
-        position: fixed;
-        background: #333; border-radius: 6px;
-        min-width: 180px; z-index: 99999;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        padding: 6px 0;
-        flex-direction: column;
-    }
-    .user-dropdown__menu.open { display: flex; }
-    .user-dropdown__menu a,
-    .user-dropdown__menu button {
-        display: block; width: 100%; text-align: left;
-        padding: 8px 16px; color: #fff; text-decoration: none;
-        background: none; border: none; cursor: pointer;
-        font: inherit; box-sizing: border-box;
-    }
-    .user-dropdown__menu a:hover,
-    .user-dropdown__menu button:hover { background: rgba(255,255,255,0.1); }
+        .user-dropdown,
+        .nav-close {
+            display: none;
+        }
+        @media (min-width: 769px) { .nav-close { display: none; } }
     </style>
 </head>
 <body class="vh-100 flex flex-column justify-between">
-    <header class="bg-gray text-white db w-100 fixed top-0 left-0 z-999" style="height:64px; overflow:visible;">
-        <nav class="flex justify-between items-center container container90 bg-gray text-white pv1-00 r1-00 m1-00 h-100">
-            <div class="flex items-center justify-center"><a href="/">CelebsAfrica</a></div>
+    <header class="bg-gray text-white db w-100 fixed top-0 left-0 z-999" style="overflow:visible;">
+        <nav class="flex justify-between items-center container container90 bg-gray text-white pv1-00 h-100">
+            <div class="flex items-center justify-center">
+                <a href="/"
+                    class="white-90 f2-00 b" 
+                        >
+                    CelebsAfrica
+                </a>
+            </div>
             <div class="menu-icon" id="menuToggle" tabindex="0" aria-label="Open menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-            <div class="flex ggap1-00 nav-items" id="navItems">
-                <div class="flex items-center justify-center"><a href="/celebs/">Celebs</a></div>
-                <div class="flex items-center justify-center"><a href="{% url 'top_celebs' %}">⭐ Top</a></div>
+            {# Desktop nav links — hidden on mobile via menu.css #}
+            <div class="flex justify-end ggap1-00 nav-items w-100 h-100" id="navItemsDesktop">
+                <div class="flex items-center justify-center">
+                    <a href="/celebs/">Celebs</a>
+                </div>
+                <div class="flex items-center justify-center">
+                    <a href="{% url 'top_celebs' %}">⭐ Top</a>
+                </div>
                 {% if user.is_authenticated %}
-                    <div class="user-dropdown" id="userDropdown">
-                        <button class="user-dropdown__trigger" id="userDropdownBtn" aria-haspopup="true" aria-expanded="false" type="button">
+                    <div style="display:flex;align-items:center;">
+                        <button id="userDropdownBtn" aria-haspopup="true" aria-expanded="false" type="button"
+                            style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:4px 8px;display:flex;align-items:center;gap:4px;border-radius:4px;">
                             {% if user.profile.avatar %}
-                                <img src="{{ user.profile.avatar.url }}" alt="avatar" style="width:28px; height:28px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:4px;">
+                                <img src="{{ user.profile.avatar.url }}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:4px;">
                             {% endif %}
                             {{ user.username }} ▾
                         </button>
-                        <div class="user-dropdown__menu" id="userDropdownMenu" role="menu">
-                            <a href="{% url 'profile' %}" role="menuitem">My Profile</a>
-                            <a href="{% url 'profile_edit' %}" role="menuitem">Edit Profile</a>
-                            <a href="{% url 'password_change' %}" role="menuitem">Change Password</a>
-                            {% if user.is_staff %}
-                                <a href="{% url 'celeb_create' %}" role="menuitem">Add Celeb</a>
-                            {% endif %}
-                            <hr style="margin:4px 0; border-color:rgba(255,255,255,0.2);">
-                            <form method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" role="menuitem">Logout</button>
-                            </form>
-                        </div>
                     </div>
                 {% else %}
-                    <div><a href="{% url 'login' %}">Login</a></div>
+                    <div class="flex items-center justify-center">
+                        <a href="{% url 'login' %}">Login</a>
+                    </div>
                 {% endif %}
             </div>
         </nav>
     </header>
+
+    {# Mobile nav overlay — direct child of body, never inside header #}
+    <div id="navOverlay" 
+        style="display:none;
+            position:fixed;
+            inset:0;
+            background:#222;
+            z-index:999999;
+            flex-direction:column;
+            padding-top:64px;
+            overflow-y:auto;
+            box-sizing:border-box;">
+        <button id="navOverlayClose" 
+            type="button" 
+            aria-label="Close menu"
+            style="position:absolute;
+                top:8px;right:24px;
+                background:none;
+                border:none;
+                color:#fff;
+                font-size:3rem;
+                cursor:pointer;
+                line-height:1;"
+        >
+            &times;
+        </button>
+        <a href="/celebs/" 
+            style="display:block;
+            padding:16px 32px;
+            color:#fff;
+            text-decoration:none;
+            font-size:1.2rem;
+            border-bottom:1px solid rgba(255,255,255,0.08);"
+        >
+            Celebs
+        </a>
+        <a href="{% url 'top_celebs' %}" 
+            style="display:block;
+            padding:16px 32px;
+            color:#fff;
+            text-decoration:none;
+            font-size:1.2rem;
+            border-bottom:1px solid rgba(255,255,255,0.08);"
+        >
+            ⭐ Top
+        </a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" 
+                style="display:block;
+                padding:16px 32px;
+                color:#fff;
+                text-decoration:none;
+                font-size:1.2rem;
+                border-bottom:1px solid rgba(255,255,255,0.08);"
+            >
+                My Profile
+            </a>
+            <a href="{% url 'profile_edit' %}" 
+                style="display:block;
+                padding:16px 32px;
+                color:#fff;
+                text-decoration:none;
+                font-size:1.2rem;
+                border-bottom:1px solid rgba(255,255,255,0.08);"
+            >
+                Edit Profile
+            </a>
+            <a href="{% url 'password_change' %}" 
+                style="display:block;
+                padding:16px 32px;
+                color:#fff;
+                text-decoration:none;
+                font-size:1.2rem;
+                border-bottom:1px solid rgba(255,255,255,0.08);"
+            >
+                Change Password
+            </a>
+            {% if user.is_staff %}
+                <a href="{% url 'celeb_create' %}" 
+                    style="display:block;
+                    padding:16px 32px;
+                    color:#fff;
+                    text-decoration:none;
+                    font-size:1.2rem;
+                    border-bottom:1px solid rgba(255,255,255,0.08);"
+                >
+                    Add Celeb
+                </a>
+            {% endif %}
+            <div style="padding:8px 32px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                        style="background:none;
+                        border:none;
+                        color:#fff;
+                        font-size:1.2rem;
+                        cursor:pointer;
+                        padding:8px 0;"
+                    >
+                        Logout
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <a href="{% url 'login' %}" style="display:block;padding:16px 32px;color:#fff;text-decoration:none;font-size:1.2rem;border-bottom:1px solid rgba(255,255,255,0.08);">Login</a>
+        {% endif %}
+    </div>
     <main class="flex-auto overflow-auto" style="min-height:0; margin-top:80px; margin-bottom:64px;">
         <div class="container container90 pb4-00" style="overflow:visible;">
             {% if messages %}
@@ -101,43 +220,35 @@
         </p>
     </footer>
     <script>
-    // Hamburger menu toggle
+    // Hamburger opens the body-level overlay
     const menuToggle = document.getElementById('menuToggle');
-    const navItems = document.getElementById('navItems');
-    if (menuToggle && navItems) {
-        menuToggle.addEventListener('click', function() {
-            navItems.classList.toggle('open');
-            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', !expanded);
-        });
+    const navOverlay = document.getElementById('navOverlay');
+    const navOverlayClose = document.getElementById('navOverlayClose');
+    function openOverlay() {
+        navOverlay.style.display = 'flex';
+        menuToggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeOverlay() {
+        navOverlay.style.display = 'none';
+        menuToggle.setAttribute('aria-expanded', 'false');
+    }
+    if (menuToggle && navOverlay) {
+        menuToggle.addEventListener('click', openOverlay);
         menuToggle.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                navItems.classList.toggle('open');
-                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-                menuToggle.setAttribute('aria-expanded', !expanded);
-            }
+            if (e.key === 'Enter' || e.key === ' ') openOverlay();
+        });
+        if (navOverlayClose) navOverlayClose.addEventListener('click', closeOverlay);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeOverlay();
         });
     }
-    // User dropdown toggle
-    const dropdownBtn = document.getElementById('userDropdownBtn');
-    const dropdownMenu = document.getElementById('userDropdownMenu');
-    if (dropdownBtn && dropdownMenu) {
-        function positionMenu() {
-            const rect = dropdownBtn.getBoundingClientRect();
-            dropdownMenu.style.top = (rect.bottom + 6) + 'px';
-            dropdownMenu.style.right = (window.innerWidth - rect.right) + 'px';
-        }
-        dropdownBtn.addEventListener('click', function(e) {
+    // Desktop: username button opens overlay (on mobile, links are already in the overlay)
+    const userDropdownBtn = document.getElementById('userDropdownBtn');
+    if (userDropdownBtn && navOverlay) {
+        userDropdownBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            const open = dropdownMenu.classList.toggle('open');
-            if (open) positionMenu();
-            dropdownBtn.setAttribute('aria-expanded', open);
+            openOverlay();
         });
-        document.addEventListener('click', function() {
-            dropdownMenu.classList.remove('open');
-            dropdownBtn.setAttribute('aria-expanded', false);
-        });
-        dropdownMenu.addEventListener('click', function(e) { e.stopPropagation(); });
     }
     </script>
 </body>

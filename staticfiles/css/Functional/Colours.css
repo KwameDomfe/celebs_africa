@@ -1,0 +1,89 @@
+/*----- COLOURS -----*/
+
+/* Black Series */
+.black{color:#000}
+.black-90{color:rgba(0,0,0,.9)}
+.black-80{color:rgba(0,0,0,.8)}
+.black-70{color:rgba(0,0,0,.7)}
+.black-60{color:rgba(0,0,0,.6)}
+.black-50{color:rgba(0,0,0,.5)}
+.black-40{color:rgba(0,0,0,.4)}
+.black-30{color:rgba(0,0,0,.3)}
+.black-20{color:rgba(0,0,0,.2)}
+.black-10{color:rgba(0,0,0,.1)}
+.black-05{color:rgba(0,0,0,.05)}
+
+/* White Series */
+.white{color:#fff}
+.white-90{color:rgba(255,255,255,.9)}
+.white-80{color:rgba(255,255,255,.8)}
+.white-70{color:rgba(255,255,255,.7)}
+.white-60{color:rgba(255,255,255,.6)}
+.white-50{color:rgba(255,255,255,.5)}
+.white-40{color:rgba(255,255,255,.4)}
+.white-30{color:rgba(255,255,255,.3)}
+.white-20{color:rgba(255,255,255,.2)}
+.white-10{color:rgba(255,255,255,.1)}
+.white-05{color:rgba(255,255,255,.05)}
+
+/* Neutral Series */
+.near-black{color:#111}
+.dark-gray{color:#333}
+.mid-gray{color:#555}
+.gray{color:#777}
+.silver{color:#999}
+.light-silver{color:#aaa}
+.moon-gray{color:#ccc}
+.light-gray{color:#eee}
+.near-white{color:#f4f4f4}
+
+
+.color-inherit{color:inherit}
+
+/* Theme Colours */
+.blue0{color:rgb(1, 82, 129)}
+.blue0-50{color:rgba(1, 82, 129, 0.5)}
+.blue1{color:rgb(0, 125, 197)}
+.blue2{color:rgb(77, 189, 253)}
+.blue3{color:rgb(78, 189, 253)}
+.gold-T{color: rgba(253, 188, 9, 0.75);}
+
+
+
+
+.gold0{color: rgb(250, 223, 150);}
+.gold1{color:rgba(250, 164, 11)}
+.gold2{color:rgba(250, 183, 0)}
+.gold3{color: rgb(250, 223, 150);}
+.gold4{color: rgb(250, 223, 150);}
+.gold5{color: rgb(250, 223, 150);}
+
+
+.red{color: red;}
+
+.brown0{color:rgb(117, 18, 1)}
+.brown1{color:rgb(117, 18, 1)}
+.brown2{color:rgb(117, 18, 1)}
+
+/* Theme Gradients */
+
+
+/* ----- Mobo First Media Queries -----*/       
+
+@media(min-width:512px) { 
+    
+} 
+
+@media(min-width:768px){ 
+
+}
+
+@media(min-width:1024px) {
+
+}
+
+@media(min-width:1280px) { 
+
+}
+
+/* --x-- Mobo First Media Queries --x--*/
