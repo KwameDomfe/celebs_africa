@@ -17,12 +17,12 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit"
-                    class="pa0-25"
+                    class="pa0-25  "
                 >Login</button>
             </form>
         </div>
         <div class="bg-white-10 w-100 pa1-00">
-            <p>Don't have an account?</p>
+            <p>You do not have an account?</p>
             <div class="pt1-00">
                 <a href="{% url 'register' %}"
                 class="blue0 ba pa0-25 br0-25"
@@ -33,7 +33,7 @@
     </div>
     <footer class="ma1-00 mt2-00">
         <a href="{% url 'home' %}"
-            class="blue0 ba pa0-25 br0-25"
+            class="white-90 ba pa0-25 br0-25"
         >
             Back to Home
         </a>
