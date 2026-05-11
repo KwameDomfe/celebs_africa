@@ -35,6 +35,8 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ('www.celebsafrica.com','celebsafrica.com','celebs-africa-o3zfi.ondigitalocean.app', '127.0.0.1', 'localhost')
 
+CSRF_TRUSTED_ORIGINS = ['https://www.celebsafrica.com', 'https://celebsafrica.com']
+
 # Application definition
 
 INSTALLED_APPS = [
