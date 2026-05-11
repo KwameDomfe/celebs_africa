@@ -191,7 +191,7 @@
                                 >
                                 {% endif %}
                             </div>
-                            <div class="flex flex-column w-100 h-100 ml1-00">
+                            <div class="flex flex-column w-100 h-100 ml1-00-m">
                                 <div class="flex justify-between items-center w-100">
                                     <h2 class="mb0-00">
                                         {{ celeb.name }}
@@ -205,13 +205,13 @@
                                     </p>
                                     {% endif %} 
                                 </div>
-                                <p class="">|| {{ celeb.street_name }} ||{% if celeb.age %} <span style="color:#aaa;">{{ celeb.age }} yrs</span>{% endif %} ({% if celeb.avg_rating %}
-                                    <span class="b" >★ {{ celeb.avg_rating|floatformat:1 }}</span>,
+                                <p class="">|| <span class="gold1">{{ celeb.street_name }}</span> ||{% if celeb.age %} <span style="color:#aaa;">{{ celeb.age }} yrs</span>{% endif %} ({% if celeb.avg_rating %}
+                                    <span class="b" ><span class="gold1">★</span> {{ celeb.avg_rating|floatformat:1 }}</span>,
                                     {% endif %}
                                 <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
-                                        <p class="mb1-00 lh-copy tj"
+                                        <p class="mb1-00 lh-copy f1-25 tracked-tight tj"
                                         >
                                             {{ celeb.bio|truncatewords:30 }}
                                         </p>

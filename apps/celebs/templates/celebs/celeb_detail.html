@@ -172,7 +172,7 @@
         {% if followers %}
         <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
             {% for follow in followers %}
-            <li style="display:flex; align-items:center; gap:6px; padding:4px 10px; background:#f5f5f5; border-radius:20px; font-size:smaller;">
+            <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
                 {% if follow.user.profile.avatar %}
                 <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
                 {% endif %}
