@@ -136,9 +136,18 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="home-filter-field">
+                    <label for="home-country">Country</label>
+                    <select id="home-country" name="country" onchange="this.form.submit()">
+                        <option value="">All Countries</option>
+                        {% for country in countries %}
+                        <option value="{{ country.pk }}" {% if selected_country == country.pk|stringformat:"s" %}selected{% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 <div class="home-filter-actions">
                     <button type="submit">Search</button>
-                    {% if q or selected_category or selected_family or selected_type %}
+                    {% if q or selected_category or selected_family or selected_type or selected_country %}
                     <a href="{% url 'home' %}">Clear</a>
                     {% endif %}
                 </div>
