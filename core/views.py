@@ -1,6 +1,6 @@
 from apps.celebs.models import Celeb, Category, Country
 from django.shortcuts import render
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, F
 
 def home(request):
     categories = Category.objects.prefetch_related('families__types').order_by('name')
@@ -52,7 +52,7 @@ def top_celebs(request):
             follower_count=Count('followers'),
             avg_rating=Avg('reviews__rating'),
         )
-        .order_by('-avg_rating', '-follower_count')
+        .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True))
     )
     if cat_id:
         celebs = celebs.filter(type__family__category_id=cat_id)
