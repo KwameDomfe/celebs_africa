@@ -3,6 +3,7 @@
 {% block content %}
 <style>
 .register-form input { padding: 0.50rem; width:100%; margin-top:0.5rem; max-width:300px; margin-bottom:0rem; }
+.register-form label { color: red; }
 </style>
 <div>
     <h1>Register</h1>
@@ -13,20 +14,24 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit"
-                    class="pa0-25 br0-25 ba "
+                    class="pa0-25 br0-25 ba red"
                 >Register</button>
             </form>
         </div>
         <div class="bg-white-10 w-50-m pa1-00 w-100">
             <p>Already have an account?</p>
-            <a href="{% url 'login' %}" class="blue0 pa0-25 ba br0-25 "
+            <a href="{% url 'login' %}" class="red pa0-25 ba br0-25 "
             >
                 Login
             </a>
         </div>
     </div>
-    <div class="mt1-0 mv2-00">
-        <a href="{% url 'home' %}" class=" pa0-25 ba br0-25">Back to Home</a>
+    <div class="mt1-0 mv2-00 mh1-00">
+        <a href="{% url 'home' %}" 
+        class=" pa0-25 ba br0-25"
+        >
+            Back to Home
+        </a>
     </div>
 </div>
 {% endblock %}

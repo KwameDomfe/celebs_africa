@@ -634,7 +634,7 @@
 .form-label,
 label,
 .form-text {
-    color: var(--theme-brown);
+    color: red;
 }
 
 .badge {
