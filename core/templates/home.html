@@ -181,12 +181,12 @@
             <ul>
                 {% for celeb in group.list %}
                     <li class="mb2-00">
-                        <div class="flex flex-column flex-row-m bg-black-80 white-90 pa1-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 white-90 pa1-00">
                             <div>
                                 {% if celeb.image %}
                                 <img src="{{ celeb.image.url }}"
                                     alt="Celeb Image"
-                                    class="w20-00 h16-00 br0-25 cover"
+                                    class="w20-00-m h16-00 br0-25 cover"
                                     style="vertical-align:middle"
                                 >
                                 {% endif %}
@@ -211,7 +211,7 @@
                                 <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
-                                        <p class="mb1-00 lh-copy f1-25 tracked-tight tj"
+                                        <p class="mb1-00 f1-25 tracked-tight tj"
                                         >
                                             {{ celeb.bio|truncatewords:30 }}
                                         </p>
