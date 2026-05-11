@@ -184,7 +184,7 @@
                                 {{ celeb.name }}
                             </a>
                             {% if celeb.nationality %}
-                            <span title="{{ celeb.nationality.name }}" style="font-size:1.5rem;">{{ celeb.nationality.flag }}</span>
+                            <span class="fi fi-{{ celeb.nationality.code|lower }}" title="{{ celeb.nationality.name }}" style="font-size:1.5rem;"></span>
                             {% endif %}
                         </div>
                         <p style="margin:4px 0 0 0;">

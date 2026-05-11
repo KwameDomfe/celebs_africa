@@ -1,0 +1,11 @@
+db.sqlite3
+*.pyc
+__pycache__
+media/
+staticfiles/
+# Ignore .env file if it exists
+.env
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+

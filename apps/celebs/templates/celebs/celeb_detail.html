@@ -44,7 +44,7 @@
             <h1 style="margin-top:0;">{{ celeb.name }}</h1>
             <p style="margin:4px 0; color:gray;">{{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
             <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
-            {% if celeb.nationality %}<p style="margin:4px 0;"><strong>Nationality:</strong> {{ celeb.nationality }}</p>{% endif %}
+            {% if celeb.nationality %}<p style="margin:4px 0;"><strong>Nationality:</strong> <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.2rem;" title="{{ celeb.nationality.name }}"></span> {{ celeb.nationality.name }}</p>{% endif %}
             {% if celeb.date_of_birth %}<p style="margin:4px 0;"><strong>Date of Birth:</strong> {{ celeb.date_of_birth }}</p>{% endif %}
             {% if celeb.discovered %}<p style="margin:4px 0;"><strong>Discovered:</strong> {{ celeb.discovered }}</p>{% endif %}
             <p style="margin:8px 0;">
