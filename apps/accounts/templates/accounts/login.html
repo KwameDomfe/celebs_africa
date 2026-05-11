@@ -2,15 +2,15 @@
 {% block title %}Login | African Celebs{% endblock %}
 {% block content %}
 <style>
-.login-form input { padding: 0.50rem; width:100%; margin-top:0.5rem; max-width:300px; margin-bottom:1rem; }
+.login-form input { padding: 0.50rem; width:100%; margin-top:0.5rem; max-width:300px; margin-bottom:0rem; }
 </style>
-<div class=" mv4-00">
+<div class="mv1-00">
     <header>
         <h1>Login</h1>
     </header>
-    <div class="flex flex-column justify-center items-center ggap2-00 vh-50"
+    <div class="flex flex-column justify-center items-center ggap2-00"
     >
-        <div class="bg-white-10 w-100 pa2-00 h-100 flex">
+        <div class="bg-white-10 w-100 pa1-00 flex">
             <form method="post"
                 class="w-100 login-form"
             >
@@ -21,16 +21,17 @@
                 >Login</button>
             </form>
         </div>
-        <div class="bg-white-10 w-100 pa2-00 h-100">
+        <div class="bg-white-10 w-100 pa1-00">
             <p>Don't have an account?</p>
-            <div><a href="{% url 'register' %}"
+            <div class="pt1-00">
+                <a href="{% url 'register' %}"
                 class="blue0 ba pa0-25 br0-25"
             >
                  Register
             </a></div>
         </div>
     </div>
-    <footer class="mt1-00">
+    <footer class="ma1-00 mt2-00">
         <a href="{% url 'home' %}"
             class="blue0 ba pa0-25 br0-25"
         >
