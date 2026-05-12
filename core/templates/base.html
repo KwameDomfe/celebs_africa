@@ -39,8 +39,8 @@
     <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
 
     {# Theme / PWA hints #}
-    <meta name="theme-color" content="#333333">
-    <meta name="color-scheme" content="dark">
+    {% comment %} <meta name="theme-color" content="#333333">
+    <meta name="color-scheme" content="dark"> {% endcomment %}
 
     {# Performance #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,6 +103,7 @@
 
     {# Mobile nav overlay — direct child of body, never inside header #}
     <div id="navOverlay" 
+        class="bg-black"
         style="display:none;
             position:fixed;
             inset:0;
@@ -111,7 +112,8 @@
             flex-direction:column;
             padding-top:64px;
             overflow-y:auto;
-            box-sizing:border-box;">
+            box-sizing:border-box;"
+    >
         <button id="navOverlayClose" 
             type="button" 
             aria-label="Close menu"
@@ -206,11 +208,21 @@
                 </form>
             </div>
         {% else %}
-            <a href="{% url 'login' %}" style="display:block;padding:16px 32px;color:#fff;text-decoration:none;font-size:1.2rem;border-bottom:1px solid rgba(255,255,255,0.08);">Login</a>
+            <a href="{% url 'login' %}" 
+                style="display:block;
+                    padding:16px 32px;
+                    color:#fff;
+                    text-decoration:none;
+                    font-size:1.2rem;
+                    border-bottom:1px solid rgba(255,255,255,0.08);"
+            >
+                Login
+            </a>
         {% endif %}
     </div>
-    <main class="flex-auto overflow-auto" style="min-height:0; margin-top:80px; margin-bottom:64px;">
-        <div class="container container90 pb4-00" style="overflow:visible;">
+    <main class="flex-auto overflow-auto" style="min-height:0; margin-top:80px; margin-bottom:64px;"
+    >
+        <div class="container container90 pb4-00 bg-black-10" style="overflow:visible;">
             {% if messages %}
             <div style="margin-bottom:16px;">
                 {% for message in messages %}

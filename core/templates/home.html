@@ -78,7 +78,7 @@
 }
 .home-filter-actions a:hover { background: #555; color: #fff; }
 </style>
-<div class="grid gtc12 ggap2-00">
+<div class="grid gtc12 ggap2-00 bg-black-90">
     <header class="gc1s12 tc bg-black-80 white-90 pa2-00">
         <h2 class="f3-00">Celebrities <br>of Africa</h2>
         <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
@@ -200,7 +200,7 @@
                                 >
                                 {% endif %}
                             </div>
-                            <div class="flex flex-column w-100 h-100 ml1-00-m">
+                            <div class="flex flex-column w-100 h-100 ml1-00-l">
                                 <div class="flex justify-between items-center w-100">
                                     <h2 class="mb0-00">
                                         {{ celeb.name }}
@@ -220,7 +220,7 @@
                                 <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
-                                        <p class="mb1-00 f1-25 tracked-tight tj"
+                                        <p class="mb1-00 f1-25 tracked-tight"
                                         >
                                             {{ celeb.bio|truncatewords:30 }}
                                         </p>
