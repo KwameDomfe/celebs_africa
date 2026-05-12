@@ -7,6 +7,7 @@
     .home-main  { grid-column: 1 / -1 !important; }
     .home-filters { display: none; }
     .home-filters.open { display: block; }
+    .home-grid { column-gap: 0; }
 }
 @media (min-width: 768px) {
     .home-filter-toggle { display: none !important; }
@@ -78,8 +79,8 @@
 }
 .home-filter-actions a:hover { background: #555; color: #fff; }
 </style>
-<div class="grid gtc12 ggap2-00 bg-black-90">
-    <header class="gc1s12 tc bg-black-80 white-90 pa2-00">
+<div class="grid gtc12 ggap2-00 bg-black-90 home-grid">
+    <header class="gc1s12 tc bg-black-80 white-90 pa1-00">
         <h2 class="f3-00">Celebrities <br>of Africa</h2>
         <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
     </header>

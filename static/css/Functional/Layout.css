@@ -328,7 +328,7 @@
 
 /* ----- Mobo First Media Queries -----*/       
 
-@media(min-width:512px) { 
+@media(min-width:375px) { 
 /*----- DISPLAY -----*/
 .dn-s{display:none}
 .di-s{display:inline}

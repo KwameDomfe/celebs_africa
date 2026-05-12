@@ -220,9 +220,9 @@
             </a>
         {% endif %}
     </div>
-    <main class="flex-auto overflow-auto" style="min-height:0; margin-top:80px; margin-bottom:64px;"
+    <main class="flex-auto w-100 bg-gray" style="height:calc(100vh - 128px); margin-top:64px; margin-bottom:64px; overflow-y:auto; overflow-x:hidden;"
     >
-        <div class="container container90 pb4-00 bg-black-10" style="overflow:visible;">
+        <div class="container container90 bg-black-10" style="overflow:visible;">
             {% if messages %}
             <div style="margin-bottom:16px;">
                 {% for message in messages %}
@@ -244,36 +244,36 @@
         </p>
     </footer>
     <script>
-    // Hamburger opens the body-level overlay
-    const menuToggle = document.getElementById('menuToggle');
-    const navOverlay = document.getElementById('navOverlay');
-    const navOverlayClose = document.getElementById('navOverlayClose');
-    function openOverlay() {
-        navOverlay.style.display = 'flex';
-        menuToggle.setAttribute('aria-expanded', 'true');
-    }
-    function closeOverlay() {
-        navOverlay.style.display = 'none';
-        menuToggle.setAttribute('aria-expanded', 'false');
-    }
-    if (menuToggle && navOverlay) {
-        menuToggle.addEventListener('click', openOverlay);
-        menuToggle.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') openOverlay();
-        });
-        if (navOverlayClose) navOverlayClose.addEventListener('click', closeOverlay);
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeOverlay();
-        });
-    }
-    // Desktop: username button opens overlay (on mobile, links are already in the overlay)
-    const userDropdownBtn = document.getElementById('userDropdownBtn');
-    if (userDropdownBtn && navOverlay) {
-        userDropdownBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            openOverlay();
-        });
-    }
+        // Hamburger opens the body-level overlay
+        const menuToggle = document.getElementById('menuToggle');
+        const navOverlay = document.getElementById('navOverlay');
+        const navOverlayClose = document.getElementById('navOverlayClose');
+        function openOverlay() {
+            navOverlay.style.display = 'flex';
+            menuToggle.setAttribute('aria-expanded', 'true');
+        }
+        function closeOverlay() {
+            navOverlay.style.display = 'none';
+            menuToggle.setAttribute('aria-expanded', 'false');
+        }
+        if (menuToggle && navOverlay) {
+            menuToggle.addEventListener('click', openOverlay);
+            menuToggle.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') openOverlay();
+            });
+            if (navOverlayClose) navOverlayClose.addEventListener('click', closeOverlay);
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeOverlay();
+            });
+        }
+        // Desktop: username button opens overlay (on mobile, links are already in the overlay)
+        const userDropdownBtn = document.getElementById('userDropdownBtn');
+        if (userDropdownBtn && navOverlay) {
+            userDropdownBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openOverlay();
+            });
+        }
     </script>
 </body>
 </html>

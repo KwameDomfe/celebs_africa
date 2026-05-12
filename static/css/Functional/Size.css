@@ -236,7 +236,7 @@
 
 /* ----- Mobo First Media Queries -----*/       
 
-@media(min-width:512px) { 
+@media(min-width:375px) { 
 /*----- HEIGHT -----*/
 .h0-00-s{height:0.00rem}
 .h0-0625-s{height:0.0625rem}
