@@ -79,9 +79,9 @@
 .top-filter-actions a:hover { background: #555; color: #fff; }
 </style>
 <div class="grid gtc12 ggap1-00 bg-black-90 pa1-00">
-    <header class="gc1s12 mb2-00">
-        <h2>⭐ Top Celebs</h2>
-        <p>Ranked by average rating, then by number of followers.</p>
+    <header class="gc1s12 mb2-00 white tc">
+        <h2 class="f3-00">⭐ Top Celebs</h2>
+        <p class="f2-00">Ranked by average rating, then by number of followers.</p>
     </header>
 
     <aside class="gc1s4 bg-black-20 top-aside" style="position:sticky; top:80px; align-self:start;">
@@ -161,11 +161,11 @@
         </div>
     </aside>
 
-    <main class="gc5s8 top-main">
+    <div class="gc5s8 top-main">
         <ul style="list-style:none; padding:0; margin:0;">
         {% for celeb in celebs %}
             <li class="mb1-00">
-                <div class="flex bg-black-80 white-90 pa1-00 br0-25" style="gap:16px; align-items:center;">
+                <div class="flex bg-black-80 white-90 br0-25" style="gap:16px; align-items:center;">
                     <div style="font-size:1.5rem; font-weight:bold; color:#f5a623; min-width:2rem; text-align:center;">
                         {{ forloop.counter }}
                     </div>
@@ -209,6 +209,6 @@
             <li style="color:gray;">No celebs found.</li>
         {% endfor %}
         </ul>
-    </main>
+    </div>
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %} | African Celebs{% endblock %}
 {% block content %}
-<div>
+<div class="pa1-00 white-90 h-100">
     <h1>{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %}</h1>
     <form method="post" enctype="multipart/form-data" autocomplete="off"
     >{% csrf_token %}
@@ -30,12 +30,19 @@
         <label>Discovered:</label><br>
         <input type="date" name="discovered" value="{{ celeb.discovered|default:'' }}"><br><br>
         <label>Image:</label><br>
-        <input type="file" name="image"><br>
-        {% if celeb and celeb.image %}
-        <img src="{{ celeb.image.url }}" alt="Celeb Image" style="max-width:200px;"><br>
-        {% endif %}
-        <button type="submit">Save</button>
-        <a href="{% url 'celebs_home' %}">Cancel</a>
+        <div class="mb2-00">
+            <input type="file" name="image"><br>
+            {% if celeb and celeb.image %}
+            <img src="{{ celeb.image.url }}" alt="Celeb Image" style="max-width:200px;"><br>
+            {% endif %}
+        </div>
+        <button type="submit" class="bg-red h2-00 white-90 b pa0-25 ba br0-25">Save</button>
+        <a href="{% url 'celebs_home' %}" 
+            class="white-90 h2-00 b pa0-25 ba br0-25" style="margin-left:12px;"
+        >
+            Cancel
+        </a>
+       
     </form>
 </div>
 {% endblock %}

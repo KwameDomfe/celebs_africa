@@ -79,17 +79,25 @@
 }
 .home-filter-actions a:hover { background: #555; color: #fff; }
 </style>
-<div class="grid gtc12 ggap2-00 bg-black-90 home-grid">
-    <header class="gc1s12 tc bg-black-80 white-90 pa1-00">
-        <h2 class="f3-00">Celebrities <br>of Africa</h2>
+<div class="grid gtc12 ggap2-0 bg-black-90 home-grid">
+    <header class="gc1s12 tc bg-black-80 white-90 ph1-00 pt2-00">
+        <h2 class="f3-00 mb2-00">Celebrities of <span class="f4-00">Africa</span></h2>
         <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
     </header>
 
     <aside class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
         style="top:80px; align-self:start;"
     >
-        <button class="home-filter-toggle" 
-            style="width:100%; padding:8px 12px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; text-align:left; margin-bottom:8px;"
+        <button class="home-filter-toggle pa1-00" 
+            style="width:100%; 
+                background:#333; 
+                color:#fff; 
+                border:none; 
+                border-radius:4px; 
+                cursor:pointer; 
+                font-size:1rem; 
+                text-align:left; 
+                margin-bottom:8px;"
             onclick="var f=document.getElementById('home-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';"
         >
             Filters ▼
@@ -175,10 +183,10 @@
             </script>
         </div>
     </aside>
-    <main class="gc5s8 home-main">
+    <div class="gc5s8 home-main">
         <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00">
-            <h3>All Celebs</h3>
-            <p>Browse the complete list of celebs from our database.</p>
+            {% comment %} <h3>All Celebs</h3> {% endcomment %}
+            <p>Browse our updated list of celebs from Africa.</p>
         </div>
         <div>
         {% regroup celebs by type.family.category as category_groups %}
@@ -242,6 +250,6 @@
             <p>No celebs found.</p>
         {% endfor %}
        
-    </main>
+    </div>
 </div>
 {% endblock %}

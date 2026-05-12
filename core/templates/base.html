@@ -64,7 +64,7 @@
         <nav class="flex justify-between items-center container container90 bg-gray text-white pv1-00 h-100">
             <div class="flex items-center justify-center">
                 <a href="/"
-                    class="white-90 f2-00 b" 
+                    class="white-90 f1-75 b" 
                         >
                     CelebsAfrica
                 </a>
@@ -222,7 +222,7 @@
     </div>
     <main class="flex-auto w-100 bg-gray" style="height:calc(100vh - 128px); margin-top:64px; margin-bottom:64px; overflow-y:auto; overflow-x:hidden;"
     >
-        <div class="container container90 bg-black-10" style="overflow:visible;">
+        <div class="container container900 bg-black-90 h-100" style="overflow:visible;">
             {% if messages %}
             <div style="margin-bottom:16px;">
                 {% for message in messages %}
@@ -239,8 +239,18 @@
         </div>
     </main>
     <footer class="bg-gray white db w-100 fixed bottom-0 left-0 z-999" style="height:64px;">
-        <p class="mv0 flex items-center justify-center h-100">
+        <p class="flex items-center justify-center">
             &copy; {{ year|default:2026 }} CelebsAfrica . All rights reserved.
+        </p>
+        <p>
+            <a href="" class="white-90"
+            >
+                Privacy Policy
+            </a> | 
+            <a href="" class="white-90"
+            >
+                Terms of Service
+            </a>
         </p>
     </footer>
     <script>

@@ -35,12 +35,13 @@
 .btn-link { background:none; border:none; cursor:pointer; padding:0; font-size:0.8rem; text-decoration:underline; }
 </style>
 
-<div>
-    <div class="celeb-header">
+<div class="bg-black-90 white-90">
+    <div class="w-100 ">
         {% if celeb.image %}
-        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
+        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
+            class="cover h16-00">
         {% endif %}
-        <div class="celeb-header-info">
+        <div class="celeb-header-info ph1-00">
             <h1 style="margin-top:0;">{{ celeb.name }}</h1>
             <p style="margin:4px 0; color:gray;">{{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
             <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
@@ -103,162 +104,164 @@
         </div>
     </div>
 
-    {% if celeb.bio %}
-    <div style="margin-bottom:24px;">
-        <h3 style="margin-bottom:8px;">About</h3>
-        <p style="line-height:1.7;">{{ celeb.bio }}</p>
-    </div>
-    {% endif %}
+    <div class="pa1-00">
+        {% if celeb.bio %}
+            <div style="margin-bottom:24px;">
+                <h3 style="margin-bottom:8px;">About</h3>
+                <p class="f1-25">{{ celeb.bio }}</p>
+            </div>
+        {% endif %}
 
-    <!-- Review Modal -->
-    {% if user.is_authenticated %}
-    <div class="review-modal-overlay" id="reviewModal">
-        <div class="review-modal">
-            <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
-            <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
-            <form method="post" action="{% url 'celeb_review' celeb.pk %}">
-                {% csrf_token %}
-                <div class="star-rating">
-                    {% for i in "54321" %}
-                    <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
-                        {% if user_review.rating == i|add:0 %}checked{% endif %} required>
-                    <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
-                    {% endfor %}
-                </div>
-                <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
-                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                    <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
-                    {% if user_review %}
-                    <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="display:inline;" onsubmit="return confirm('Delete your review?')">
-                        {% csrf_token %}
-                        <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
-                    </form>
-                    {% endif %}
-                </div>
-            </form>
+        <!-- Review Modal -->
+        {% if user.is_authenticated %}
+        <div class="review-modal-overlay" id="reviewModal">
+            <div class="review-modal">
+                <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
+                <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
+                <form method="post" action="{% url 'celeb_review' celeb.pk %}">
+                    {% csrf_token %}
+                    <div class="star-rating">
+                        {% for i in "54321" %}
+                        <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
+                            {% if user_review.rating == i|add:0 %}checked{% endif %} required>
+                        <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
+                        {% endfor %}
+                    </div>
+                    <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+                        {% if user_review %}
+                        <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="display:inline;" onsubmit="return confirm('Delete your review?')">
+                            {% csrf_token %}
+                            <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
 
-    <div id="reviews" style="margin-top:24px;">
-        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
-            <h3 style="margin:0;">Reviews ({{ review_count }})</h3>
-            {% if user.is_authenticated %}
-            <button id="openReviewModal" style="padding:6px 16px;">
-                {% if user_review %}Update your review{% else %}Write a review{% endif %}
-            </button>
+        <div id="reviews" style="margin-top:24px;">
+            <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+                <h3 style="margin:0;">Reviews ({{ review_count }})</h3>
+                {% if user.is_authenticated %}
+                <button id="openReviewModal" style="padding:6px 16px;">
+                    {% if user_review %}Update your review{% else %}Write a review{% endif %}
+                </button>
+                {% else %}
+                <a href="{% url 'login' %}">Log in</a> to leave a review.
+                {% endif %}
+            </div>
+            <ul style="list-style:none; padding:0; max-width:600px;">
+            {% for review in reviews %}
+                <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <strong>{{ review.user.username }}</strong>
+                        <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+                        <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
+                    </div>
+                    {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
+                </li>
+            {% empty %}
+                <li style="color:gray;">No reviews yet. Be the first!</li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div style="margin-top:24px;">
+            <h3>Followers ({{ follow_count }})</h3>
+            {% if followers %}
+            <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
+                {% for follow in followers %}
+                <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
+                    {% if follow.user.profile.avatar %}
+                    <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+                    {% endif %}
+                    {{ follow.user.username }}
+                </li>
+                {% endfor %}
+            </ul>
             {% else %}
-            <a href="{% url 'login' %}">Log in</a> to leave a review.
+            <p style="color:gray; font-size:smaller;">No followers yet.</p>
             {% endif %}
         </div>
-        <ul style="list-style:none; padding:0; max-width:600px;">
-        {% for review in reviews %}
-            <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
-                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <strong>{{ review.user.username }}</strong>
-                    <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
-                    <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
-                </div>
-                {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
-            </li>
-        {% empty %}
-            <li style="color:gray;">No reviews yet. Be the first!</li>
-        {% endfor %}
-        </ul>
-    </div>
 
-    <div style="margin-top:24px;">
-        <h3>Followers ({{ follow_count }})</h3>
-        {% if followers %}
-        <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
-            {% for follow in followers %}
-            <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
-                {% if follow.user.profile.avatar %}
-                <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
-                {% endif %}
-                {{ follow.user.username }}
-            </li>
+        <div id="comments" style="margin-top:24px;">
+            <h3>Comments ({{ comments|length }})</h3>
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
+                {% csrf_token %}
+                <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
+                <button type="submit" style="margin-top:6px;">Post Comment</button>
+            </form>
+            {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
+            {% endif %}
+            <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
+            {% for comment in comments %}
+                <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
+                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                        <strong>{{ comment.user.username }}</strong>
+                        <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
+                        {% if user.is_authenticated %}
+                        <span class="comment-actions">
+                            {% if comment.user == user %}
+                            <button class="btn-link" style="color:#0070f3;"
+                                onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
+                                data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
+                            {% endif %}
+                            {% if comment.user == user or user.is_staff %}
+                            <button class="btn-link" style="color:#c00;"
+                                onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <p style="margin:4px 0;">{{ comment.text }}</p>
+                </li>
+            {% empty %}
+                <li style="color:gray;">No comments yet.</li>
             {% endfor %}
-        </ul>
-        {% else %}
-        <p style="color:gray; font-size:smaller;">No followers yet.</p>
-        {% endif %}
-    </div>
+            </ul>
+        </div>
 
-    <div id="comments" style="margin-top:24px;">
-        <h3>Comments ({{ comments|length }})</h3>
+        <!-- Comment Delete Modal -->
         {% if user.is_authenticated %}
-        <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
-            {% csrf_token %}
-            <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
-            <button type="submit" style="margin-top:6px;">Post Comment</button>
-        </form>
-        {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
+        <div class="review-modal-overlay" id="commentDeleteModal">
+            <div class="review-modal" style="max-width:380px;">
+                <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
+                <h3 style="margin-top:0;">Delete comment?</h3>
+                <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
+                <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
+                    {% csrf_token %}
+                    <div style="display:flex; gap:10px;">
+                        <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
+                        <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         {% endif %}
-        <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
-        {% for comment in comments %}
-            <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
-                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <strong>{{ comment.user.username }}</strong>
-                    <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
-                    {% if user.is_authenticated %}
-                    <span class="comment-actions">
-                        {% if comment.user == user %}
-                        <button class="btn-link" style="color:#0070f3;"
-                            onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
-                            data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
-                        {% endif %}
-                        {% if comment.user == user or user.is_staff %}
-                        <button class="btn-link" style="color:#c00;"
-                            onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
-                        {% endif %}
-                    </span>
-                    {% endif %}
-                </div>
-                <p style="margin:4px 0;">{{ comment.text }}</p>
-            </li>
-        {% empty %}
-            <li style="color:gray;">No comments yet.</li>
-        {% endfor %}
-        </ul>
-    </div>
 
-    <!-- Comment Delete Modal -->
-    {% if user.is_authenticated %}
-    <div class="review-modal-overlay" id="commentDeleteModal">
-        <div class="review-modal" style="max-width:380px;">
-            <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
-            <h3 style="margin-top:0;">Delete comment?</h3>
-            <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
-            <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
-                {% csrf_token %}
-                <div style="display:flex; gap:10px;">
-                    <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
-                    <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
-                </div>
-            </form>
+        <!-- Comment Edit Modal -->
+        {% if user.is_authenticated %}
+        <div class="review-modal-overlay" id="commentEditModal">
+            <div class="review-modal">
+                <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
+                <h3>Edit comment</h3>
+                <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
+                    {% csrf_token %}
+                    <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                    <button type="submit">Save changes</button>
+                </form>
+            </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
 
-    <!-- Comment Edit Modal -->
-    {% if user.is_authenticated %}
-    <div class="review-modal-overlay" id="commentEditModal">
-        <div class="review-modal">
-            <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
-            <h3>Edit comment</h3>
-            <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
-                {% csrf_token %}
-                <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
-                <button type="submit">Save changes</button>
-            </form>
+        <div style="margin-top:24px;">
+            <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
         </div>
-    </div>
-    {% endif %}
-
-    <div style="margin-top:24px;">
-        <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
     </div>
 </div>
 

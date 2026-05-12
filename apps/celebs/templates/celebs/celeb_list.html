@@ -78,8 +78,8 @@
 }
 .cl-filter-actions a:hover { background: #555; color: #fff; }
 </style>
-<div class="grid gtc12 ggap2-00">
-    <header class="gc1s12 tc bg-black-80 white-90 pa2-00">
+<div class="grid gtc12 ggap2-00 bg-black-90">
+    <header class="gc1s12 tc bg-black-80 white-90 pa2-00 pb0-00">
         <h2 class="f3-00">African Celebs</h2>
         <p class="f2-00">Browse and discover celebrated personalities from across the continent.</p>
     </header>
@@ -166,7 +166,7 @@
         </div>
     </aside>
 
-    <main class="gc5s8 cl-main">
+    <div class="gc5s8 cl-main ph1-00">
         {% if user.is_staff %}
         <div style="margin-bottom:16px;">
             <a href="{% url 'celeb_create' %}"
@@ -192,7 +192,7 @@
         {% regroup celebs by type.family.category as category_groups %}
         {% for group in category_groups %}
             <div class="mb2-00">
-                <div class="mb1-00 bg-black-80 red pa0-50 f1-75">
+                <div class="mb1-00 bg-black-80 red f1-50">
                     <h3>{{ group.grouper|default:"Uncategorised" }}</h3>
                 </div>
                 {% regroup group.list by type.family as family_groups %}
@@ -216,7 +216,7 @@
                         <ul style="list-style:none; padding:0; margin:0 0 8px 0;">
                         {% for celeb in typegroup.list %}
                         <li class="mb1-00">
-                            <div class="flex bg-black-80 white-90 pa1-00 br0-25" style="gap:16px; align-items:center;">
+                            <div class="flex bg-black-80 white-90 br0-25" style="gap:16px; align-items:center;">
                                 <div style="flex-shrink:0;">
                                     {% if celeb.image %}
                                     <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
@@ -286,6 +286,6 @@
             });
         })();
         </script>
-    </main>
+    </div>
 </div>
 {% endblock %}
