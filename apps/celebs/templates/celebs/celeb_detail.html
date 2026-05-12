@@ -130,14 +130,14 @@
                     <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
                     <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                         <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
-                        {% if user_review %}
-                        <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="display:inline;" onsubmit="return confirm('Delete your review?')">
-                            {% csrf_token %}
-                            <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
-                        </form>
-                        {% endif %}
                     </div>
                 </form>
+                {% if user_review %}
+                <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
+                    {% csrf_token %}
+                    <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
+                </form>
+                {% endif %}
             </div>
         </div>
         {% endif %}
