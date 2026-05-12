@@ -186,7 +186,7 @@
     <div class="gc5s8 home-main">
         <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00">
             {% comment %} <h3>All Celebs</h3> {% endcomment %}
-            <p>Browse our updated list of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }} and counting from Africa.</p>
+            <p>{% if is_filtered %}<span class="b gold1 f3-00">{{ celebs_count }}</span> result{{ celebs_count|pluralize }} of <span class="silver">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }}{% else %}Browse our updated list of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }} and counting from Africa{% endif %}.</p>
         </div>
         <div>
         {% regroup celebs by type.family.category as category_groups %}
