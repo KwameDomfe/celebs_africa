@@ -102,7 +102,7 @@
 
 /* ----- Mobo First Media Queries -----*/       
 
-@media(min-width:512px) { 
+@media(min-width:375px) { 
 /*----- FONT FAMILY -----*/
 .sans-serif-s{font-family:-apple-system,
     BlinkMacSystemFont,avenir next,avenir,
