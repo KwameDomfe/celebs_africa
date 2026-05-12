@@ -87,7 +87,7 @@
 
     <aside class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
         style="top:80px; align-self:start;"
-    >
+    
         <button class="home-filter-toggle pa1-00" 
             style="width:100%; 
                 background:#333; 
@@ -186,7 +186,7 @@
     <div class="gc5s8 home-main">
         <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00">
             {% comment %} <h3>All Celebs</h3> {% endcomment %}
-            <p>Browse our updated list of celebs from Africa.</p>
+            <p>Browse our updated list of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }} and counting from Africa.</p>
         </div>
         <div>
         {% regroup celebs by type.family.category as category_groups %}

@@ -36,6 +36,7 @@ def home(request):
         'selected_type': type_id,
         'selected_country': country_id,
         'q': q,
+        'total_celebs': Celeb.objects.count(),
     }
     return render(request, 'home.html', context)
 
