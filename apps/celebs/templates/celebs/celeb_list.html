@@ -237,7 +237,9 @@
                                     </div>
                                     <p style="margin:4px 0 0 0;">
                                         {{ celeb.street_name }}
-                                        {% if celeb.date_of_birth %}&nbsp;·&nbsp;<span style="color:#aaa;">{{ celeb.date_of_birth|date:"j M" }}</span>{% endif %}
+                                        {% if celeb.is_deceased %}
+                                        &nbsp;·&nbsp;<span style="color:#c0392b;">&#10013; Deceased</span>
+                                        {% elif celeb.date_of_birth %}&nbsp;·&nbsp;<span style="color:#aaa;">{{ celeb.date_of_birth|date:"j M" }}</span>{% endif %}
                                     </p>
                                     <p style="margin:6px 0 0 0;">
                                         {% if celeb.avg_rating %}

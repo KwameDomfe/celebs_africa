@@ -77,16 +77,21 @@ class Celeb(models.Model):
 	rating = models.FloatField(default=0.0, help_text="Legacy field; rating now computed from reviews")
 	discovered = models.DateField(null=True, blank=True)
 	date_of_birth = models.DateField(null=True, blank=True)
+	date_of_death = models.DateField(null=True, blank=True)
 	image = models.ImageField(upload_to='celebs/', null=True, blank=True)
+
+	@property
+	def is_deceased(self):
+		return self.date_of_death is not None
 
 	@property
 	def age(self):
 		if not self.date_of_birth:
 			return None
 		from datetime import date
-		today = date.today()
+		end = self.date_of_death if self.date_of_death else date.today()
 		dob = self.date_of_birth
-		return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+		return end.year - dob.year - ((end.month, end.day) < (dob.month, dob.day))
 
 	def save(self, *args, **kwargs):
 		if not self.slug:

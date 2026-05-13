@@ -191,6 +191,7 @@ def celeb_create(request):
 		bio = request.POST.get('bio', '')
 		discovered = request.POST.get('discovered')
 		date_of_birth = request.POST.get('date_of_birth')
+		date_of_death = request.POST.get('date_of_death')
 		type_id = request.POST.get('type')
 		nationality_id = request.POST.get('nationality') or None
 		image = request.FILES.get('image')
@@ -202,6 +203,7 @@ def celeb_create(request):
 			nationality_id=nationality_id,
 			discovered=discovered or None,
 			date_of_birth=date_of_birth or None,
+			date_of_death=date_of_death or None,
 			image=image
 		)
 		return HttpResponseRedirect(reverse('celebs_home'))
@@ -221,6 +223,7 @@ def celeb_update(request, slug):
 		celeb.nationality_id = request.POST.get('nationality') or None
 		celeb.discovered = request.POST.get('discovered') or None
 		celeb.date_of_birth = request.POST.get('date_of_birth') or None
+		celeb.date_of_death = request.POST.get('date_of_death') or None
 		if request.FILES.get('image'):
 			celeb.image = request.FILES.get('image')
 		celeb.save()

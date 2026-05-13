@@ -47,6 +47,11 @@
             <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
             {% if celeb.nationality %}<p style="margin:4px 0;"><strong>Nationality:</strong> <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.2rem;" title="{{ celeb.nationality.name }}"></span> {{ celeb.nationality.name }}</p>{% endif %}
             {% if celeb.date_of_birth %}<p style="margin:4px 0;"><strong>Date of Birth:</strong> {{ celeb.date_of_birth }}</p>{% endif %}
+            {% if celeb.is_deceased %}
+            <p style="margin:4px 0;"><strong>Date of Death:</strong> {{ celeb.date_of_death }} &nbsp;<span style="color:#c0392b; font-weight:bold;">&#10013; Deceased</span>{% if celeb.age %} &nbsp;<small style="color:gray;">(aged {{ celeb.age }})</small>{% endif %}</p>
+            {% elif celeb.age %}
+            <p style="margin:4px 0;"><strong>Age:</strong> {{ celeb.age }}</p>
+            {% endif %}
             {% if celeb.discovered %}<p style="margin:4px 0;"><strong>Discovered:</strong> {{ celeb.discovered }}</p>{% endif %}
             <p style="margin:8px 0;">
                 {% if avg_rating %}
