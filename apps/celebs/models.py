@@ -94,7 +94,7 @@ class Celeb(models.Model):
 
 	@property
 	def featured_video_embed_url(self):
-		"""Convert any YouTube URL to an embed URL."""
+		"""Convert any YouTube video URL to an embed URL. Returns '' if not a valid video URL."""
 		url = self.featured_video.strip()
 		if not url:
 			return ''
@@ -110,7 +110,8 @@ class Celeb(models.Model):
 		m = re.search(r'[?&]v=([A-Za-z0-9_-]+)', url)
 		if m:
 			return f'https://www.youtube.com/embed/{m.group(1)}'
-		return url
+		# Not a valid video URL (e.g. channel URL) — cannot embed
+		return ''
 
 	@property
 	def age(self):
