@@ -223,10 +223,21 @@
                                     </p>
                                     {% endif %} 
                                 </div>
-                                <p class="">|| <span class="gold1">{{ celeb.street_name }}</span> ||{% if celeb.age %} <span style="color:#aaa;">{{ celeb.age }} yrs</span>{% endif %} ({% if celeb.avg_rating %}
+                                <p class="">|| <span class="gold1">{{ celeb.street_name }}</span> || ({% if celeb.avg_rating %}
                                     <span class="b" ><span class="gold1">★</span> {{ celeb.avg_rating|floatformat:1 }}</span>,
                                     {% endif %}
                                 <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
+                                <p style="margin:2px 0 4px 0; font-size:0.85rem; color:#aaa;">
+                                    {% if celeb.date_of_birth %}
+                                    <span title="Date of Birth">&#9679; Born {{ celeb.date_of_birth|date:"j M Y" }}</span>
+                                    {% endif %}
+                                    {% if celeb.is_deceased %}
+                                    &nbsp;&nbsp;<span style="color:#c0392b;" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
+                                    {% if celeb.age %}&nbsp;<span style="color:#888;">(aged {{ celeb.age }})</span>{% endif %}
+                                    {% elif celeb.age %}
+                                    &nbsp;&nbsp;<span>Age {{ celeb.age }}</span>
+                                    {% endif %}
+                                </p>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
                                         <p class="mb1-00 f1-25 tracked-tight"
