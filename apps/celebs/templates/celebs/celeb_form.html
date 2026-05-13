@@ -26,11 +26,11 @@
             {% endfor %}
         </select><br>
         <label>Date of Birth:</label><br>
-        <input type="date" name="date_of_birth" value="{{ celeb.date_of_birth|default:'' }}"><br>
+        <input type="date" name="date_of_birth" value="{{ celeb.date_of_birth|date:'Y-m-d' }}"><br>
         <label>Date of Death:</label><br>
-        <input type="date" name="date_of_death" value="{{ celeb.date_of_death|default:'' }}"><br>
+        <input type="date" name="date_of_death" value="{{ celeb.date_of_death|date:'Y-m-d' }}"><br>
         <label>Discovered:</label><br>
-        <input type="date" name="discovered" value="{{ celeb.discovered|default:'' }}"><br><br>
+        <input type="date" name="discovered" value="{{ celeb.discovered|date:'Y-m-d' }}"><br><br>
         <label>Image:</label><br>
         <div class="mb2-00">
             <input type="file" name="image"><br>
