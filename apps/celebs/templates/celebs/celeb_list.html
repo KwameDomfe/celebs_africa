@@ -237,9 +237,17 @@
                                     </div>
                                     <p style="margin:4px 0 0 0;">
                                         {{ celeb.street_name }}
+                                    </p>
+                                    <p style="margin:2px 0 0 0; font-size:0.85rem; color:#aaa;">
+                                        {% if celeb.date_of_birth %}
+                                        <span title="Date of Birth">&#9679; Born {{ celeb.date_of_birth|date:"j M Y" }}</span>
+                                        {% endif %}
                                         {% if celeb.is_deceased %}
-                                        &nbsp;·&nbsp;<span style="color:#c0392b;">&#10013; Deceased</span>
-                                        {% elif celeb.date_of_birth %}&nbsp;·&nbsp;<span style="color:#aaa;">{{ celeb.date_of_birth|date:"j M" }}</span>{% endif %}
+                                        &nbsp;&nbsp;<span style="color:#c0392b;" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
+                                        {% if celeb.age %}&nbsp;<span style="color:#888;">(aged {{ celeb.age }})</span>{% endif %}
+                                        {% elif celeb.age %}
+                                        &nbsp;&nbsp;<span title="Age">Age {{ celeb.age }}</span>
+                                        {% endif %}
                                     </p>
                                     <p style="margin:6px 0 0 0;">
                                         {% if celeb.avg_rating %}
