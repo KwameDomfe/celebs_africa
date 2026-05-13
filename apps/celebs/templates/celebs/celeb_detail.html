@@ -117,18 +117,10 @@
             </div>
         {% endif %}
 
-        {% if celeb.net_worth or celeb.awards %}
+        {% if celeb.awards %}
         <div style="margin-bottom:24px;">
             <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
-            {% if celeb.net_worth %}
-            <p style="margin:4px 0;"><strong>Net Worth:</strong> {{ celeb.net_worth }}</p>
-            {% endif %}
-            {% if celeb.awards %}
-            <div style="margin-top:8px;">
-                <strong>Awards &amp; Achievements:</strong>
-                <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
-            </div>
-            {% endif %}
+            <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
         </div>
         {% endif %}
 
