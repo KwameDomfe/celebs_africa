@@ -117,6 +117,59 @@
             </div>
         {% endif %}
 
+        {% if celeb.net_worth or celeb.awards %}
+        <div style="margin-bottom:24px;">
+            <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
+            {% if celeb.net_worth %}
+            <p style="margin:4px 0;"><strong>Net Worth:</strong> {{ celeb.net_worth }}</p>
+            {% endif %}
+            {% if celeb.awards %}
+            <div style="margin-top:8px;">
+                <strong>Awards &amp; Achievements:</strong>
+                <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if celeb.website or celeb.instagram or celeb.twitter or celeb.facebook or celeb.youtube %}
+        <div style="margin-bottom:24px;">
+            <h3 style="margin-bottom:8px;">Online Presence</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                {% if celeb.website %}
+                <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer"
+                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
+                    🌐 Website
+                </a>
+                {% endif %}
+                {% if celeb.instagram %}
+                <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer"
+                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
+                    📸 @{{ celeb.instagram }}
+                </a>
+                {% endif %}
+                {% if celeb.twitter %}
+                <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer"
+                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#1da1f2; text-decoration:none;">
+                    𝕏 @{{ celeb.twitter }}
+                </a>
+                {% endif %}
+                {% if celeb.facebook %}
+                <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer"
+                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
+                    📘 Facebook
+                </a>
+                {% endif %}
+                {% if celeb.youtube %}
+                <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer"
+                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
+                    ▶ YouTube
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Review Modal -->
         {% if user.is_authenticated %}
         <div class="review-modal-overlay" id="reviewModal">

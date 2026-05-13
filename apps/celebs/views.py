@@ -204,7 +204,14 @@ def celeb_create(request):
 			discovered=discovered or None,
 			date_of_birth=date_of_birth or None,
 			date_of_death=date_of_death or None,
-			image=image
+			image=image,
+			net_worth=request.POST.get('net_worth', ''),
+			awards=request.POST.get('awards', ''),
+			website=request.POST.get('website', ''),
+			instagram=request.POST.get('instagram', ''),
+			twitter=request.POST.get('twitter', ''),
+			facebook=request.POST.get('facebook', ''),
+			youtube=request.POST.get('youtube', ''),
 		)
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_form.html', {'types': types, 'countries': countries})
@@ -224,6 +231,13 @@ def celeb_update(request, slug):
 		celeb.discovered = request.POST.get('discovered') or None
 		celeb.date_of_birth = request.POST.get('date_of_birth') or None
 		celeb.date_of_death = request.POST.get('date_of_death') or None
+		celeb.net_worth = request.POST.get('net_worth', '')
+		celeb.awards = request.POST.get('awards', '')
+		celeb.website = request.POST.get('website', '')
+		celeb.instagram = request.POST.get('instagram', '')
+		celeb.twitter = request.POST.get('twitter', '')
+		celeb.facebook = request.POST.get('facebook', '')
+		celeb.youtube = request.POST.get('youtube', '')
 		if request.FILES.get('image'):
 			celeb.image = request.FILES.get('image')
 		celeb.save()

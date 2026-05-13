@@ -79,6 +79,13 @@ class Celeb(models.Model):
 	date_of_birth = models.DateField(null=True, blank=True)
 	date_of_death = models.DateField(null=True, blank=True)
 	image = models.ImageField(upload_to='celebs/', null=True, blank=True)
+	net_worth = models.CharField(max_length=100, blank=True, help_text='e.g. $5 million')
+	awards = models.TextField(blank=True, help_text='Notable awards and achievements')
+	website = models.URLField(max_length=200, blank=True)
+	instagram = models.CharField(max_length=100, blank=True, help_text='Username only, no @')
+	twitter = models.CharField(max_length=100, blank=True, help_text='Username only, no @')
+	facebook = models.CharField(max_length=100, blank=True, help_text='Page name or URL slug')
+	youtube = models.CharField(max_length=100, blank=True, help_text='Channel name or URL slug')
 
 	@property
 	def is_deceased(self):

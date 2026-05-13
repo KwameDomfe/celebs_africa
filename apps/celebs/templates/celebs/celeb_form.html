@@ -38,6 +38,27 @@
             <img src="{{ celeb.image.url }}" alt="Celeb Image" style="max-width:200px;"><br>
             {% endif %}
         </div>
+
+        <hr style="border-color:#444; margin:16px 0;">
+        <h3 style="margin-bottom:8px;">Career &amp; Financial</h3>
+        <label>Net Worth:</label><br>
+        <input type="text" name="net_worth" value="{{ celeb.net_worth|default:'' }}" placeholder="e.g. $5 million"><br>
+        <label>Awards &amp; Achievements:</label><br>
+        <textarea name="awards" rows="4" style="width:100%; max-width:480px;" placeholder="List notable awards, one per line">{{ celeb.awards|default:'' }}</textarea><br>
+
+        <hr style="border-color:#444; margin:16px 0;">
+        <h3 style="margin-bottom:8px;">Online Presence</h3>
+        <label>Website:</label><br>
+        <input type="url" name="website" value="{{ celeb.website|default:'' }}" placeholder="https://..."><br>
+        <label>Instagram (username only):</label><br>
+        <input type="text" name="instagram" value="{{ celeb.instagram|default:'' }}" placeholder="e.g. burnaboygram"><br>
+        <label>Twitter / X (username only):</label><br>
+        <input type="text" name="twitter" value="{{ celeb.twitter|default:'' }}" placeholder="e.g. burnaboy"><br>
+        <label>Facebook (page name or slug):</label><br>
+        <input type="text" name="facebook" value="{{ celeb.facebook|default:'' }}" placeholder="e.g. BurnaBoyMusic"><br>
+        <label>YouTube (channel name or slug):</label><br>
+        <input type="text" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="e.g. BurnaBoy"><br><br>
+
         <button type="submit" class="bg-red h2-00 white-90 b pa0-25 ba br0-25">Save</button>
         <a href="{% url 'celebs_home' %}" 
             class="white-90 h2-00 b pa0-25 ba br0-25" style="margin-left:12px;"
