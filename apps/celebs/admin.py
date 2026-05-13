@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Family, Type, Celeb, Review, Comment, Country
+from .models import Category, Family, Type, Celeb, Review, Comment, Country, CelebPhoto
 
 
 class TypeInline(admin.TabularInline):
@@ -53,6 +53,13 @@ class CelebAdmin(admin.ModelAdmin):
     list_filter = ('nationality', 'type__family__category', 'type__family', 'type')
     search_fields = ('name', 'street_name')
     prepopulated_fields = {'slug': ('name',)}
+
+    class PhotoInline(admin.TabularInline):
+        model = CelebPhoto
+        extra = 1
+        fields = ('image', 'caption')
+
+    inlines = [PhotoInline]
 
 
 @admin.register(Review)

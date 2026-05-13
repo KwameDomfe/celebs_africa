@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count, Avg
-from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country
+from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto
 
 
 def staff_required(view_func):
@@ -212,6 +212,7 @@ def celeb_create(request):
 			twitter=request.POST.get('twitter', ''),
 			facebook=request.POST.get('facebook', ''),
 			youtube=request.POST.get('youtube', ''),
+			featured_video=request.POST.get('featured_video', ''),
 		)
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_form.html', {'types': types, 'countries': countries})
@@ -238,6 +239,7 @@ def celeb_update(request, slug):
 		celeb.twitter = request.POST.get('twitter', '')
 		celeb.facebook = request.POST.get('facebook', '')
 		celeb.youtube = request.POST.get('youtube', '')
+		celeb.featured_video = request.POST.get('featured_video', '')
 		if request.FILES.get('image'):
 			celeb.image = request.FILES.get('image')
 		celeb.save()
@@ -252,4 +254,27 @@ def celeb_delete(request, pk):
 		celeb.delete()
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_confirm_delete.html', {'celeb': celeb})
+
+
+@staff_required
+def celeb_photo_upload(request, pk):
+	celeb = get_object_or_404(Celeb, pk=pk)
+	if request.method == 'POST':
+		for f in request.FILES.getlist('photos'):
+			CelebPhoto.objects.create(
+				celeb=celeb,
+				image=f,
+				caption=request.POST.get('caption', ''),
+			)
+	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
+
+
+@staff_required
+def celeb_photo_delete(request, pk):
+	photo = get_object_or_404(CelebPhoto, pk=pk)
+	celeb = photo.celeb
+	if request.method == 'POST':
+		photo.image.delete(save=False)
+		photo.delete()
+	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
 

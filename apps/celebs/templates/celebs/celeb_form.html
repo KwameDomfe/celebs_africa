@@ -57,7 +57,9 @@
         <label>Facebook (page name or slug):</label><br>
         <input type="text" name="facebook" value="{{ celeb.facebook|default:'' }}" placeholder="e.g. BurnaBoyMusic"><br>
         <label>YouTube (channel name or slug):</label><br>
-        <input type="text" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="e.g. BurnaBoy"><br><br>
+        <input type="text" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="e.g. BurnaBoy"><br>
+        <label>Featured Video (YouTube URL):</label><br>
+        <input type="url" name="featured_video" value="{{ celeb.featured_video|default:'' }}" placeholder="https://www.youtube.com/watch?v=..."><br><br>
 
         <button type="submit" class="bg-red h2-00 white-90 b pa0-25 ba br0-25">Save</button>
         <a href="{% url 'celebs_home' %}" 

@@ -86,10 +86,31 @@ class Celeb(models.Model):
 	twitter = models.CharField(max_length=100, blank=True, help_text='Username only, no @')
 	facebook = models.CharField(max_length=100, blank=True, help_text='Page name or URL slug')
 	youtube = models.CharField(max_length=100, blank=True, help_text='Channel name or URL slug')
+	featured_video = models.URLField(max_length=200, blank=True, help_text='YouTube video URL e.g. https://www.youtube.com/watch?v=...')
 
 	@property
 	def is_deceased(self):
 		return self.date_of_death is not None
+
+	@property
+	def featured_video_embed_url(self):
+		"""Convert any YouTube URL to an embed URL."""
+		url = self.featured_video.strip()
+		if not url:
+			return ''
+		import re
+		# Already an embed URL
+		if 'youtube.com/embed/' in url:
+			return url
+		# youtu.be/VIDEO_ID
+		m = re.search(r'youtu\.be/([A-Za-z0-9_-]+)', url)
+		if m:
+			return f'https://www.youtube.com/embed/{m.group(1)}'
+		# youtube.com/watch?v=VIDEO_ID
+		m = re.search(r'[?&]v=([A-Za-z0-9_-]+)', url)
+		if m:
+			return f'https://www.youtube.com/embed/{m.group(1)}'
+		return url
 
 	@property
 	def age(self):
@@ -123,6 +144,19 @@ class Celeb(models.Model):
 
 	def __str__(self):
 		return self.name
+
+
+class CelebPhoto(models.Model):
+	celeb = models.ForeignKey(Celeb, on_delete=models.CASCADE, related_name='photos')
+	image = models.ImageField(upload_to='celebs/gallery/')
+	caption = models.CharField(max_length=200, blank=True)
+	uploaded_at = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['-uploaded_at']
+
+	def __str__(self):
+		return f"{self.celeb.name} photo {self.pk}"
 
 
 class Like(models.Model):
