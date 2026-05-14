@@ -72,8 +72,15 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	user_liked = request.user.is_authenticated and celeb.likes.filter(user=request.user).exists()
 	user_following = request.user.is_authenticated and celeb.followers.filter(user=request.user).exists()
 	user_review = None
+	user_followed_celebs = []
 	if request.user.is_authenticated:
 		user_review = reviews.filter(user=request.user).first()
+		user_followed_celebs = (
+			Celeb.objects
+			.filter(followers__user=request.user)
+			.select_related('type__family__category')
+			.order_by('name')
+		)
 	context = {
 		'celeb': celeb,
 		'comments': comments,
@@ -86,6 +93,7 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		'user_liked': user_liked,
 		'user_following': user_following,
 		'user_review': user_review,
+		'user_followed_celebs': user_followed_celebs,
 	}
 	return render(request, 'celebs/celeb_detail.html', context)
 

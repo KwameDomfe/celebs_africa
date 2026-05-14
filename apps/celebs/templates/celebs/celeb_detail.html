@@ -33,354 +33,465 @@
 .review-modal-close:hover { color:#000; }
 .comment-actions { display:inline-flex; gap:6px; margin-left:8px; }
 .btn-link { background:none; border:none; cursor:pointer; padding:0; font-size:0.8rem; text-decoration:underline; }
+@media (max-width: 767px) {
+    .cd-sidebar { display: none !important; }
+    .cd-main  { grid-column: 1 / -1 !important; }
+    .cd-right  { display: none !important; }
+}
 </style>
 
-<div class="bg-black-90 white-90">
-    <div class="w-100 ">
-        {% if celeb.image %}
-        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
-            class="cover h16-00">
-        {% endif %}
-        <div class="celeb-header-info ph1-00">
-            <h1 style="margin-top:0;">{{ celeb.name }}</h1>
-            <p style="margin:4px 0; color:gray;">{{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
-            <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
-            {% if celeb.nationality %}<p style="margin:4px 0;"><strong>Nationality:</strong> <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.2rem;" title="{{ celeb.nationality.name }}"></span> {{ celeb.nationality.name }}</p>{% endif %}
-            {% if celeb.date_of_birth %}<p style="margin:4px 0;"><strong>Date of Birth:</strong> {{ celeb.date_of_birth }}</p>{% endif %}
-            {% if celeb.is_deceased %}
-            <p style="margin:4px 0;"><strong>Date of Death:</strong> {{ celeb.date_of_death }} &nbsp;<span style="color:#c0392b; font-weight:bold;">&#10013; Deceased</span>{% if celeb.age %} &nbsp;<small style="color:gray;">(aged {{ celeb.age }})</small>{% endif %}</p>
-            {% elif celeb.age %}
-            <p style="margin:4px 0;"><strong>Age:</strong> {{ celeb.age }}</p>
+<div class="grid gtc12 ggap1-00 mt2-00">
+    <div class="gc1s3 white cd-sidebar">
+    {% if user.is_authenticated %}
+    <div class = "flex flex-column justify-center items-center w-100" style="position:sticky; top:32px; ">
+        <!-- Avatar -->
+        <div class = "flex flex-column justify-center items-center w-100" style="text-align:center; margin-bottom:12px;">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}"    
+                alt="{{ user.username }}"
+                style="width:64px; height:64px;  object-fit:cover; border:2px solid #333;"
+                class="br0-25">
+                
+            {% else %}
+            <div style="width:64px; 
+                height:64px; 
+                background:#2a2a2a; .
+                border:2px solid #333; 
+                display:inline-flex; 
+                align-items:center; 
+                justify-content:center; 
+                ont-size:1.6rem; 
+                color:#666;">
+                &#9786;
+            </div>
             {% endif %}
-            {% if celeb.discovered %}<p style="margin:4px 0;"><strong>Discovered:</strong> {{ celeb.discovered }}</p>{% endif %}
-            <p style="margin:8px 0;">
-                {% if avg_rating %}
-                    <span style="color:#f5a623; font-size:1.2rem;">&#9733; {{ avg_rating|floatformat:1 }}</span>
-                    <small style="color:gray;">/ 5 &nbsp;({{ review_count }} review{{ review_count|pluralize }})</small>
-                {% else %}
-                    <em style="color:gray;">No reviews yet</em>
-                {% endif %}
+            <p style="margin:6px 0 2px; 
+                font-size:0.85rem; 
+                font-weight:600; 
+                color:rgba(255,255,255,0.88);"
+            >
+                {{ user.get_full_name|default:user.username }}
             </p>
-            <div class="action-bar">
-                {% if user.is_authenticated %}
-                <form method="post" action="{% url 'celeb_like' celeb.pk %}">{% csrf_token %}
-                    <button type="submit"
-                        class="ba br0-25 pa0-25"
-                    >
-                    {% if user_liked %}
-                        Unlike
-                    {% else %}
-                        Like
-                    {% endif %} ({{ like_count }})
-                    </button>
-                </form>
-                <form method="post" action="{% url 'celeb_follow' celeb.pk %}">{% csrf_token %}
-                    <button type="submit"
-                        class="ba br0-25 pa0-25"
-                    >
-                    {% if user_following %}
-                        Unfollow
-                    {% else %}
-                        Follow
-                    {% endif %} ({{ follow_count }})
-                    </button>
-                </form>
+            {% if user.get_full_name %}
+            <p style="margin:0; font-size:0.75rem; color:#555;"
+            >
+                @{{ user.username }}
+            </p>
+            {% endif %}
+        </div>
+        <!-- Relation to this celeb -->
+        <div class="w-100"
+            style="border-top:1px solid #2a2a2a; padding-top:10px; display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                {% if user_liked %}
+                <span style="color:red;">&#9829;</span>
+                <span style="color:rgba(255,255,255,0.5);">Liked</span>
                 {% else %}
-                <span>{{ like_count }} Like{{ like_count|pluralize }}</span>
-                <span>{{ follow_count }} Follower{{ follow_count|pluralize }}</span>
-                {% endif %}
-                <button onclick="navigator.clipboard.writeText(window.location.href).then(function(){ 
-                    this.textContent='Copied!'; 
-                    setTimeout(function(){ this.textContent='Share'; }.bind(this),2000); 
-                    }.bind(this))"
-                    class="ba br0-25 pa0-25"
-                >
-                    Share
-                </button>
-                {% if user.is_staff %}
-                <a href="{% url 'celeb_update' celeb.slug %}"
-                    class="blue0 ba br0-25 pa0-25"
-                >Edit</a>
-                <a href="{% url 'celeb_delete' celeb.pk %}"
-                    class="red ba br0-25 pa0-25"
-                >Delete</a>
+                <span style="color:#444;">&#9825;</span>
+                <span style="color:#444;">Not liked</span>
                 {% endif %}
             </div>
-        </div>
-    </div>
-
-    <div class="pa1-00">
-        {% if celeb.bio %}
-            <div style="margin-bottom:24px;">
-                <h3 style="margin-bottom:8px;">About</h3>
-                <p class="f1-25">{{ celeb.bio }}</p>
-            </div>
-        {% endif %}
-
-        {% if celeb.awards %}
-        <div style="margin-bottom:24px;">
-            <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
-            <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
-        </div>
-        {% endif %}
-
-        {% if celeb.website or celeb.instagram or celeb.twitter or celeb.facebook or celeb.youtube %}
-        <div style="margin-bottom:24px;">
-            <h3 style="margin-bottom:8px;">Online Presence</h3>
-            <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-                {% if celeb.website %}
-                <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer"
-                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
-                    🌐 Website
-                </a>
-                {% endif %}
-                {% if celeb.instagram %}
-                <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer"
-                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
-                    📸 @{{ celeb.instagram }}
-                </a>
-                {% endif %}
-                {% if celeb.twitter %}
-                <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer"
-                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#1da1f2; text-decoration:none;">
-                    𝕏 @{{ celeb.twitter }}
-                </a>
-                {% endif %}
-                {% if celeb.facebook %}
-                <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer"
-                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
-                    📘 Facebook
-                </a>
-                {% endif %}
-                {% if celeb.youtube %}
-                <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer"
-                    style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
-                    ▶ YouTube
-                </a>
+            <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                {% if user_following %}
+                <span style="color:#4caf50;">&#10003;</span>
+                <span style="color:rgba(255,255,255,0.5);">Following</span>
+                {% else %}
+                <span style="color:#444;">&#8722;</span>
+                <span style="color:#444;">Not following</span>
                 {% endif %}
             </div>
-        </div>
-        {% endif %}
-
-        {% if celeb.featured_video_embed_url %}
-        <div style="margin-bottom:24px;" id="featured-video">
-            <h3 style="margin-bottom:8px;">Featured Video</h3>
-            <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:640px; border-radius:8px;">
-                <iframe
-                    src="{{ celeb.featured_video_embed_url }}"
-                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; border-radius:8px;"
-                    allowfullscreen
-                    loading="lazy"
-                    title="{{ celeb.name }} featured video">
-                </iframe>
+            {% if user_review %}
+            <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                <span style="color:#f5a623;">&#9733;</span>
+                <span style="color:rgba(255,255,255,0.5);">Rated {{ user_review.rating }}/5</span>
             </div>
+            {% endif %}
         </div>
-        {% endif %}
-
-        {% with photos=celeb.photos.all %}
-        {% if photos or user.is_staff %}
-        <div style="margin-bottom:24px;" id="gallery">
-            <h3 style="margin-bottom:12px;">Gallery</h3>
-            {% if photos %}
-            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
-                {% for photo in photos %}
-                <div style="position:relative;">
-                    <a href="{{ photo.image.url }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
-                            style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;">
-                    </a>
-                    {% if photo.caption %}
-                    <p style="font-size:0.75rem; color:#aaa; margin:4px 0 0 0; text-align:center;">{{ photo.caption }}</p>
+        <div class="w-100" style="margin-top:12px; border-top:1px solid #2a2a2a; padding-top:10px;">
+            <a href="{% url 'profile' %}" style="font-size:0.78rem; color:#555; text-decoration:none; display:block; margin-bottom:4px;">My Profile</a>
+            <a href="{% url 'celebs_home' %}" style="font-size:0.78rem; color:#555; text-decoration:none; display:block;">All Celebs</a>
+        </div>
+        {% if user_followed_celebs %}
+        <div class="w-100" style="margin-top:12px; border-top:1px solid #2a2a2a; padding-top:10px;">
+            <p style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.06em; color:#444; margin:0 0 6px;">Following</p>
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:4px;">
+            {% for fc in user_followed_celebs %}
+                <li style="display:flex; align-items:center; gap:6px;">
+                    {% if fc.image %}
+                    <img src="{{ fc.image.url }}" alt="" style="width:22px; height:22px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+                    {% else %}
+                    <span style="width:22px; height:22px; border-radius:50%; background:#2a2a2a; display:inline-block; flex-shrink:0;"></span>
                     {% endif %}
-                    {% if user.is_staff %}
-                    <form method="post" action="{% url 'celeb_photo_delete' photo.pk %}"
-                        onsubmit="return confirm('Delete this photo?')"
-                        style="position:absolute; top:4px; right:4px;">
-                        {% csrf_token %}
+                    <a href="{{ fc.get_absolute_url }}" style="font-size:0.8rem; color:{% if fc == celeb %}rgba(255,255,255,0.7){% else %}#555{% endif %}; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;{% if fc == celeb %} font-weight:600;{% endif %}">{{ fc.name }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div style="position:sticky; top:80px; padding:12px 8px;">
+        <p style="font-size:0.8rem; color:#555; margin:0 0 10px; line-height:1.5;">Join to like, follow and review your favourite African celebs.</p>
+        <a href="{% url 'register' %}"
+            style="display:block; text-align:center; background:red; color:#fff; border-radius:4px; padding:8px 0; font-size:0.8rem; font-weight:700; text-decoration:none; margin-bottom:6px;">
+            Register
+        </a>
+        <a href="{% url 'login' %}"
+            style="display:block; text-align:center; color:rgba(255,255,255,0.4); border:1px solid #2a2a2a; border-radius:4px; padding:7px 0; font-size:0.8rem; text-decoration:none;">
+            Login
+        </a>
+    </div>
+    {% endif %}
+</div>
+    <div class="gc4s6 bg-black-90 white-90 cd-main">
+        <div class="w-100 ">
+            {% if celeb.image %}
+            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
+                class="cover h16-00">
+            {% endif %}
+            <div class="celeb-header-info">
+                <h1 style="margin-top:0;">{{ celeb.name }}</h1>
+                <p style="margin:4px 0; color:gray;">{{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
+                <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
+                {% if celeb.nationality %}<p style="margin:4px 0;"><strong>Nationality:</strong> <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.2rem;" title="{{ celeb.nationality.name }}"></span> {{ celeb.nationality.name }}</p>{% endif %}
+                {% if celeb.date_of_birth %}<p style="margin:4px 0;"><strong>Date of Birth:</strong> {{ celeb.date_of_birth }}</p>{% endif %}
+                {% if celeb.is_deceased %}
+                <p style="margin:4px 0;"><strong>Date of Death:</strong> {{ celeb.date_of_death }} &nbsp;<span style="color:#c0392b; font-weight:bold;">&#10013; Deceased</span>{% if celeb.age %} &nbsp;<small style="color:gray;">(aged {{ celeb.age }})</small>{% endif %}</p>
+                {% elif celeb.age %}
+                <p style="margin:4px 0;"><strong>Age:</strong> {{ celeb.age }}</p>
+                {% endif %}
+                {% if celeb.discovered %}<p style="margin:4px 0;"><strong>Discovered:</strong> {{ celeb.discovered }}</p>{% endif %}
+                <p style="margin:8px 0;">
+                    {% if avg_rating %}
+                        <span style="color:#f5a623; font-size:1.2rem;">&#9733; {{ avg_rating|floatformat:1 }}</span>
+                        <small style="color:gray;">/ 5 &nbsp;({{ review_count }} review{{ review_count|pluralize }})</small>
+                    {% else %}
+                        <em style="color:gray;">No reviews yet</em>
+                    {% endif %}
+                </p>
+                <div class="action-bar">
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'celeb_like' celeb.pk %}">{% csrf_token %}
                         <button type="submit"
-                            style="background:rgba(0,0,0,0.65); border:none; color:#f55; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:0.85rem; line-height:1; padding:0;">
-                            ×
+                            class="ba br0-25 pa0-25"
+                        >
+                        {% if user_liked %}
+                            Unlike
+                        {% else %}
+                            Like
+                        {% endif %} ({{ like_count }})
                         </button>
+                    </form>
+                    <form method="post" action="{% url 'celeb_follow' celeb.pk %}">{% csrf_token %}
+                        <button type="submit"
+                            class="ba br0-25 pa0-25"
+                        >
+                        {% if user_following %}
+                            Unfollow
+                        {% else %}
+                            Follow
+                        {% endif %} ({{ follow_count }})
+                        </button>
+                    </form>
+                    {% else %}
+                    <span>{{ like_count }} Like{{ like_count|pluralize }}</span>
+                    <span>{{ follow_count }} Follower{{ follow_count|pluralize }}</span>
+                    {% endif %}
+                    <button onclick="navigator.clipboard.writeText(window.location.href).then(function(){ 
+                        this.textContent='Copied!'; 
+                        setTimeout(function(){ this.textContent='Share'; }.bind(this),2000); 
+                        }.bind(this))"
+                        class="ba br0-25 pa0-25"
+                    >
+                        Share
+                    </button>
+                    {% if user.is_staff %}
+                    <a href="{% url 'celeb_update' celeb.slug %}"
+                        class="blue0 ba br0-25 pa0-25"
+                    >Edit</a>
+                    <a href="{% url 'celeb_delete' celeb.pk %}"
+                        class="red ba br0-25 pa0-25"
+                    >Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+            {% if celeb.bio %}
+                <div style="margin-bottom:24px;">
+                    <h3 style="margin-bottom:8px;">About</h3>
+                    <p class="f1-25">{{ celeb.bio }}</p>
+                </div>
+            {% endif %}
+
+            {% if celeb.awards %}
+            <div style="margin-bottom:24px;">
+                <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
+                <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
+            </div>
+            {% endif %}
+
+            {% if celeb.website or celeb.instagram or celeb.twitter or celeb.facebook or celeb.youtube %}
+            <div style="margin-bottom:24px;">
+                <h3 style="margin-bottom:8px;">Online Presence</h3>
+                <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                    {% if celeb.website %}
+                    <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
+                        🌐 Website
+                    </a>
+                    {% endif %}
+                    {% if celeb.instagram %}
+                    <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
+                        📸 @{{ celeb.instagram }}
+                    </a>
+                    {% endif %}
+                    {% if celeb.twitter %}
+                    <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#1da1f2; text-decoration:none;">
+                        𝕏 @{{ celeb.twitter }}
+                    </a>
+                    {% endif %}
+                    {% if celeb.facebook %}
+                    <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
+                        📘 Facebook
+                    </a>
+                    {% endif %}
+                    {% if celeb.youtube %}
+                    <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer"
+                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
+                        ▶ YouTube
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if celeb.featured_video_embed_url %}
+            <div style="margin-bottom:24px;" id="featured-video">
+                <h3 style="margin-bottom:8px;">Featured Video</h3>
+                <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:640px; border-radius:8px;">
+                    <iframe
+                        src="{{ celeb.featured_video_embed_url }}"
+                        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; border-radius:8px;"
+                        allowfullscreen
+                        loading="lazy"
+                        title="{{ celeb.name }} featured video">
+                    </iframe>
+                </div>
+            </div>
+            {% endif %}
+
+            {% with photos=celeb.photos.all %}
+            {% if photos or user.is_staff %}
+            <div style="margin-bottom:24px;" id="gallery">
+                <h3 style="margin-bottom:12px;">Gallery</h3>
+                {% if photos %}
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
+                    {% for photo in photos %}
+                    <div style="position:relative;">
+                        <a href="{{ photo.image.url }}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
+                                style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;">
+                        </a>
+                        {% if photo.caption %}
+                        <p style="font-size:0.75rem; color:#aaa; margin:4px 0 0 0; text-align:center;">{{ photo.caption }}</p>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <form method="post" action="{% url 'celeb_photo_delete' photo.pk %}"
+                            onsubmit="return confirm('Delete this photo?')"
+                            style="position:absolute; top:4px; right:4px;">
+                            {% csrf_token %}
+                            <button type="submit"
+                                style="background:rgba(0,0,0,0.65); border:none; color:#f55; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:0.85rem; line-height:1; padding:0;">
+                                ×
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="color:#666;">No photos yet.</p>
+                {% endif %}
+                {% if user.is_staff %}
+                <form method="post" action="{% url 'celeb_photo_upload' celeb.pk %}" enctype="multipart/form-data"
+                    style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+                    {% csrf_token %}
+                    <div>
+                        <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Add Photos</label>
+                        <input type="file" name="photos" multiple accept="image/*">
+                    </div>
+                    <div>
+                        <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Caption (optional)</label>
+                        <input type="text" name="caption" placeholder="Caption for all uploaded photos"
+                            style="padding:6px 10px; background:#1a1a1a; border:1px solid #444; border-radius:4px; color:#f0f0f0;">
+                    </div>
+                    <button type="submit" class="ba br0-25 pa0-25">Upload</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <!-- Review Modal -->
+            {% if user.is_authenticated %}
+            <div class="review-modal-overlay" id="reviewModal">
+                <div class="review-modal">
+                    <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
+                    <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
+                    <form method="post" action="{% url 'celeb_review' celeb.pk %}">
+                        {% csrf_token %}
+                        <div class="star-rating">
+                            {% for i in "54321" %}
+                            <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
+                                {% if user_review.rating == i|add:0 %}checked{% endif %} required>
+                            <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
+                            {% endfor %}
+                        </div>
+                        <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
+                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+                        </div>
+                    </form>
+                    {% if user_review %}
+                    <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
+                        {% csrf_token %}
+                        <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
                     </form>
                     {% endif %}
                 </div>
-                {% endfor %}
             </div>
-            {% else %}
-            <p style="color:#666;">No photos yet.</p>
             {% endif %}
-            {% if user.is_staff %}
-            <form method="post" action="{% url 'celeb_photo_upload' celeb.pk %}" enctype="multipart/form-data"
-                style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
-                {% csrf_token %}
-                <div>
-                    <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Add Photos</label>
-                    <input type="file" name="photos" multiple accept="image/*">
-                </div>
-                <div>
-                    <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Caption (optional)</label>
-                    <input type="text" name="caption" placeholder="Caption for all uploaded photos"
-                        style="padding:6px 10px; background:#1a1a1a; border:1px solid #444; border-radius:4px; color:#f0f0f0;">
-                </div>
-                <button type="submit" class="ba br0-25 pa0-25">Upload</button>
-            </form>
-            {% endif %}
-        </div>
-        {% endif %}
-        {% endwith %}
 
-        <!-- Review Modal -->
-        {% if user.is_authenticated %}
-        <div class="review-modal-overlay" id="reviewModal">
-            <div class="review-modal">
-                <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
-                <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
-                <form method="post" action="{% url 'celeb_review' celeb.pk %}">
-                    {% csrf_token %}
-                    <div class="star-rating">
-                        {% for i in "54321" %}
-                        <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
-                            {% if user_review.rating == i|add:0 %}checked{% endif %} required>
-                        <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
-                        {% endfor %}
-                    </div>
-                    <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
-                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                        <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
-                    </div>
-                </form>
-                {% if user_review %}
-                <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
-                    {% csrf_token %}
-                    <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
-                </form>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-
-        <div id="reviews" style="margin-top:24px;">
-            <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
-                <h3 style="margin:0;">Reviews ({{ review_count }})</h3>
-                {% if user.is_authenticated %}
-                <button id="openReviewModal" style="padding:6px 16px;">
-                    {% if user_review %}Update your review{% else %}Write a review{% endif %}
-                </button>
-                {% else %}
-                <a href="{% url 'login' %}">Log in</a> to leave a review.
-                {% endif %}
-            </div>
-            <ul style="list-style:none; padding:0; max-width:600px;">
-            {% for review in reviews %}
-                <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
-                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                        <strong>{{ review.user.username }}</strong>
-                        <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
-                        <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
-                    </div>
-                    {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
-                </li>
-            {% empty %}
-                <li style="color:gray;">No reviews yet. Be the first!</li>
-            {% endfor %}
-            </ul>
-        </div>
-
-        <div style="margin-top:24px;">
-            <h3>Followers ({{ follow_count }})</h3>
-            {% if followers %}
-            <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
-                {% for follow in followers %}
-                <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
-                    {% if follow.user.profile.avatar %}
-                    <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+            <div id="reviews" style="margin-top:24px;">
+                <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+                    <h3 style="margin:0;">Reviews ({{ review_count }})</h3>
+                    {% if user.is_authenticated %}
+                    <button id="openReviewModal" style="padding:6px 16px;">
+                        {% if user_review %}Update your review{% else %}Write a review{% endif %}
+                    </button>
+                    {% else %}
+                    <a href="{% url 'login' %}">Log in</a> to leave a review.
                     {% endif %}
-                    {{ follow.user.username }}
-                </li>
+                </div>
+                <ul style="list-style:none; padding:0; max-width:600px;">
+                {% for review in reviews %}
+                    <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <strong>{{ review.user.username }}</strong>
+                            <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+                            <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
+                        </div>
+                        {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
+                    </li>
+                {% empty %}
+                    <li style="color:gray;">No reviews yet. Be the first!</li>
                 {% endfor %}
-            </ul>
-            {% else %}
-            <p style="color:gray; font-size:smaller;">No followers yet.</p>
-            {% endif %}
-        </div>
+                </ul>
+            </div>
 
-        <div id="comments" style="margin-top:24px;">
-            <h3>Comments ({{ comments|length }})</h3>
-            {% if user.is_authenticated %}
-            <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
-                {% csrf_token %}
-                <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
-                <button type="submit" style="margin-top:6px;">Post Comment</button>
-            </form>
-            {% else %}
-            <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
-            {% endif %}
-            <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
-            {% for comment in comments %}
-                <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
-                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                        <strong>{{ comment.user.username }}</strong>
-                        <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
-                        {% if user.is_authenticated %}
-                        <span class="comment-actions">
-                            {% if comment.user == user %}
-                            <button class="btn-link" style="color:#0070f3;"
-                                onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
-                                data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
-                            {% endif %}
-                            {% if comment.user == user or user.is_staff %}
-                            <button class="btn-link" style="color:#c00;"
-                                onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
-                            {% endif %}
-                        </span>
+            <div style="margin-top:24px;">
+                <h3>Followers ({{ follow_count }})</h3>
+                {% if followers %}
+                <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
+                    {% for follow in followers %}
+                    <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
+                        {% if follow.user.profile.avatar %}
+                        <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
                         {% endif %}
-                    </div>
-                    <p style="margin:4px 0;">{{ comment.text }}</p>
-                </li>
-            {% empty %}
-                <li style="color:gray;">No comments yet.</li>
-            {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Comment Delete Modal -->
-        {% if user.is_authenticated %}
-        <div class="review-modal-overlay" id="commentDeleteModal">
-            <div class="review-modal" style="max-width:380px;">
-                <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
-                <h3 style="margin-top:0;">Delete comment?</h3>
-                <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
-                <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
-                    {% csrf_token %}
-                    <div style="display:flex; gap:10px;">
-                        <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
-                        <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
-                    </div>
-                </form>
+                        {{ follow.user.username }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p style="color:gray; font-size:smaller;">No followers yet.</p>
+                {% endif %}
             </div>
-        </div>
-        {% endif %}
 
-        <!-- Comment Edit Modal -->
-        {% if user.is_authenticated %}
-        <div class="review-modal-overlay" id="commentEditModal">
-            <div class="review-modal">
-                <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
-                <h3>Edit comment</h3>
-                <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
+            <div id="comments" style="margin-top:24px;">
+                <h3>Comments ({{ comments|length }})</h3>
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
                     {% csrf_token %}
-                    <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
-                    <button type="submit">Save changes</button>
+                    <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
+                    <button type="submit" style="margin-top:6px;">Post Comment</button>
                 </form>
+                {% else %}
+                <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
+                {% endif %}
+                <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
+                {% for comment in comments %}
+                    <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <strong>{{ comment.user.username }}</strong>
+                            <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
+                            {% if user.is_authenticated %}
+                            <span class="comment-actions">
+                                {% if comment.user == user %}
+                                <button class="btn-link" style="color:#0070f3;"
+                                    onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
+                                    data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
+                                {% endif %}
+                                {% if comment.user == user or user.is_staff %}
+                                <button class="btn-link" style="color:#c00;"
+                                    onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <p style="margin:4px 0;">{{ comment.text }}</p>
+                    </li>
+                {% empty %}
+                    <li style="color:gray;">No comments yet.</li>
+                {% endfor %}
+                </ul>
             </div>
-        </div>
-        {% endif %}
 
-        <div style="margin-top:24px;">
-            <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
+            <!-- Comment Delete Modal -->
+            {% if user.is_authenticated %}
+            <div class="review-modal-overlay" id="commentDeleteModal">
+                <div class="review-modal" style="max-width:380px;">
+                    <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
+                    <h3 style="margin-top:0;">Delete comment?</h3>
+                    <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
+                    <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
+                        {% csrf_token %}
+                        <div style="display:flex; gap:10px;">
+                            <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
+                            <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Comment Edit Modal -->
+            {% if user.is_authenticated %}
+            <div class="review-modal-overlay" id="commentEditModal">
+                <div class="review-modal">
+                    <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
+                    <h3>Edit comment</h3>
+                    <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
+                        {% csrf_token %}
+                        <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                        <button type="submit">Save changes</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <div style="margin-top:24px;">
+                <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
+            </div>
         </div>
     </div>
-</div>
+    <div class="gc10s3 white cd-right"> </div>
+<div>
+
 
 <script>
 (function(){
