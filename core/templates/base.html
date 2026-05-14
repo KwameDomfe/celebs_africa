@@ -60,7 +60,7 @@
     </style>
 </head>
 <body class="vh-100 flex flex-column justify-between">
-    <header class="bg-gray text-white db w-100 fixed top-0 left-0 z-999" style="overflow:visible;">
+    <header class="bg-gray text-white db w-100 fixed top-0 left-0 z-999">
         <nav class="flex justify-between items-center container container90 bg-gray text-white pv1-00 h-100">
             <div class="flex items-center justify-center">
                 <a href="/"
@@ -220,9 +220,13 @@
             </a>
         {% endif %}
     </div>
-    <main class="flex-auto w-100 bg-gray" style="height:calc(100vh - 128px); margin-top:64px; margin-bottom:64px; overflow-y:auto; overflow-x:hidden;"
-    >
-        <div class="container container900 bg-black-90 h-100" style="overflow:visible;">
+    <main class="flex-auto w-100 bg-gray" 
+        style="height:calc(100vh - 128px); 
+            margin-top:64px; 
+            margin-bottom:64px; 
+            overflow-y:auto;
+            overflow-x:hidden;">
+        <div class="container container90 bg-black-90" style="overflow:visible; min-height:100%;">
             {% if messages %}
             <div style="margin-bottom:16px;">
                 {% for message in messages %}

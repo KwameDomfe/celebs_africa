@@ -1,72 +1,190 @@
 {% extends 'base.html' %}
 {% block title %}{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %} | African Celebs{% endblock %}
 {% block content %}
-<div class="pa1-00 white-90 h-100">
-    <h1>{% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %}</h1>
-    <form method="post" enctype="multipart/form-data" autocomplete="off"
-    >{% csrf_token %}
-        <label>Name:</label><br>
-        <input type="text" name="name" value="{{ celeb.name|default:'' }}"><br>
-        <label>Category / Family / Type:</label><br>
-        <select name="type" required>
-            <option value="">-- Select type --</option>
-            {% for typ in types %}
-            <option value="{{ typ.pk }}" {% if celeb.type_id == typ.pk %}selected{% endif %}>{{ typ }}</option>
-            {% endfor %}
-        </select><br>
-        <label>Street Name:</label><br>
-        <input type="text" name="street_name" value="{{ celeb.street_name|default:'' }}"><br>
-        <label>Bio:</label><br>
-        <textarea name="bio" rows="4" style="width:100%; max-width:480px;">{{ celeb.bio|default:'' }}</textarea><br>
-        <label>Nationality:</label><br>
-        <select name="nationality">
-            <option value="">-- Select country --</option>
-            {% for country in countries %}
-            <option value="{{ country.pk }}" {% if celeb.nationality_id == country.pk %}selected{% endif %}>{{ country }}</option>
-            {% endfor %}
-        </select><br>
-        <label>Date of Birth:</label><br>
-        <input type="date" name="date_of_birth" value="{{ celeb.date_of_birth|date:'Y-m-d' }}"><br>
-        <label>Date of Death:</label><br>
-        <input type="date" name="date_of_death" value="{{ celeb.date_of_death|date:'Y-m-d' }}"><br>
-        <label>Discovered:</label><br>
-        <input type="date" name="discovered" value="{{ celeb.discovered|date:'Y-m-d' }}"><br><br>
-        <label>Image:</label><br>
-        <div class="mb2-00">
-            <input type="file" name="image"><br>
+<style>
+.celeb-form { max-width: 560px; }
+
+.form-field { margin-bottom: 16px; }
+.form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.celeb-form input[type="text"],
+.celeb-form input[type="url"],
+.celeb-form input[type="date"],
+.celeb-form input[type="file"],
+.celeb-form select,
+.celeb-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    background: #111;
+    color: rgba(255,255,255,0.88);
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+.celeb-form input[type="text"]:focus,
+.celeb-form input[type="url"]:focus,
+.celeb-form input[type="date"]:focus,
+.celeb-form select:focus,
+.celeb-form textarea:focus { border-color: red; outline: none; }
+.celeb-form input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
+.celeb-form select option { background: #111; }
+.celeb-form textarea { resize: vertical; }
+.celeb-form input[type="file"] { padding: 6px 10px; cursor: pointer; }
+
+.form-section { margin-top: 28px; padding-top: 20px; border-top: 1px solid #2a2a2a; }
+.form-section-title {
+    margin: 0 0 16px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #555;
+}
+.form-hint { display: block; margin-top: 5px; font-size: 0.78rem; color: #555; }
+
+.current-image { display: flex; align-items: flex-start; gap: 10px; margin-top: 8px; }
+.current-image img { width: 72px; height: 72px; object-fit: cover; border-radius: 4px; border: 1px solid #333; }
+.current-image span { font-size: 0.78rem; color: #555; }
+
+.celeb-form-actions {
+    display: flex; gap: 10px; align-items: center;
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid #2a2a2a;
+}
+.btn-save {
+    background: red; color: #fff; border: none; border-radius: 4px;
+    padding: 10px 28px; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.03em; transition: background 0.15s;
+}
+.btn-save:hover { background: #c00; }
+.btn-cancel {
+    color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.9rem;
+    padding: 10px 16px; border: 1px solid #333; border-radius: 4px;
+    transition: border-color 0.15s, color 0.15s;
+}
+.btn-cancel:hover { border-color: #666; color: rgba(255,255,255,0.85); }
+</style>
+
+<div class="pa1-00 white-90">
+    <h2 style="margin:0 0 24px; font-size:1.4rem;">
+        {% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %}
+    </h2>
+
+    <form method="post" enctype="multipart/form-data" autocomplete="off" class="celeb-form">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label for="id_name">Name</label>
+            <input type="text" id="id_name" name="name" value="{{ celeb.name|default:'' }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_type">Category / Family / Type</label>
+            <select id="id_type" name="type" required>
+                <option value="">-- Select type --</option>
+                {% for typ in types %}
+                <option value="{{ typ.pk }}" {% if celeb.type_id == typ.pk %}selected{% endif %}>{{ typ }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="id_street_name">Street Name</label>
+            <input type="text" id="id_street_name" name="street_name" value="{{ celeb.street_name|default:'' }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_nationality">Nationality</label>
+            <select id="id_nationality" name="nationality">
+                <option value="">-- Select country --</option>
+                {% for country in countries %}
+                <option value="{{ country.pk }}" {% if celeb.nationality_id == country.pk %}selected{% endif %}>{{ country }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="id_bio">Bio</label>
+            <textarea id="id_bio" name="bio" rows="5">{{ celeb.bio|default:'' }}</textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="id_dob">Date of Birth</label>
+            <input type="date" id="id_dob" name="date_of_birth" value="{{ celeb.date_of_birth|date:'Y-m-d' }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_dod">Date of Death</label>
+            <input type="date" id="id_dod" name="date_of_death" value="{{ celeb.date_of_death|date:'Y-m-d' }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_discovered">Discovered</label>
+            <input type="date" id="id_discovered" name="discovered" value="{{ celeb.discovered|date:'Y-m-d' }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_image">Image</label>
+            <input type="file" id="id_image" name="image" accept="image/*">
             {% if celeb and celeb.image %}
-            <img src="{{ celeb.image.url }}" alt="Celeb Image" style="max-width:200px;"><br>
+            <div class="current-image">
+                <img src="{{ celeb.image.url }}" alt="Current image">
+                <span>Current image</span>
+            </div>
             {% endif %}
         </div>
 
-        <hr style="border-color:#444; margin:16px 0;">
-        <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
-        <label>Awards &amp; Achievements:</label><br>
-        <textarea name="awards" rows="4" style="width:100%; max-width:480px;" placeholder="List notable awards, one per line">{{ celeb.awards|default:'' }}</textarea><br>
+        <div class="form-section">
+            <p class="form-section-title">Career &amp; Achievements</p>
+            <div class="form-field">
+                <label for="id_awards">Awards &amp; Achievements</label>
+                <textarea id="id_awards" name="awards" rows="5" placeholder="List notable awards, one per line">{{ celeb.awards|default:'' }}</textarea>
+            </div>
+        </div>
 
-        <hr style="border-color:#444; margin:16px 0;">
-        <h3 style="margin-bottom:8px;">Online Presence</h3>
-        <label>Website:</label><br>
-        <input type="url" name="website" value="{{ celeb.website|default:'' }}" placeholder="https://..."><br>
-        <label>Instagram (username only):</label><br>
-        <input type="text" name="instagram" value="{{ celeb.instagram|default:'' }}" placeholder="e.g. burnaboygram"><br>
-        <label>Twitter / X (username only):</label><br>
-        <input type="text" name="twitter" value="{{ celeb.twitter|default:'' }}" placeholder="e.g. burnaboy"><br>
-        <label>Facebook (page name or slug):</label><br>
-        <input type="text" name="facebook" value="{{ celeb.facebook|default:'' }}" placeholder="e.g. BurnaBoyMusic"><br>
-        <label>YouTube (channel name or slug):</label><br>
-        <input type="text" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="e.g. BurnaBoy"><br>
-        <label>Featured Video (YouTube URL):</label><br>
-        <input type="url" name="featured_video" value="{{ celeb.featured_video|default:'' }}" placeholder="https://www.youtube.com/watch?v=..."><br>
-        <small style="color:#aaa;">Must be a video URL (watch?v= or youtu.be/). Channel URLs cannot be embedded.</small><br><br>
+        <div class="form-section">
+            <p class="form-section-title">Online Presence</p>
+            <div class="form-field">
+                <label for="id_website">Website</label>
+                <input type="url" id="id_website" name="website" value="{{ celeb.website|default:'' }}" placeholder="https://example.com">
+            </div>
+            <div class="form-field">
+                <label for="id_instagram">Instagram</label>
+                <input type="text" id="id_instagram" name="instagram" value="{{ celeb.instagram|default:'' }}" placeholder="username — e.g. burnaboygram">
+            </div>
+            <div class="form-field">
+                <label for="id_twitter">Twitter / X</label>
+                <input type="text" id="id_twitter" name="twitter" value="{{ celeb.twitter|default:'' }}" placeholder="username — e.g. burnaboy">
+            </div>
+            <div class="form-field">
+                <label for="id_facebook">Facebook</label>
+                <input type="text" id="id_facebook" name="facebook" value="{{ celeb.facebook|default:'' }}" placeholder="page name or slug — e.g. BurnaBoyMusic">
+            </div>
+            <div class="form-field">
+                <label for="id_youtube">YouTube</label>
+                <input type="text" id="id_youtube" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="channel name or slug — e.g. BurnaBoy">
+            </div>
+            <div class="form-field">
+                <label for="id_featured_video">Featured Video</label>
+                <input type="url" id="id_featured_video" name="featured_video" value="{{ celeb.featured_video|default:'' }}" placeholder="https://www.youtube.com/watch?v=...">
+                <span class="form-hint">Must be a video URL (watch?v= or youtu.be/). Channel URLs cannot be embedded.</span>
+            </div>
+        </div>
 
-        <button type="submit" class="bg-red h2-00 white-90 b pa0-25 ba br0-25">Save</button>
-        <a href="{% url 'celebs_home' %}" 
-            class="white-90 h2-00 b pa0-25 ba br0-25" style="margin-left:12px;"
-        >
-            Cancel
-        </a>
-       
+        <div class="celeb-form-actions">
+            <button type="submit" class="btn-save">Save</button>
+            <a href="{% url 'celebs_home' %}" class="btn-cancel">Cancel</a>
+        </div>
     </form>
 </div>
 {% endblock %}
