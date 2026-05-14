@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 {% block title %}Accounts | African Celebs{% endblock %}
 {% block content %}
-<div>
-  <h1>Welcome to Accounts!</h1>
-  {% if user.is_authenticated %}
-  <p>You are logged in as {{ user.username }}.</p>
-  <p>Would you like to logout ?</p>
-  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-    Yes, <button type="submit">Logout.</button>
-  </form>
-  {% else %}
-  <a href="{% url 'login' %}"
-    class="blue0"
-  >Login</a> |
-  <a href="{% url 'register' %}"
-    class="blue0"
-  >Register</a>
-  {% endif %}
+<style>
+.btn-save { background: red; color: #fff; border: none; border-radius: 4px; padding: 10px 28px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-save:hover { background: #c00; }
+.btn-outline { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.9rem; padding: 10px 16px; border: 1px solid #333; border-radius: 4px; transition: border-color 0.15s, color 0.15s; display: inline-block; }
+.btn-outline:hover { border-color: #666; color: rgba(255,255,255,0.85); }
+</style>
+<div class="pa1-00 white-90">
+    <h2 style="margin: 0 0 16px; font-size: 1.4rem;">Account</h2>
+    {% if user.is_authenticated %}
+    <p style="margin: 0 0 20px; color: #888;">Signed in as <strong style="color: rgba(255,255,255,0.88);">{{ user.username }}</strong></p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-save">Logout</button>
+    </form>
+    {% else %}
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'login' %}" class="btn-save" style="text-decoration: none;">Login</a>
+        <a href="{% url 'register' %}" class="btn-outline">Register</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

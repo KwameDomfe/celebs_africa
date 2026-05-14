@@ -1,40 +1,82 @@
 {% extends 'base.html' %}
 {% block title %}Edit Profile | African Celebs{% endblock %}
 {% block content %}
-<div class="pa1-00 white-90 h-100">
-    <h1>Edit Profile</h1>
-    <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p>
-    <label>First Name:<br>
-        <input type="text" name="first_name" value="{{ u.first_name }}">
-    </label>
-    </p>
-    <p>
-    <label>Last Name:<br>
-        <input type="text" name="last_name" value="{{ u.last_name }}">
-    </label>
-    </p>
-    <p>
-    <label>Email:<br>
-        <input type="email" name="email" value="{{ u.email }}">
-    </label>
-    </p>
-    <p>
-    <label>Bio:<br>
-        <textarea name="bio" rows="4" cols="40">{{ profile.bio }}</textarea>
-    </label>
-    </p>
-    <p>
-    <label>Avatar:<br>
-        {% if profile.avatar %}
-        <img src="{{ profile.avatar.url }}" alt="Current avatar" style="width:64px; height:64px; object-fit:cover; border-radius:50%; display:block; margin-bottom:8px;">
-        {% endif %}
-        <input type="file" name="avatar" accept="image/*">
-    </label>
-    </p>
-    <button type="submit" class="bg-red h2-00 white-90 b pa0-25 ba br0-25">Save Changes</button>
-    <a href="{% url 'profile' %}" class="white-90 h2-00 b pa0-25 ba br0-25" style="margin-left:12px;">Cancel</a>
+<style>
+.site-form { max-width: 480px; }
+.form-field { margin-bottom: 16px; }
+.form-field label {
+    display: block; margin-bottom: 5px;
+    font-size: 0.8rem; color: #888; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.site-form input[type="text"],
+.site-form input[type="email"],
+.site-form input[type="password"],
+.site-form input[type="number"],
+.site-form input[type="url"],
+.site-form input[type="date"],
+.site-form input[type="file"],
+.site-form select,
+.site-form textarea {
+    width: 100%; box-sizing: border-box; display: block;
+    background: #111; color: rgba(255,255,255,0.88);
+    border: 1px solid #3a3a3a; border-radius: 4px;
+    padding: 8px 10px; font-size: 0.95rem; font-family: inherit;
+    transition: border-color 0.15s;
+}
+.site-form input:focus, .site-form select:focus, .site-form textarea:focus { border-color: red; outline: none; }
+.site-form textarea { resize: vertical; }
+.site-form input[type="file"] { padding: 6px 10px; cursor: pointer; }
+.current-avatar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.current-avatar img { width: 56px; height: 56px; object-fit: cover; border-radius: 50%; border: 1px solid #333; }
+.current-avatar span { font-size: 0.78rem; color: #555; }
+.form-actions { display: flex; gap: 10px; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #2a2a2a; }
+.btn-save { background: red; color: #fff; border: none; border-radius: 4px; padding: 10px 28px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-save:hover { background: #c00; }
+.btn-cancel { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.9rem; padding: 10px 16px; border: 1px solid #333; border-radius: 4px; transition: border-color 0.15s, color 0.15s; }
+.btn-cancel:hover { border-color: #666; color: rgba(255,255,255,0.85); }
+</style>
+
+<div class="pa1-00 white-90">
+    <h2 style="margin: 0 0 24px; font-size: 1.4rem;">Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data" class="site-form">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label for="id_first_name">First Name</label>
+            <input type="text" id="id_first_name" name="first_name" value="{{ u.first_name }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_last_name">Last Name</label>
+            <input type="text" id="id_last_name" name="last_name" value="{{ u.last_name }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_email">Email</label>
+            <input type="email" id="id_email" name="email" value="{{ u.email }}">
+        </div>
+
+        <div class="form-field">
+            <label for="id_bio">Bio</label>
+            <textarea id="id_bio" name="bio" rows="4">{{ profile.bio }}</textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="id_avatar">Avatar</label>
+            {% if profile.avatar %}
+            <div class="current-avatar">
+                <img src="{{ profile.avatar.url }}" alt="Current avatar">
+                <span>Current avatar</span>
+            </div>
+            {% endif %}
+            <input type="file" id="id_avatar" name="avatar" accept="image/*">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Save Changes</button>
+            <a href="{% url 'profile' %}" class="btn-cancel">Cancel</a>
+        </div>
     </form>
 </div>
 {% endblock %}

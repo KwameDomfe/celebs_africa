@@ -2,43 +2,51 @@
 {% block title %}Login | African Celebs{% endblock %}
 {% block content %}
 <style>
-.login-form input { padding: 0.50rem; width:100%; margin-top:0.5rem; max-width:300px; margin-bottom:0rem; }
-.login-form label { color: red; }
+.site-form { max-width: 480px; }
+.site-form p { margin-bottom: 16px; }
+.site-form p label {
+    display: block; margin-bottom: 5px;
+    font-size: 0.8rem; color: #888; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+}
+.site-form input[type="text"],
+.site-form input[type="email"],
+.site-form input[type="password"],
+.site-form input[type="number"],
+.site-form input[type="url"],
+.site-form input[type="date"],
+.site-form input[type="file"],
+.site-form select,
+.site-form textarea {
+    width: 100%; box-sizing: border-box; display: block;
+    background: #111; color: rgba(255,255,255,0.88);
+    border: 1px solid #3a3a3a; border-radius: 4px;
+    padding: 8px 10px; font-size: 0.95rem; font-family: inherit;
+    transition: border-color 0.15s;
+}
+.site-form input:focus, .site-form select:focus, .site-form textarea:focus { border-color: red; outline: none; }
+.site-form ul.errorlist { list-style: none; padding: 0; margin: 0 0 4px 0; }
+.site-form ul.errorlist li { color: #e55; font-size: 0.8rem; }
+.site-form .helptext { display: block; font-size: 0.78rem; color: #555; margin-top: 4px; }
+.form-actions { display: flex; gap: 10px; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #2a2a2a; }
+.btn-save { background: red; color: #fff; border: none; border-radius: 4px; padding: 10px 28px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-save:hover { background: #c00; }
+.btn-cancel { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.9rem; padding: 10px 16px; border: 1px solid #333; border-radius: 4px; transition: border-color 0.15s, color 0.15s; }
+.btn-cancel:hover { border-color: #666; color: rgba(255,255,255,0.85); }
 </style>
-<div class="mv1-00">
-    <header>
-        <h1>Login</h1>
-    </header>
-    <div class="flex flex-column justify-center items-center ggap2-00"
-    >
-        <div class="bg-white-10 w-100 pa1-00 flex">
-            <form method="post"
-                class="w-100 login-form"
-            >
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit"
-                    class="pa0-25 b--red red ba br0-25"
-                >Login</button>
-            </form>
-        </div>
-        <div class="bg-white-10 w-100 pa1-00">
-            <p>You do not have an account?</p>
-            <div class="pt1-00">
-                <a href="{% url 'register' %}"
-                class="red ba pa0-25 br0-25"
-            >
-                 Register
-            </a></div>
-        </div>
-    </div>
-    <footer class="ma1-00 mt2-00">
-        <a href="{% url 'home' %}"
-            class="white-90 ba pa0-25 br0-25"
-        >
-            Back to Home
-        </a>
-    </footer>
-</div>
 
+<div class="pa1-00 white-90">
+    <h2 style="margin: 0 0 24px; font-size: 1.4rem;">Login</h2>
+    <form method="post" class="site-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn-save">Login</button>
+            <a href="{% url 'home' %}" class="btn-cancel">Back to Home</a>
+        </div>
+    </form>
+    <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+        Don't have an account? <a href="{% url 'register' %}" style="color: red;">Register</a>
+    </p>
+</div>
 {% endblock %}
