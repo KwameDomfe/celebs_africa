@@ -3,10 +3,12 @@
 {% block content %}
 <style>
 @media (max-width: 767px) {
+    .cl-grid { gap: 0 !important; }
     .cl-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
     .cl-main  { grid-column: 1 / -1 !important; }
     .cl-filters { display: none; }
     .cl-filters.open { display: block; }
+    .cl-banner { padding: 1rem !important; }
 }
 @media (min-width: 768px) {
     .cl-filter-toggle { display: none !important; }
@@ -78,19 +80,21 @@
 }
 .cl-filter-actions a:hover { background: #555; color: #fff; }
 </style>
-<div class="grid gtc12 ggap2-00 bg-black-90">
-    <header class="gc1s12 tc bg-black-80 white-90 pa2-00 pb0-00">
-        <h2 class="f3-00">African Celebs</h2>
+<div class="grid gtc12 ggap2-00 bg-black-90 cl-grid">
+    <header class="gc1s12 tc bg-black-80 white-90 pa2-00 pb0-00 cl-banner">
+        <h2 class="f2-50">African Celebs</h2>
         <p class="f2-00">Browse and discover celebrated personalities from across the continent.</p>
     </header>
 
-    <aside class="gc1s4 pa1-00 bg-black-80 sticky cl-aside" style="top:80px; align-self:start;">
+    <aside class="gc1s4 pa1-00 bg-black-80 sticky cl-aside" 
+        style="top:80px; align-self:start;"
+    >
         <button class="cl-filter-toggle"
             style="width:100%; padding:8px 12px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; text-align:left; margin-bottom:8px;"
             onclick="var f=document.getElementById('cl-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';">
             Filters ▼
         </button>
-        <div id="cl-filters" class="cl-filters w-100">
+        <div id="cl-filters" class="cl-filters">
             <form method="get" class="w-100">
                 <div class="cl-filter-field">
                     <label for="cl-q">Search</label>
