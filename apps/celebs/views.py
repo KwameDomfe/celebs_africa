@@ -21,7 +21,7 @@ def staff_required(view_func):
 def celebs_home(request):
 	categories = Category.objects.prefetch_related('families__types').order_by('name')
 	countries = Country.objects.all()
-	celebs = Celeb.objects.select_related('type__family__category').annotate(
+	celebs = Celeb.objects.filter(published=True).select_related('type__family__category').annotate(
 		follower_count=Count('followers'),
 		avg_rating=Avg('reviews__rating'),
 	).order_by(
@@ -61,7 +61,10 @@ def celeb_detail_by_pk(request, pk):
 
 
 def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
-	celeb = get_object_or_404(Celeb, slug=slug)
+	qs = Celeb.objects.select_related('type__family__category')
+	if not request.user.is_staff:
+		qs = qs.filter(published=True)
+	celeb = get_object_or_404(qs, slug=slug)
 	comments = celeb.comments.select_related('user').order_by('-created_at')
 	reviews = celeb.reviews.select_related('user').order_by('-created_at')
 	followers = celeb.followers.select_related('user').order_by('user__username')
@@ -235,6 +238,7 @@ def celeb_create(request):
 			facebook=request.POST.get('facebook', ''),
 			youtube=request.POST.get('youtube', ''),
 			featured_video=request.POST.get('featured_video', ''),
+			published=request.POST.get('published') == 'on',
 		)
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_form.html', {'types': types, 'countries': countries})
@@ -261,6 +265,7 @@ def celeb_update(request, slug):
 		celeb.facebook = request.POST.get('facebook', '')
 		celeb.youtube = request.POST.get('youtube', '')
 		celeb.featured_video = request.POST.get('featured_video', '')
+		celeb.published = request.POST.get('published') == 'on'
 		if request.FILES.get('image'):
 			celeb.image = request.FILES.get('image')
 		celeb.save()

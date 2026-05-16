@@ -22,7 +22,7 @@ def home(request):
     q_filter = q.strip()
 
     # Base filter queryset (no annotations — for accurate counting)
-    filters = Celeb.objects.all()
+    filters = Celeb.objects.filter(published=True)
     if cat_id:
         filters = filters.filter(type__family__category_id=cat_id)
     if family_id:
@@ -51,7 +51,7 @@ def home(request):
         'selected_country': country_id,
         'selected_sort': sort,
         'q': q,
-        'total_celebs': Celeb.objects.count(),
+        'total_celebs': Celeb.objects.filter(published=True).count(),
         'celebs_count': filters.count(),
         'is_filtered': is_filtered,
     }
@@ -65,7 +65,7 @@ def top_celebs(request):
     q = request.GET.get('q', '').strip()
     categories = Category.objects.prefetch_related('families__types').order_by('name')
     celebs = (
-        Celeb.objects.select_related('type__family__category', 'nationality')
+        Celeb.objects.filter(published=True).select_related('type__family__category', 'nationality')
         .annotate(
             follower_count=Count('followers'),
             avg_rating=Avg('reviews__rating'),

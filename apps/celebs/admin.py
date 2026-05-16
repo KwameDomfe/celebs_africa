@@ -49,8 +49,9 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(Celeb)
 class CelebAdmin(admin.ModelAdmin):
-    list_display = ('name', 'nationality', 'type', 'rating')
-    list_filter = ('nationality', 'type__family__category', 'type__family', 'type')
+    list_display = ('name', 'nationality', 'type', 'rating', 'published')
+    list_filter = ('published', 'nationality', 'type__family__category', 'type__family', 'type')
+    list_editable = ('published',)
     search_fields = ('name', 'street_name')
     prepopulated_fields = {'slug': ('name',)}
 

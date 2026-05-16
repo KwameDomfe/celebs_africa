@@ -86,6 +86,7 @@ class Celeb(models.Model):
 	facebook = models.CharField(max_length=100, blank=True, help_text='Page name or URL slug')
 	youtube = models.CharField(max_length=100, blank=True, help_text='Channel name or URL slug')
 	featured_video = models.URLField(max_length=200, blank=True, help_text='YouTube video URL e.g. https://www.youtube.com/watch?v=...')
+	published = models.BooleanField(default=True, help_text='Unpublished celebs are hidden from all public listings and detail pages')
 
 	@property
 	def is_deceased(self):

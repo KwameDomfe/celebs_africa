@@ -179,6 +179,13 @@
                 <input type="url" id="id_featured_video" name="featured_video" value="{{ celeb.featured_video|default:'' }}" placeholder="https://www.youtube.com/watch?v=...">
                 <span class="form-hint">Must be a video URL (watch?v= or youtu.be/). Channel URLs cannot be embedded.</span>
             </div>
+            <div class="form-field">
+                <label class="form-checkbox-label">
+                    <input type="checkbox" name="published" id="id_published" {% if celeb.published or not celeb.pk %}checked{% endif %}>
+                    Published
+                </label>
+                <span class="form-hint">Uncheck to hide this celeb from all public pages.</span>
+            </div>
         </div>
 
         <div class="celeb-form-actions">
