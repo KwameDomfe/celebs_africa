@@ -1,4 +1,6 @@
 from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth.views import redirect_to_login
 
 
 class LastSeenMiddleware:
@@ -21,3 +23,37 @@ class LastSeenMiddleware:
                     UserProfile.objects.filter(pk=profile.pk).update(last_seen=now)
                     profile.last_seen = now  # keep in-memory copy fresh
         return self.get_response(request)
+
+
+class LoginRequiredMiddleware:
+    """
+    Redirects unauthenticated users to the login page for every URL except
+    the explicitly whitelisted public paths.
+    """
+    # Exact paths that are always public
+    PUBLIC_EXACT = {
+        '/',
+        '/accounts/login/',
+        '/accounts/register/',
+        '/accounts/logout/',
+    }
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        # Prefix-based public paths (built once at startup)
+        self._public_prefixes = (
+            '/admin/',
+            settings.STATIC_URL or '/static/',
+            settings.MEDIA_URL or '/media/',
+        )
+
+    def __call__(self, request):
+        if not request.user.is_authenticated:
+            path = request.path_info
+            if (
+                path not in self.PUBLIC_EXACT
+                and not any(path.startswith(p) for p in self._public_prefixes)
+            ):
+                return redirect_to_login(request.get_full_path())
+        return self.get_response(request)
+

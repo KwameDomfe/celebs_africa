@@ -68,11 +68,11 @@
     border: none;
 }
 .home-filter-actions button {
-    background: #e55;
+    background: #e00;
     color: #fff;
     font-weight: 600;
 }
-.home-filter-actions button:hover { background: #c33; }
+.home-filter-actions button:hover { background: #b00; }
 .home-filter-actions a {
     background: #444;
     color: #ccc;
@@ -393,9 +393,9 @@
         </div>
         {% else %}
         <div class="aside-guest-prompt">
-            <p>Sign in to follow celebs, rate and comment.</p>
+            <p>Sign in to view celeb details, follow celebs, rate, like and comment.</p>
             <div class="aside-user-links">
-                <a href="{% url 'login' %}" class="login-btn">Login</a>
+                <a href="{% url 'login' %}" class="b--none bg-red">Login</a>
                 <a href="{% url 'register' %}">Register</a>
             </div>
         </div>
@@ -478,7 +478,7 @@
                     </select>
                 </div>
                 <div class="home-filter-actions">
-                    <button type="submit">Search</button>
+                    <button type="submit" class="b--none bg-red">Search</button>
                     {% if q or selected_category or selected_family or selected_type or selected_country or selected_sort != 'default' %}
                     <a href="{% url 'home' %}">Clear</a>
                     {% endif %}
