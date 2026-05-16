@@ -107,7 +107,8 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		if words
 		else f'{celeb.name} — {celeb.type.family.category} celebrity on CelebsAfrica.'
 	)
-	context.update({'og_image': og_image, 'og_description': og_description})
+	share_url = request.build_absolute_uri(celeb.get_absolute_url())
+	context.update({'og_image': og_image, 'og_description': og_description, 'share_url': share_url})
 
 	return render(request, 'celebs/celeb_detail.html', context)
 
