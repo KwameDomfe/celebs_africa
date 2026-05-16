@@ -78,8 +78,284 @@
     color: #ccc;
 }
 .home-filter-actions a:hover { background: #555; color: #fff; }
+
+/* ── Aside user card ─────────────────────────────────── */
+.aside-user {
+    padding: 12px 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 4px;
+}
+.aside-user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.aside-user-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid #444;
+}
+.aside-user-initials {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #333;
+    border: 2px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #e55;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.aside-user-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    line-height: 1.2;
+}
+.aside-user-email {
+    font-size: 0.78rem;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+}
+.aside-user-bio {
+    font-size: 0.82rem;
+    color: #aaa;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+.aside-user-links {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.aside-user-links a {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: 1px solid #444;
+    color: #ccc;
+    transition: background 0.15s, color 0.15s;
+}
+.aside-user-links a:hover { background: #444; color: #fff; }
+.aside-user-links a.aside-user-logout {
+    border-color: #622;
+    color: #e77;
+}
+.aside-user-links a.aside-user-logout:hover { background: #622; color: #fff; }
+.aside-guest-prompt {
+    padding: 10px 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 4px;
+}
+.aside-guest-prompt p {
+    font-size: 0.82rem;
+    color: #999;
+    margin: 0 0 8px;
+}
+.aside-guest-prompt .aside-user-links a.login-btn {
+    background: #e55;
+    border-color: #e55;
+    color: #fff;
+    font-weight: 600;
+}
+.aside-guest-prompt .aside-user-links a.login-btn:hover { background: #c33; border-color: #c33; }
+
+/* ── Skeleton ─────────────────────────────────────────── */
+@keyframes skel-shimmer {
+    0%   { background-position: -800px 0; }
+    100% { background-position:  800px 0; }
+}
+.skel {
+    background: linear-gradient(90deg, #1e1e1e 25%, #2c2c2c 50%, #1e1e1e 75%);
+    background-size: 1600px 100%;
+    animation: skel-shimmer 1.6s infinite linear;
+    border-radius: 3px;
+    display: block;
+}
 </style>
-<div class="grid gtc12 ggap2-0 bg-black-90 home-grid">
+{# ── Skeleton overlay — shown while filter navigation is in flight ── #}
+<div id="home-skeleton" style="display:none;" aria-hidden="true" class="grid gtc12 ggap2-0 bg-black-90 home-grid">
+
+    {# header #}
+    <div class="gc1s12 tc bg-black-80 ph1-00 pt2-00 pb2-00">
+        <div class="skel" style="height:2.4rem; width:260px; margin:0 auto 1rem;"></div>
+        <div class="skel" style="height:1.1rem; width:360px; margin:0 auto;"></div>
+    </div>
+
+    {# aside #}
+    <div class="gc1s4 pa1-00 bg-black-80 sticky home-aside" style="top:80px; align-self:start;">
+        {# user card skeleton #}
+        <div style="padding:12px 0 14px; border-bottom:1px solid rgba(255,255,255,0.10); margin-bottom:4px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                <div class="skel" style="width:46px; height:46px; border-radius:50%; flex-shrink:0;"></div>
+                <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                    <div class="skel" style="height:0.9rem; width:60%;"></div>
+                    <div class="skel" style="height:0.7rem; width:80%;"></div>
+                </div>
+            </div>
+            <div style="display:flex; gap:6px;">
+                <div class="skel" style="height:26px; width:72px; border-radius:4px;"></div>
+                <div class="skel" style="height:26px; width:54px; border-radius:4px;"></div>
+                <div class="skel" style="height:26px; width:60px; border-radius:4px;"></div>
+            </div>
+        </div>
+        <div class="skel home-filter-toggle" style="height:2.4rem; width:100%; margin-bottom:8px; border-radius:4px;"></div>
+        <div class="home-filter-field">
+            <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-field">
+            <div class="skel" style="height:0.65rem; width:66px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-field">
+            <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-field">
+            <div class="skel" style="height:0.65rem; width:36px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-field">
+            <div class="skel" style="height:0.65rem; width:58px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-field" style="border-bottom:none;">
+            <div class="skel" style="height:0.65rem; width:52px; margin-bottom:6px;"></div>
+            <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
+        </div>
+        <div class="home-filter-actions">
+            <div class="skel" style="height:36px; flex:1; border-radius:4px;"></div>
+        </div>
+    </div>
+
+    {# main content #}
+    <div class="gc5s8 home-main">
+        {# stat bar #}
+        <div class="bg-black-80 pa1-00 mb1-00 tc">
+            <div class="skel" style="height:1.1rem; width:270px; margin:0 auto;"></div>
+        </div>
+        {# category heading #}
+        <div class="mb1-00 bg-black-80 pa0-50">
+            <div class="skel" style="height:1.4rem; width:150px;"></div>
+        </div>
+        {# celeb cards #}
+        <ul>
+            <li class="mb2-00">
+                <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                    <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                    <div class="flex flex-column w-100" style="gap:10px;">
+                        <div class="flex justify-between items-center">
+                            <div class="skel" style="height:1.4rem; width:55%;"></div>
+                            <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                        </div>
+                        <div class="skel" style="height:1rem; width:72%;"></div>
+                        <div class="skel" style="height:0.85rem; width:48%;"></div>
+                        <div class="skel" style="height:0.85rem; width:90%;"></div>
+                        <div class="skel" style="height:0.85rem; width:68%;"></div>
+                        <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="mb2-00">
+                <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                    <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                    <div class="flex flex-column w-100" style="gap:10px;">
+                        <div class="flex justify-between items-center">
+                            <div class="skel" style="height:1.4rem; width:43%;"></div>
+                            <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                        </div>
+                        <div class="skel" style="height:1rem; width:65%;"></div>
+                        <div class="skel" style="height:0.85rem; width:38%;"></div>
+                        <div class="skel" style="height:0.85rem; width:82%;"></div>
+                        <div class="skel" style="height:0.85rem; width:58%;"></div>
+                        <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="mb2-00">
+                <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                    <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                    <div class="flex flex-column w-100" style="gap:10px;">
+                        <div class="flex justify-between items-center">
+                            <div class="skel" style="height:1.4rem; width:61%;"></div>
+                            <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                        </div>
+                        <div class="skel" style="height:1rem; width:78%;"></div>
+                        <div class="skel" style="height:0.85rem; width:54%;"></div>
+                        <div class="skel" style="height:0.85rem; width:95%;"></div>
+                        <div class="skel" style="height:0.85rem; width:74%;"></div>
+                        <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="mb2-00">
+                <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                    <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                    <div class="flex flex-column w-100" style="gap:10px;">
+                        <div class="flex justify-between items-center">
+                            <div class="skel" style="height:1.4rem; width:38%;"></div>
+                            <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                        </div>
+                        <div class="skel" style="height:1rem; width:60%;"></div>
+                        <div class="skel" style="height:0.85rem; width:44%;"></div>
+                        <div class="skel" style="height:0.85rem; width:88%;"></div>
+                        <div class="skel" style="height:0.85rem; width:62%;"></div>
+                        <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="mb2-00">
+                <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                    <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                    <div class="flex flex-column w-100" style="gap:10px;">
+                        <div class="flex justify-between items-center">
+                            <div class="skel" style="height:1.4rem; width:50%;"></div>
+                            <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                        </div>
+                        <div class="skel" style="height:1rem; width:70%;"></div>
+                        <div class="skel" style="height:0.85rem; width:42%;"></div>
+                        <div class="skel" style="height:0.85rem; width:86%;"></div>
+                        <div class="skel" style="height:0.85rem; width:64%;"></div>
+                        <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<script>
+(function () {
+    var skel = document.getElementById('home-skeleton');
+    var form = document.querySelector('.home-filters form');
+    if (!skel || !form) return;
+    function showSkeleton() {
+        skel.style.display = '';
+        skel.removeAttribute('aria-hidden');
+        var content = document.getElementById('home-content');
+        if (content) content.style.display = 'none';
+    }
+    form.addEventListener('submit', showSkeleton);
+    // selects fire submit via their onchange inline handler;
+    // catch the form submit event which covers all of them
+})();
+</script>
+
+<div id="home-content" class="grid gtc12 ggap2-0 bg-black-90 home-grid">
     <header class="gc1s12 tc bg-black-80 white-90 ph1-00 pt2-00">
         <h2 class="f2-50 mb2-00">Celebrities of <span class="f4-00">Africa</span></h2>
         <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
@@ -88,6 +364,43 @@
     <aside class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
         style="top:80px; align-self:start;"
     >
+        {# ── User card ── #}
+        {% if user.is_authenticated %}
+        <div class="aside-user">
+            <div class="aside-user-row">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" 
+                        alt="{{ user.username }}" 
+                        class="w4-00 br0-25">
+                {% else %}
+                    <div class="aside-user-initials">{{ user.username|slice:":1" }}</div>
+                {% endif %}
+                <div style="overflow:hidden;">
+                    <div class="aside-user-name">{{ user.username }}</div>
+                    {% if user.email %}
+                    <div class="aside-user-email" title="{{ user.email }}">{{ user.email }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% comment %} {% if user.profile.bio %}
+            <p class="aside-user-bio">{{ user.profile.bio|truncatewords:18 }}</p>
+            {% endif %}
+            <div class="aside-user-links">
+                <a href="{% url 'profile' %}">&#128100; Profile</a>
+                <a href="{% url 'profile_edit' %}">&#9998; Edit</a>
+                <a href="{% url 'logout' %}" class="aside-user-logout">Logout</a>
+            </div> {% endcomment %}
+        </div>
+        {% else %}
+        <div class="aside-guest-prompt">
+            <p>Sign in to follow celebs, rate and comment.</p>
+            <div class="aside-user-links">
+                <a href="{% url 'login' %}" class="login-btn">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            </div>
+        </div>
+        {% endif %}
+
         <button class="home-filter-toggle pa1-00" 
             style="width:100%; 
                 background:#333; 
@@ -329,4 +642,5 @@
        
     </div>
 </div>
+</div>{# /home-content #}
 {% endblock %}

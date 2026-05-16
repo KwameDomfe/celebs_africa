@@ -33,6 +33,50 @@
 .review-modal-close:hover { color:#000; }
 .comment-actions { display:inline-flex; gap:6px; margin-left:8px; }
 .btn-link { background:none; border:none; cursor:pointer; padding:0; font-size:0.8rem; text-decoration:underline; }
+/* Image modal / carousel */
+.img-modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.93);
+    z-index:20000; align-items:center; justify-content:center; flex-direction:column;
+}
+.img-modal-overlay.open { display:flex; }
+.img-modal-close {
+    position:absolute; top:14px; right:18px; background:none; border:none;
+    color:#fff; font-size:2.2rem; cursor:pointer; line-height:1; opacity:.75; z-index:1;
+}
+.img-modal-close:hover { opacity:1; }
+.img-modal-stage {
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:100%; max-height:80vh; padding:0 56px; box-sizing:border-box;
+}
+.img-modal-img {
+    max-width:100%; max-height:78vh; object-fit:contain;
+    border-radius:4px; display:block; user-select:none;
+}
+.img-modal-arrow {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(0,0,0,.55); border:none; color:#fff; font-size:2.2rem;
+    width:44px; height:44px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:.8; transition:opacity .15s, background .15s; user-select:none;
+}
+.img-modal-arrow:hover { opacity:1; background:rgba(0,0,0,.85); }
+.img-modal-arrow.prev { left:6px; }
+.img-modal-arrow.next { right:6px; }
+.img-modal-arrow:disabled { opacity:.25; cursor:default; pointer-events:none; }
+.img-modal-caption {
+    color:#ccc; font-size:.88rem; text-align:center;
+    margin-top:10px; min-height:1.2em; padding:0 16px;
+}
+.img-modal-dots {
+    display:flex; gap:7px; margin-top:10px;
+    justify-content:center; flex-wrap:wrap; max-width:320px;
+}
+.img-modal-dot {
+    width:8px; height:8px; border-radius:50%;
+    background:#555; border:none; cursor:pointer; padding:0;
+    transition:background .15s;
+}
+.img-modal-dot.active { background:#fff; }
 @media (max-width: 767px) {
     .cd-sidebar { display: none !important; }
     .cd-main  { grid-column: 1 / -1 !important; }
@@ -177,7 +221,12 @@
         <div class="w-100 ">
             {% if celeb.image %}
             <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
-                class="cover h16-00">
+                class="cover h16-00"
+                data-gallery-item
+                data-src="{{ celeb.image.url }}"
+                data-caption="{{ celeb.name }}"
+                onclick="openImgModal(this)"
+                style="cursor:pointer;">
             {% endif %}
             <div class="celeb-header-info">
                 <h1 style="margin-top:0;">{{ celeb.name }}</h1>
@@ -323,7 +372,12 @@
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
                     {% for photo in photos %}
                     <div style="position:relative;">
-                        <a href="{{ photo.image.url }}" target="_blank" rel="noopener noreferrer">
+                        <a href="{{ photo.image.url }}"
+                            data-gallery-item
+                            data-src="{{ photo.image.url }}"
+                            data-caption="{{ photo.caption|default:celeb.name }}"
+                            onclick="openImgModal(this); return false;"
+                            style="cursor:pointer; display:block;">
                             <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
                                 style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;">
                         </a>
@@ -581,6 +635,96 @@
         dModal.classList.add('open');
         document.body.style.overflow = 'hidden';
     };
+})();
+</script>
+
+<!-- Image modal / carousel -->
+<div id="imgModal" class="img-modal-overlay" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button id="imgModalClose" class="img-modal-close" aria-label="Close">&times;</button>
+    <div class="img-modal-stage">
+        <button id="imgModalPrev" class="img-modal-arrow prev" aria-label="Previous">&#8249;</button>
+        <img id="imgModalImg" class="img-modal-img" src="" alt="">
+        <button id="imgModalNext" class="img-modal-arrow next" aria-label="Next">&#8250;</button>
+    </div>
+    <div id="imgModalCaption" class="img-modal-caption"></div>
+    <div id="imgModalDots" class="img-modal-dots"></div>
+</div>
+<script>
+(function () {
+    var overlay  = document.getElementById('imgModal');
+    var imgEl    = document.getElementById('imgModalImg');
+    var caption  = document.getElementById('imgModalCaption');
+    var dotsWrap = document.getElementById('imgModalDots');
+    var prevBtn  = document.getElementById('imgModalPrev');
+    var nextBtn  = document.getElementById('imgModalNext');
+    var gallery  = [];
+    var current  = 0;
+
+    function buildGallery() {
+        gallery = Array.from(document.querySelectorAll('[data-gallery-item]')).map(function (el) {
+            return { src: el.dataset.src, caption: el.dataset.caption || '' };
+        });
+    }
+
+    function render() {
+        var item = gallery[current];
+        imgEl.src = item.src;
+        imgEl.alt = item.caption;
+        caption.textContent = item.caption;
+        var single = gallery.length <= 1;
+        prevBtn.style.display = single ? 'none' : '';
+        nextBtn.style.display = single ? 'none' : '';
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === gallery.length - 1;
+        dotsWrap.innerHTML = '';
+        if (!single) {
+            gallery.forEach(function (_, i) {
+                var d = document.createElement('button');
+                d.className = 'img-modal-dot' + (i === current ? ' active' : '');
+                d.setAttribute('aria-label', 'Image ' + (i + 1));
+                d.addEventListener('click', function () { current = i; render(); });
+                dotsWrap.appendChild(d);
+            });
+        }
+    }
+
+    window.openImgModal = function (el) {
+        buildGallery();
+        var items = Array.from(document.querySelectorAll('[data-gallery-item]'));
+        current = Math.max(0, items.indexOf(el));
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        render();
+    };
+
+    function close() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        imgEl.src = '';
+    }
+
+    document.getElementById('imgModalClose').addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    prevBtn.addEventListener('click', function () { if (current > 0) { current--; render(); } });
+    nextBtn.addEventListener('click', function () { if (current < gallery.length - 1) { current++; render(); } });
+
+    document.addEventListener('keydown', function (e) {
+        if (!overlay.classList.contains('open')) return;
+        if (e.key === 'ArrowLeft')  { if (current > 0) { current--; render(); } }
+        else if (e.key === 'ArrowRight') { if (current < gallery.length - 1) { current++; render(); } }
+        else if (e.key === 'Escape') close();
+    });
+
+    // swipe
+    var tx = 0;
+    overlay.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+    overlay.addEventListener('touchend', function (e) {
+        var dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 44) {
+            if (dx < 0 && current < gallery.length - 1) { current++; render(); }
+            else if (dx > 0 && current > 0) { current--; render(); }
+        }
+    }, { passive: true });
 })();
 </script>
 {% endblock %}
