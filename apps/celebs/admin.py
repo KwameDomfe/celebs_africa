@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Family, Type, Celeb, Review, Comment, Country, CelebPhoto
+from .models import Category, Family, Type, Celeb, Review, Comment, Country, CelebPhoto, CelebSocialLink
 
 
 class TypeInline(admin.TabularInline):
@@ -60,7 +60,12 @@ class CelebAdmin(admin.ModelAdmin):
         extra = 1
         fields = ('image', 'caption')
 
-    inlines = [PhotoInline]
+    class SocialLinkInline(admin.TabularInline):
+        model = CelebSocialLink
+        extra = 1
+        fields = ('platform', 'url', 'order')
+
+    inlines = [PhotoInline, SocialLinkInline]
 
 
 @admin.register(Review)

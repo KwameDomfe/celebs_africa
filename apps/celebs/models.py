@@ -166,6 +166,62 @@ class CelebPhoto(models.Model):
 		return f"{self.celeb.name} photo {self.pk}"
 
 
+class CelebSocialLink(models.Model):
+	PLATFORM_CHOICES = [
+		('website',     'Website'),
+		('instagram',   'Instagram'),
+		('twitter',     'Twitter / X'),
+		('facebook',    'Facebook'),
+		('tiktok',      'TikTok'),
+		('youtube',     'YouTube'),
+		('snapchat',    'Snapchat'),
+		('threads',     'Threads'),
+		('linkedin',    'LinkedIn'),
+		('spotify',     'Spotify'),
+		('soundcloud',  'SoundCloud'),
+		('apple_music', 'Apple Music'),
+		('deezer',      'Deezer'),
+		('audiomack',   'Audiomack'),
+		('boomplay',    'Boomplay'),
+		('telegram',    'Telegram'),
+		('whatsapp',    'WhatsApp'),
+		('twitch',      'Twitch'),
+		('vimeo',       'Vimeo'),
+		('pinterest',   'Pinterest'),
+		('other',       'Other'),
+	]
+	_ICONS = {
+		'website': ('🌐', '#8af'),  'instagram': ('📸', '#e1a'),
+		'twitter': ('𝕏', '#aaa'),   'facebook': ('📘', '#4267B2'),
+		'tiktok': ('🎵', '#aaa'),    'youtube': ('▶', '#f00'),
+		'snapchat': ('👻', '#f5f'),  'threads': ('🧵', '#aaa'),
+		'linkedin': ('💼', '#0A66C2'), 'spotify': ('🎧', '#1DB954'),
+		'soundcloud': ('🔊', '#FF5500'), 'apple_music': ('🎵', '#FC3C44'),
+		'deezer': ('🎶', '#00C7F2'), 'audiomack': ('🎤', '#FF6600'),
+		'boomplay': ('▶', '#f60'),   'telegram': ('✈', '#26A5E4'),
+		'whatsapp': ('💬', '#25D366'), 'twitch': ('🎮', '#9146FF'),
+		'vimeo': ('🎬', '#1ab7ea'), 'pinterest': ('📌', '#E60023'),
+		'other': ('🔗', '#888'),
+	}
+
+	celeb = models.ForeignKey(Celeb, on_delete=models.CASCADE, related_name='social_links')
+	platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+	url = models.URLField(max_length=500)
+	order = models.PositiveSmallIntegerField(default=0)
+
+	class Meta:
+		ordering = ['order', 'platform']
+
+	def get_icon(self):
+		return self._ICONS.get(self.platform, ('🔗', '#888'))[0]
+
+	def get_color(self):
+		return self._ICONS.get(self.platform, ('🔗', '#888'))[1]
+
+	def __str__(self):
+		return f"{self.celeb.name} — {self.get_platform_display()}"
+
+
 class Like(models.Model):
 	celeb = models.ForeignKey(Celeb, on_delete=models.CASCADE, related_name='likes')
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='celeb_likes')

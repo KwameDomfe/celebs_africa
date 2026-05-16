@@ -73,6 +73,26 @@
     transition: border-color 0.15s, color 0.15s;
 }
 .btn-cancel:hover { border-color: #666; color: rgba(255,255,255,0.85); }
+/* Published checkbox */
+.form-checkbox-label { display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.9rem; color:rgba(255,255,255,0.8); }
+.form-checkbox-label input[type="checkbox"] { width:16px; height:16px; cursor:pointer; }
+/* Social link rows */
+.link-row { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.link-platform-select { width:100%; }
+.link-url-row { display:flex; gap:8px; align-items:center; }
+.link-url-input { flex:1; min-width:0; width:auto; }
+.link-remove-btn {
+    background:none; border:1px solid #555; color:#aaa; border-radius:4px;
+    padding:6px 10px; cursor:pointer; font-size:0.85rem; flex-shrink:0;
+    transition:border-color .15s, color .15s;
+}
+.link-remove-btn:hover { border-color:#e55; color:#e55; }
+.link-add-btn {
+    background:none; border:1px dashed #555; color:rgba(255,255,255,0.6);
+    border-radius:4px; padding:7px 14px; cursor:pointer; font-size:0.85rem;
+    transition:border-color .15s, color .15s; margin-top:4px;
+}
+.link-add-btn:hover { border-color:#aaa; color:rgba(255,255,255,0.9); }
 </style>
 
 <div class="pa1-00 white-90">
@@ -153,27 +173,29 @@
         </div>
 
         <div class="form-section">
-            <p class="form-section-title">Online Presence</p>
-            <div class="form-field">
-                <label for="id_website">Website</label>
-                <input type="url" id="id_website" name="website" value="{{ celeb.website|default:'' }}" placeholder="https://example.com">
+            <p class="form-section-title">Social &amp; Online Links</p>
+            <div id="social-links-list">
+                {% for link in celeb.social_links.all %}
+                <div class="link-row">
+                    <select name="link_platform" class="link-platform-select">
+                        <option value="">-- Platform --</option>
+                        {% for value, label in platform_choices %}
+                        <option value="{{ value }}" {% if value == link.platform %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="link-url-row">
+                        <input type="url" name="link_url" value="{{ link.url }}" placeholder="https://..." class="link-url-input">
+                        <button type="button" class="link-remove-btn" onclick="removeLinkRow(this)" title="Remove">✕</button>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="form-field">
-                <label for="id_instagram">Instagram</label>
-                <input type="text" id="id_instagram" name="instagram" value="{{ celeb.instagram|default:'' }}" placeholder="username — e.g. burnaboygram">
-            </div>
-            <div class="form-field">
-                <label for="id_twitter">Twitter / X</label>
-                <input type="text" id="id_twitter" name="twitter" value="{{ celeb.twitter|default:'' }}" placeholder="username — e.g. burnaboy">
-            </div>
-            <div class="form-field">
-                <label for="id_facebook">Facebook</label>
-                <input type="text" id="id_facebook" name="facebook" value="{{ celeb.facebook|default:'' }}" placeholder="page name or slug — e.g. BurnaBoyMusic">
-            </div>
-            <div class="form-field">
-                <label for="id_youtube">YouTube</label>
-                <input type="text" id="id_youtube" name="youtube" value="{{ celeb.youtube|default:'' }}" placeholder="channel name or slug — e.g. BurnaBoy">
-            </div>
+            <button type="button" onclick="addLinkRow()" class="link-add-btn">+ Add link</button>
+            <span class="form-hint">Full URL required — e.g. https://instagram.com/yourname</span>
+        </div>
+
+        <div class="form-section">
+            <p class="form-section-title">Video &amp; Visibility</p>
             <div class="form-field">
                 <label for="id_featured_video">Featured Video</label>
                 <input type="url" id="id_featured_video" name="featured_video" value="{{ celeb.featured_video|default:'' }}" placeholder="https://www.youtube.com/watch?v=...">
@@ -194,4 +216,64 @@
         </div>
     </form>
 </div>
+
+<script>
+(function () {
+    var PLATFORM_OPTIONS = [
+        {% for value, label in platform_choices %}['{{ value }}', '{{ label }}'],
+        {% endfor %}
+    ];
+
+    function buildSelect(selectedValue) {
+        var sel = document.createElement('select');
+        sel.name = 'link_platform';
+        sel.className = 'link-platform-select';
+        var blank = document.createElement('option');
+        blank.value = ''; blank.textContent = '-- Platform --';
+        sel.appendChild(blank);
+        PLATFORM_OPTIONS.forEach(function (pair) {
+            var opt = document.createElement('option');
+            opt.value = pair[0]; opt.textContent = pair[1];
+            if (pair[0] === selectedValue) opt.selected = true;
+            sel.appendChild(opt);
+        });
+        return sel;
+    }
+
+    window.addLinkRow = function (platform, url) {
+        var container = document.getElementById('social-links-list');
+        var row = document.createElement('div');
+        row.className = 'link-row';
+        var inp = document.createElement('input');
+        inp.type = 'url'; inp.name = 'link_url';
+        inp.className = 'link-url-input';
+        inp.placeholder = 'https://...';
+        if (url) inp.value = url;
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'link-remove-btn';
+        btn.title = 'Remove'; btn.textContent = '✕';
+        btn.onclick = function () { removeLinkRow(btn); };
+        var urlRow = document.createElement('div');
+        urlRow.className = 'link-url-row';
+        urlRow.appendChild(inp);
+        urlRow.appendChild(btn);
+        row.appendChild(buildSelect(platform || ''));
+        row.appendChild(urlRow);
+        container.appendChild(row);
+        inp.focus();
+    };
+
+    window.removeLinkRow = function (btn) {
+        btn.closest('.link-row').remove();
+    };
+
+    // Show one blank row on load so the user can paste immediately
+    document.addEventListener('DOMContentLoaded', function () {
+        var list = document.getElementById('social-links-list');
+        if (list && list.children.length === 0) {
+            window.addLinkRow();
+        }
+    });
+})();
+</script>
 {% endblock %}

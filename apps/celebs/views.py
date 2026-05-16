@@ -5,7 +5,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Count, Avg
-from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto
+from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto, CelebSocialLink
+
+
+def _save_social_links(request, celeb):
+	"""Parse link_platform / link_url POST lists and replace all social links for celeb."""
+	platforms = request.POST.getlist('link_platform')
+	urls = request.POST.getlist('link_url')
+	celeb.social_links.all().delete()
+	order = 0
+	for platform, url in zip(platforms, urls):
+		url = url.strip()
+		if platform and url:
+			CelebSocialLink.objects.create(celeb=celeb, platform=platform, url=url, order=order)
+			order += 1
 
 
 def staff_required(view_func):
@@ -221,7 +234,7 @@ def celeb_create(request):
 		type_id = request.POST.get('type')
 		nationality_id = request.POST.get('nationality') or None
 		image = request.FILES.get('image')
-		Celeb.objects.create(
+		new_celeb = Celeb.objects.create(
 			name=name,
 			street_name=street_name,
 			bio=bio,
@@ -232,16 +245,15 @@ def celeb_create(request):
 			date_of_death=date_of_death or None,
 			image=image,
 			awards=request.POST.get('awards', ''),
-			website=request.POST.get('website', ''),
-			instagram=request.POST.get('instagram', ''),
-			twitter=request.POST.get('twitter', ''),
-			facebook=request.POST.get('facebook', ''),
-			youtube=request.POST.get('youtube', ''),
 			featured_video=request.POST.get('featured_video', ''),
 			published=request.POST.get('published') == 'on',
 		)
+		_save_social_links(request, new_celeb)
 		return HttpResponseRedirect(reverse('celebs_home'))
-	return render(request, 'celebs/celeb_form.html', {'types': types, 'countries': countries})
+	return render(request, 'celebs/celeb_form.html', {
+		'types': types, 'countries': countries,
+		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+	})
 
 
 @staff_required
@@ -259,18 +271,17 @@ def celeb_update(request, slug):
 		celeb.date_of_birth = request.POST.get('date_of_birth') or None
 		celeb.date_of_death = request.POST.get('date_of_death') or None
 		celeb.awards = request.POST.get('awards', '')
-		celeb.website = request.POST.get('website', '')
-		celeb.instagram = request.POST.get('instagram', '')
-		celeb.twitter = request.POST.get('twitter', '')
-		celeb.facebook = request.POST.get('facebook', '')
-		celeb.youtube = request.POST.get('youtube', '')
 		celeb.featured_video = request.POST.get('featured_video', '')
 		celeb.published = request.POST.get('published') == 'on'
 		if request.FILES.get('image'):
 			celeb.image = request.FILES.get('image')
 		celeb.save()
+		_save_social_links(request, celeb)
 		return HttpResponseRedirect(celeb.get_absolute_url())
-	return render(request, 'celebs/celeb_form.html', {'celeb': celeb, 'types': types, 'countries': countries})
+	return render(request, 'celebs/celeb_form.html', {
+		'celeb': celeb, 'types': types, 'countries': countries,
+		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+	})
 
 
 @staff_required
