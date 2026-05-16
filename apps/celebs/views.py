@@ -95,6 +95,20 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		'user_review': user_review,
 		'user_followed_celebs': user_followed_celebs,
 	}
+
+	# OG / social sharing
+	og_image = ''
+	if celeb.image:
+		img_url = celeb.image.url
+		og_image = img_url if img_url.startswith('http') else request.build_absolute_uri(img_url)
+	words = celeb.bio.split() if celeb.bio else []
+	og_description = (
+		' '.join(words[:30]) + ('…' if len(words) > 30 else '')
+		if words
+		else f'{celeb.name} — {celeb.type.family.category} celebrity on CelebsAfrica.'
+	)
+	context.update({'og_image': og_image, 'og_description': og_description})
+
 	return render(request, 'celebs/celeb_detail.html', context)
 
 

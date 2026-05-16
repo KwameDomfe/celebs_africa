@@ -2,6 +2,15 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 
+# Known social-media / SEO crawler user-agent substrings.
+# These bots must be able to read pages unauthenticated to generate previews.
+_CRAWLER_AGENTS = (
+    'facebookexternalhit', 'Facebot',
+    'Twitterbot', 'LinkedInBot',
+    'WhatsApp', 'Slackbot',
+    'TelegramBot', 'Discordbot',
+    'Googlebot', 'bingbot', 'DuckDuckBot',
+)
 
 class LastSeenMiddleware:
     """Updates UserProfile.last_seen on every authenticated request."""
@@ -54,6 +63,8 @@ class LoginRequiredMiddleware:
                 path not in self.PUBLIC_EXACT
                 and not any(path.startswith(p) for p in self._public_prefixes)
             ):
-                return redirect_to_login(request.get_full_path())
+                ua = request.META.get('HTTP_USER_AGENT', '')
+                if not any(bot.lower() in ua.lower() for bot in _CRAWLER_AGENTS):
+                    return redirect_to_login(request.get_full_path())
         return self.get_response(request)
 

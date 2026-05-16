@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}{{ celeb.name }} | African Celebs{% endblock %}
+{% load static %}
+{% block title %}{{ celeb.name }} | CelebsAfrica{% endblock %}
+{% block title2 %}{{ celeb.name }} | CelebsAfrica{% endblock %}
+{% block og_type %}profile{% endblock %}
+{% block canonical %}https://celebsafrica.com{{ celeb.get_absolute_url }}{% endblock %}
+{% block meta_description %}{{ og_description }}{% endblock %}
+{% block og_description %}{{ og_description }}{% endblock %}
+{% block og_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block twitter_title %}{{ celeb.name }} | CelebsAfrica{% endblock %}
+{% block twitter_description %}{{ og_description }}{% endblock %}
+{% block twitter_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 {% block content %}
 <style>
 .celeb-header { display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; margin-bottom:24px; }
