@@ -98,19 +98,25 @@ class Celeb(models.Model):
 		if not url:
 			return ''
 		import re
+		video_id = None
 		# Already an embed URL
-		if 'youtube.com/embed/' in url:
-			return url
-		# youtu.be/VIDEO_ID
-		m = re.search(r'youtu\.be/([A-Za-z0-9_-]+)', url)
+		m = re.search(r'youtube\.com/embed/([A-Za-z0-9_-]+)', url)
 		if m:
-			return f'https://www.youtube.com/embed/{m.group(1)}'
-		# youtube.com/watch?v=VIDEO_ID
-		m = re.search(r'[?&]v=([A-Za-z0-9_-]+)', url)
-		if m:
-			return f'https://www.youtube.com/embed/{m.group(1)}'
-		# Not a valid video URL (e.g. channel URL) — cannot embed
-		return ''
+			video_id = m.group(1)
+		if not video_id:
+			# youtu.be/VIDEO_ID
+			m = re.search(r'youtu\.be/([A-Za-z0-9_-]+)', url)
+			if m:
+				video_id = m.group(1)
+		if not video_id:
+			# youtube.com/watch?v=VIDEO_ID
+			m = re.search(r'[?&]v=([A-Za-z0-9_-]+)', url)
+			if m:
+				video_id = m.group(1)
+		if not video_id:
+			return ''
+		# origin param is required by the YouTube player to avoid Error 153
+		return f'https://www.youtube.com/embed/{video_id}?origin=https://celebsafrica.com'
 
 	@property
 	def age(self):
