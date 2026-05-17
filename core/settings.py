@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-CHANGE_THIS_TO
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ('www.celebsafrica.com','celebsafrica.com','celebs-africa-o3zfi.ondigitalocean.app', '127.0.0.1', 'localhost')
+ALLOWED_HOSTS = ('127.0.0.1', 'localhost','celebs-africa-o3zfi.ondigitalocean.app','www.celebsafrica.com','celebsafrica.com')
 
 CSRF_TRUSTED_ORIGINS = ['https://www.celebsafrica.com', 'https://celebsafrica.com']
 
