@@ -54,6 +54,7 @@ def home(request):
         'total_celebs': Celeb.objects.filter(published=True).count(),
         'celebs_count': filters.count(),
         'is_filtered': is_filtered,
+        'country_count': Celeb.objects.filter(published=True).values('nationality').distinct().exclude(nationality=None).count(),
     }
     return render(request, 'home.html', context)
 
