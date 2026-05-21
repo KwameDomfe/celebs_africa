@@ -4,6 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# Theme — set data-theme ASAP to prevent flash of wrong theme #}
+    <script>
+        (function(){
+            var t = localStorage.getItem('theme');
+            document.documentElement.setAttribute('data-theme', (t === 'light' || t === 'dark') ? t : 'dark');
+        })();
+    </script>
 
     {# Google Analytics — only load in production (DEBUG=False) #}
     {% if not debug %}
@@ -50,6 +57,7 @@
     <link rel="stylesheet" href="{% static 'css/gdb_normalize.css' %}">
     <link rel="stylesheet" href="{% static 'css/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
     <style>
         .user-dropdown,
@@ -82,6 +90,10 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <a href="{% url 'top_celebs' %}">⭐ Top</a>
+                </div>
+                <div class="flex items-center justify-center">
+                    <button class="theme-toggle-btn" id="themeToggle" type="button"
+                        title="Switch to light mode" aria-label="Toggle theme">☀️</button>
                 </div>
                 {% if user.is_authenticated %}
                     <div style="display:flex;align-items:center;">
@@ -220,6 +232,10 @@
                 Login
             </a>
         {% endif %}
+        <div style="padding:16px 32px;border-bottom:1px solid rgba(128,128,128,0.15);">
+            <button class="theme-toggle-btn" id="themeToggleMobile" type="button"
+                style="font-size:1.1rem;">☀️ Toggle Theme</button>
+        </div>
     </div>
     <main class="flex-auto w-100 bg-black" 
         style="height:calc(100vh - 128px); 
@@ -291,6 +307,42 @@
                 openOverlay();
             });
         }
+    </script>
+    <script>
+        // ===== Theme Toggle =====
+        (function () {
+            var html = document.documentElement;
+
+            function getTheme() {
+                return html.getAttribute('data-theme') || 'dark';
+            }
+
+            function applyTheme(theme) {
+                html.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                var isDark = theme === 'dark';
+                document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+                    if (btn.id === 'themeToggleMobile') {
+                        btn.textContent = isDark ? '☀️  Light Mode' : '🌙  Dark Mode';
+                    } else {
+                        btn.textContent = isDark ? '☀️' : '🌙';
+                    }
+                    btn.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+                    btn.setAttribute('aria-label', btn.title);
+                });
+            }
+
+            function toggleTheme() {
+                applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+            }
+
+            // Sync button icons with current theme on load
+            applyTheme(getTheme());
+
+            document.querySelectorAll('.theme-toggle-btn').forEach(function (btn) {
+                btn.addEventListener('click', toggleTheme);
+            });
+        })();
     </script>
 </body>
 </html>
