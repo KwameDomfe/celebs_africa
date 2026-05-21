@@ -57,6 +57,9 @@ html[data-theme="light"] footer {
 }
 html[data-theme="light"] footer a       { color: #333 !important; }
 
+/* View Details link */
+html[data-theme="light"] .view-details-link { color: #cc0000 !important; border-color: #cc0000 !important; }
+
 /* Mobile nav overlay */
 html[data-theme="light"] #navOverlay   { background: #ffffff !important; }
 html[data-theme="light"] #navOverlay a {
@@ -66,3 +69,6 @@ html[data-theme="light"] #navOverlay a {
 html[data-theme="light"] #navOverlayClose { color: #111 !important; }
 html[data-theme="light"] #navOverlay button,
 html[data-theme="light"] #navOverlay form button { color: #111 !important; }
+
+/* Mobile overlay toggle — white in dark mode */
+#navOverlay .theme-toggle-btn { color: #ffffff; }
