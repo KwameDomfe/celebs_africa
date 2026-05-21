@@ -60,6 +60,15 @@ html[data-theme="light"] footer a       { color: #333 !important; }
 /* View Details link */
 html[data-theme="light"] .view-details-link { color: #cc0000 !important; border-color: #cc0000 !important; }
 
+/* Celeb detail user sidebar */
+html[data-theme="light"] .cd-user-sidebar { color: #111; }
+html[data-theme="light"] .cd-user-sidebar p { color: #111 !important; }
+html[data-theme="light"] .cd-user-sidebar a { color: #333 !important; }
+/* Catch all hardcoded rgba(255,...) white inline colors */
+html[data-theme="light"] .cd-user-sidebar [style*="rgba(255"] { color: #111 !important; }
+/* Avatar / celeb placeholder dark background */
+html[data-theme="light"] .cd-user-sidebar [style*="background:#2a2a2a"] { background: #e0e0e0 !important; color: #555 !important; }
+
 /* Mobile nav overlay */
 html[data-theme="light"] #navOverlay   { background: #ffffff !important; }
 html[data-theme="light"] #navOverlay a {
