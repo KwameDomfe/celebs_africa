@@ -35,7 +35,14 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ('127.0.0.1', 'localhost','celebs-africa-o3zfi.ondigitalocean.app','www.celebsafrica.com','celebsafrica.com')
 
-CSRF_TRUSTED_ORIGINS = ['https://www.celebsafrica.com', 'https://celebsafrica.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://www.celebsafrica.com',
+    'https://celebsafrica.com',
+    'https://celebs-africa-o3zfi.ondigitalocean.app',
+]
+
+# Trust the X-Forwarded-Proto header set by DigitalOcean's HTTPS proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 

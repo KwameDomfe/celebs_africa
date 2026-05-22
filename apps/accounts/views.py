@@ -55,7 +55,7 @@ def register(request):
             user = form.save()
             user.profile.role = form.cleaned_data['role']
             user.profile.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('account_home')
     else:
         form = RegisterForm()
