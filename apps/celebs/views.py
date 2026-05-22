@@ -26,8 +26,8 @@ def celebs_home(request):
 	categories = Category.objects.prefetch_related('families__types').order_by('name')
 	countries = Country.objects.all()
 	celebs = Celeb.objects.filter(published=True).select_related('type__family__category').annotate(
-		follower_count=Count('followers'),
-		avg_rating=Avg('reviews__rating'),
+		follower_count=Count('followers', distinct=True),
+		avg_rating=Avg('reviews__rating', distinct=True),
 	).order_by(
 		'type__family__category__name', 'type__family__name', 'type__name', 'name'
 	)

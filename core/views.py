@@ -36,8 +36,8 @@ def home(request):
 
     # Annotated queryset for display (same filters applied)
     celebs = filters.select_related('type__family__category', 'nationality').annotate(
-        follower_count=Count('followers'),
-        avg_rating=Avg('reviews__rating'),
+        follower_count=Count('followers', distinct=True),
+        avg_rating=Avg('reviews__rating', distinct=True),
     ).order_by(*SORT_OPTIONS.get(sort, DEFAULT_ORDER))
 
     is_filtered = any([cat_id, family_id, type_id, country_id, q_filter])
@@ -68,8 +68,8 @@ def top_celebs(request):
     celebs = (
         Celeb.objects.filter(published=True).select_related('type__family__category', 'nationality')
         .annotate(
-            follower_count=Count('followers'),
-            avg_rating=Avg('reviews__rating'),
+            follower_count=Count('followers', distinct=True),
+            avg_rating=Avg('reviews__rating', distinct=True),
         )
         .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True))
     )
