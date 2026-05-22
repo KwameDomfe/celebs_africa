@@ -17,4 +17,5 @@ urlpatterns = [
     path('<int:pk>/', views.celeb_detail_by_pk, name='celeb_detail_pk'),
     path('<slug:cat_slug>/<slug:family_slug>/<slug:type_slug>/<slug:slug>/', views.celeb_detail, name='celeb_detail'),
     path('<slug:slug>/edit/', views.celeb_update, name='celeb_update'),
+    path('my-celebs/', views.my_celebs, name='my_celebs'),
 ]

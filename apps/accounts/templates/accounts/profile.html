@@ -16,6 +16,9 @@
     <p>
     <a href="{% url 'profile_edit' %}" class="red">Edit Profile</a> &nbsp;|&nbsp;
     <a href="{% url 'password_change' %}" class="red">Change Password</a>
+    {% if user.managed_celebs.exists or user.is_staff %}&nbsp;|&nbsp;
+    <a href="{% url 'my_celebs' %}" class="red">My Celebs</a>
+    {% endif %}
     </p>
 
     <h2>Following ({{ following|length }})</h2>

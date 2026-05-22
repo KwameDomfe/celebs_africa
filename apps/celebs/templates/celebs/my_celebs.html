@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}My Celebs | CelebsAfrica{% endblock %}
+{% block content %}
+<style>
+.mc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.mc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+.mc-card {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.15s;
+}
+.mc-card:hover { border-color: #555; }
+.mc-card-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    background: #1a1a1a;
+    display: block;
+}
+.mc-card-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    font-size: 2.5rem;
+}
+.mc-card-body {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+.mc-card-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+}
+.mc-card-meta {
+    font-size: 0.78rem;
+    color: #888;
+}
+.mc-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.mc-badge-pub { background: #1a3a1a; color: #5c5; }
+.mc-badge-draft { background: #3a2200; color: #c80; }
+.mc-card-actions {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid #222;
+    flex-wrap: wrap;
+}
+.mc-btn {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    border: 1px solid;
+    transition: opacity 0.15s;
+}
+.mc-btn:hover { opacity: 0.75; }
+.mc-btn-view  { color: #aaa; border-color: #444; }
+.mc-btn-edit  { color: #5af; border-color: #5af; }
+.mc-btn-del   { color: #f55; border-color: #f55; }
+.mc-empty {
+    padding: 40px 0;
+    text-align: center;
+    color: #666;
+}
+.mc-empty p { margin: 0 0 16px; font-size: 0.95rem; }
+</style>
+
+<div class="pa1-00 white-90">
+    <div class="mc-header">
+        <h1 style="margin: 0; font-size: 1.5rem;">My Celebs</h1>
+        {% if can_create %}
+        <a href="{% url 'celeb_create' %}" class="btn-save" style="text-decoration:none;">+ Add New Celeb</a>
+        {% endif %}
+    </div>
+
+    {% if managed_celebs %}
+    <div class="mc-grid">
+        {% for celeb in managed_celebs %}
+        <div class="mc-card">
+            {% if celeb.image %}
+            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="mc-card-img">
+            {% else %}
+            <div class="mc-card-img-placeholder">&#9398;</div>
+            {% endif %}
+            <div class="mc-card-body">
+                <h2 class="mc-card-name">{{ celeb.name }}</h2>
+                <div class="mc-card-meta">{{ celeb.type.family.category.name }} &rsaquo; {{ celeb.type.name }}</div>
+                <div style="margin-top:4px;">
+                    {% if celeb.published %}
+                    <span class="mc-badge mc-badge-pub">Published</span>
+                    {% else %}
+                    <span class="mc-badge mc-badge-draft">Draft</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mc-card-actions">
+                <a href="{{ celeb.get_absolute_url }}" class="mc-btn mc-btn-view">View</a>
+                <a href="{% url 'celeb_update' celeb.slug %}" class="mc-btn mc-btn-edit">Edit</a>
+                <a href="{% url 'celeb_delete' celeb.pk %}" class="mc-btn mc-btn-del">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="mc-empty">
+        <p>You don't have any celeb pages assigned yet.</p>
+        {% if can_create %}
+        <a href="{% url 'celeb_create' %}" class="btn-save" style="text-decoration:none;">Create your first celeb</a>
+        {% else %}
+        <p style="font-size:0.85rem;">Contact an admin to be assigned to a celeb page.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

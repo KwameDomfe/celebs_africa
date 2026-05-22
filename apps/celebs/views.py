@@ -197,7 +197,7 @@ def celeb_comment(request, pk):
 def comment_edit(request, pk):
 	comment = get_object_or_404(Comment.objects.select_related('celeb__type__family__category'), pk=pk)
 	if comment.user != request.user:
-		return HttpResponseForbidden('You can only edit your own comments.')
+		raise PermissionDenied
 	if request.method == 'POST':
 		text = request.POST.get('text', '').strip()
 		if text:
@@ -250,7 +250,10 @@ def celeb_create(request):
 			published=request.POST.get('published') == 'on',
 		)
 		_save_social_links(request, new_celeb)
-		return HttpResponseRedirect(reverse('celebs_home'))
+		# Auto-add non-staff creators as managers so they can edit their own celeb
+		if not request.user.is_staff:
+			new_celeb.managers.add(request.user)
+		return HttpResponseRedirect(new_celeb.get_absolute_url())
 	return render(request, 'celebs/celeb_form.html', {
 		'types': types, 'countries': countries,
 		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
@@ -324,3 +327,18 @@ def celeb_photo_delete(request, pk):
 		photo.delete()
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
 
+
+@login_required
+def my_celebs(request):
+	if request.user.is_staff:
+		celebs = Celeb.objects.select_related('type__family__category').order_by('name')
+	else:
+		celebs = (
+			request.user.managed_celebs
+			.select_related('type__family__category')
+			.order_by('name')
+		)
+	return render(request, 'celebs/my_celebs.html', {
+		'managed_celebs': celebs,
+		'can_create': request.user.has_perm('celebs.add_celeb'),
+	})

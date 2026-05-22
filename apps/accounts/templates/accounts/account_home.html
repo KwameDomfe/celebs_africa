@@ -11,6 +11,13 @@
     <h2 style="margin: 0 0 16px; font-size: 1.4rem;">Account</h2>
     {% if user.is_authenticated %}
     <p style="margin: 0 0 20px; color: #888;">Signed in as <strong style="color: rgba(255,255,255,0.88);">{{ user.username }}</strong></p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+        <a href="{% url 'profile' %}" class="btn-outline">My Profile</a>
+        {% if user.managed_celebs.exists or user.is_staff %}
+        <a href="{% url 'my_celebs' %}" class="btn-outline">My Celebs</a>
+        {% endif %}
+        <a href="{% url 'celebs_home' %}" class="btn-outline">All Celebs</a>
+    </div>
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit" class="btn-save">Logout</button>
