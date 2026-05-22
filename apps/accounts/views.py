@@ -9,9 +9,21 @@ from django import forms
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    role = forms.ChoiceField(
+        choices=[
+            ('fan', 'Fan'),
+            ('celeb', 'Celeb'),
+            ('manager', 'Celeb Manager'),
+            ('staff', 'Staff'),
+        ],
+        required=True,
+        initial='fan',
+        label='I am a',
+    )
 
     class Meta(UserCreationForm.Meta):
         fields = ('username', 'email', 'password1', 'password2')
+        field_order = ['username', 'email', 'password1', 'password2', 'role']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -41,6 +53,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            user.profile.role = form.cleaned_data['role']
+            user.profile.save()
             login(request, user)
             return redirect('account_home')
     else:
