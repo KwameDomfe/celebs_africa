@@ -97,6 +97,10 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 			.select_related('type__family__category')
 			.order_by('name')
 		)
+	published_qs = Celeb.objects.filter(published=True).select_related('type__family__category')
+	prev_celeb = published_qs.filter(pk__lt=celeb.pk).order_by('-pk').first()
+	next_celeb = published_qs.filter(pk__gt=celeb.pk).order_by('pk').first()
+
 	context = {
 		'celeb': celeb,
 		'comments': comments,
@@ -111,6 +115,8 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		'user_review': user_review,
 		'user_followed_celebs': user_followed_celebs,
 		'can_manage': request.user.has_perm('celebs.change_celeb', celeb),
+		'prev_celeb': prev_celeb,
+		'next_celeb': next_celeb,
 	}
 
 	# OG / social sharing

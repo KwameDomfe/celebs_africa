@@ -630,18 +630,29 @@
             </div>
         </div>
     </div>
-    <div class="gc10s3 white cd-left"> 
+    <div class="gc10s3 white cd-left pa1-00"> 
         Previous: 
         {% if prev_celeb %}
-            <a href="{% url 'celeb_detail' prev_celeb.slug %}">{{ prev_celeb.name }}</a>
+            <a href="{{ prev_celeb.get_absolute_url }}"
+                class="red"
+            >
+                {{ prev_celeb.name }}
+            </a>
         {% else %}
-            <span style="color:gray;">None</span>
+            <span style="color:gray;"
+            >
+                None
+            </span>
         {% endif %}
     </div>
-    <div class="gc10s3 white cd-right"> 
+    <div class="gc10s3 white cd-right pa1-00"> 
         Next: 
         {% if next_celeb %}
-            <a href="{% url 'celeb_detail' next_celeb.slug %}">{{ next_celeb.name }}</a>
+            <a href="{{ next_celeb.get_absolute_url }}"
+                class="red"
+            >
+                {{ next_celeb.name }}
+            </a>
         {% else %}
             <span style="color:gray;">None</span>
         {% endif %}
