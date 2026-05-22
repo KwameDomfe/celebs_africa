@@ -98,8 +98,8 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 			.order_by('name')
 		)
 	published_qs = Celeb.objects.filter(published=True).select_related('type__family__category')
-	prev_celeb = published_qs.filter(pk__lt=celeb.pk).order_by('-pk').first()
-	next_celeb = published_qs.filter(pk__gt=celeb.pk).order_by('pk').first()
+	prev_celeb = published_qs.filter(name__lt=celeb.name).order_by('-name').first()
+	next_celeb = published_qs.filter(name__gt=celeb.name).order_by('name').first()
 
 	context = {
 		'celeb': celeb,
