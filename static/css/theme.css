@@ -86,6 +86,10 @@ html[data-theme="light"] #navOverlay form button { color: #111 !important; }
    LIGHT MODE — Component overrides
    ================================================================ */
 
+/* --- Password show/hide toggle --- */
+html[data-theme="light"] .pw-toggle { color: #999 !important; }
+html[data-theme="light"] .pw-toggle:hover { color: #444 !important; }
+
 /* --- Shared form inputs (.site-form: login, register, password, profile-edit) --- */
 html[data-theme="light"] .site-form input,
 html[data-theme="light"] .site-form select,
