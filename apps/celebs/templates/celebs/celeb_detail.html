@@ -327,7 +327,8 @@
                             </button>
                         </div>
                     </div>
-                    {% if can_manage %}"
+                    {% if can_manage %}
+                    <a href="{% url 'celeb_update' celeb.slug %}"
                         class="blue0 ba br0-25 pa0-25"
                     >Edit</a>
                     <a href="{% url 'celeb_delete' celeb.pk %}"
