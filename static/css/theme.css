@@ -81,3 +81,162 @@ html[data-theme="light"] #navOverlay form button { color: #111 !important; }
 
 /* Mobile overlay toggle — white in dark mode */
 #navOverlay .theme-toggle-btn { color: #ffffff; }
+
+/* ================================================================
+   LIGHT MODE — Component overrides
+   ================================================================ */
+
+/* --- Shared form inputs (.site-form: login, register, password, profile-edit) --- */
+html[data-theme="light"] .site-form input,
+html[data-theme="light"] .site-form select,
+html[data-theme="light"] .site-form textarea {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+html[data-theme="light"] .site-form .helptext { color: #777 !important; }
+
+/* --- Celeb create/edit form --- */
+html[data-theme="light"] .celeb-form input[type="text"],
+html[data-theme="light"] .celeb-form input[type="url"],
+html[data-theme="light"] .celeb-form input[type="date"],
+html[data-theme="light"] .celeb-form input[type="file"],
+html[data-theme="light"] .celeb-form select,
+html[data-theme="light"] .celeb-form textarea {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+html[data-theme="light"] .celeb-form select option { background: #fff !important; }
+html[data-theme="light"] .link-platform-select,
+html[data-theme="light"] .link-url-input {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+html[data-theme="light"] .link-remove-btn { border-color: #bbb !important; color: #555 !important; }
+html[data-theme="light"] .link-remove-btn:hover { border-color: #c00 !important; color: #c00 !important; }
+html[data-theme="light"] .link-add-btn { border-color: #bbb !important; color: rgba(0,0,0,0.6) !important; }
+html[data-theme="light"] .link-add-btn:hover { border-color: #888 !important; color: rgba(0,0,0,0.9) !important; }
+
+/* --- Shared secondary button and form separator --- */
+html[data-theme="light"] .btn-cancel {
+    color: rgba(0,0,0,0.65) !important;
+    border-color: #aaa !important;
+}
+html[data-theme="light"] .btn-cancel:hover {
+    color: rgba(0,0,0,0.85) !important;
+    border-color: #555 !important;
+}
+html[data-theme="light"] .form-actions,
+html[data-theme="light"] .celeb-form-actions { border-top-color: #ddd !important; }
+
+/* --- Celeb list & home: filter panel inputs and buttons --- */
+html[data-theme="light"] .cl-filter-field input,
+html[data-theme="light"] .cl-filter-field select,
+html[data-theme="light"] .home-filter-field input,
+html[data-theme="light"] .home-filter-field select {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+html[data-theme="light"] .cl-filter-toggle { background: #e0e0e0 !important; color: #111 !important; }
+html[data-theme="light"] .home-filter-toggle { background: #e0e0e0 !important; color: #111 !important; }
+html[data-theme="light"] .cl-filter-actions a {
+    background: #ddd !important;
+    color: #333 !important;
+}
+html[data-theme="light"] .cl-filter-actions a:hover { background: #bbb !important; color: #111 !important; }
+html[data-theme="light"] .home-filter-field { border-bottom-color: rgba(0,0,0,0.1) !important; }
+html[data-theme="light"] .home-filter-field label,
+html[data-theme="light"] .cl-filter-field label { color: #555 !important; }
+html[data-theme="light"] .fam-tab-btn { color: #555 !important; }
+html[data-theme="light"] .fam-tab-btn:hover { color: #111 !important; }
+
+/* --- My Celebs page cards --- */
+html[data-theme="light"] .mc-card { background: #fff !important; border-color: #ddd !important; }
+html[data-theme="light"] .mc-card:hover { border-color: #999 !important; }
+html[data-theme="light"] .mc-card-img-placeholder { background: #eee !important; color: #bbb !important; }
+html[data-theme="light"] .mc-card-name { color: #111 !important; }
+html[data-theme="light"] .mc-card-meta { color: #555 !important; }
+html[data-theme="light"] .mc-card-actions { border-top-color: #eee !important; }
+html[data-theme="light"] .mc-badge-pub { background: #d4f0d4 !important; color: #1a6a1a !important; }
+html[data-theme="light"] .mc-badge-draft { background: #fff3cc !important; color: #875000 !important; }
+html[data-theme="light"] .mc-btn-view { color: #444 !important; border-color: #aaa !important; }
+html[data-theme="light"] .mc-btn-edit { color: #0055bb !important; border-color: #0055bb !important; }
+html[data-theme="light"] .mc-empty { color: #777 !important; }
+
+/* --- Account home nav buttons --- */
+html[data-theme="light"] .acct-nav-btn {
+    color: rgba(0,0,0,0.72) !important;
+    border-color: #888 !important;
+}
+html[data-theme="light"] .acct-nav-btn:hover {
+    color: #000 !important;
+    border-color: #333 !important;
+    background: rgba(0,0,0,0.04) !important;
+}
+html[data-theme="light"] .acct-nav-btn.primary { border-color: #cc0000 !important; color: #cc0000 !important; }
+html[data-theme="light"] .acct-logout-btn { color: #999 !important; }
+html[data-theme="light"] .acct-logout-btn:hover { color: #555 !important; }
+
+/* --- Celeb detail: social link chips --- */
+html[data-theme="light"] .celeb-social-link {
+    background: #eef0f8 !important;
+    border-color: #ccc !important;
+}
+
+/* --- Celeb detail: photo caption input --- */
+html[data-theme="light"] .cd-caption-input {
+    background: #fff !important;
+    border-color: #ccc !important;
+    color: #111 !important;
+}
+
+/* --- Celeb detail: guest login block --- */
+html[data-theme="light"] .cd-guest-login-btn {
+    color: #333 !important;
+    border-color: #bbb !important;
+}
+
+/* --- Home: filter actions Clear link --- */
+html[data-theme="light"] .home-filter-actions a {
+    background: #ddd !important;
+    color: #333 !important;
+}
+html[data-theme="light"] .home-filter-actions a:hover { background: #bbb !important; color: #111 !important; }
+
+/* --- Home: aside user card --- */
+html[data-theme="light"] .aside-user,
+html[data-theme="light"] .aside-guest-prompt { border-bottom-color: rgba(0,0,0,0.12) !important; }
+html[data-theme="light"] .aside-user-initials { background: #e0e0e0 !important; border-color: #bbb !important; }
+html[data-theme="light"] .aside-user-name { color: #111 !important; }
+html[data-theme="light"] .aside-user-email { color: #666 !important; }
+html[data-theme="light"] .aside-user-bio { color: #555 !important; }
+html[data-theme="light"] .aside-user-links a { color: #444 !important; border-color: #aaa !important; }
+html[data-theme="light"] .aside-user-links a:hover { background: #e0e0e0 !important; color: #111 !important; }
+
+/* --- Skeleton loader (transient during filter nav) --- */
+html[data-theme="light"] .skel {
+    background: linear-gradient(90deg, #e0e0e0 25%, #ececec 50%, #e0e0e0 75%) !important;
+    background-size: 1600px 100% !important;
+}
+
+/* --- Celeb list: missing filter-field border --- */
+html[data-theme="light"] .cl-filter-field { border-bottom-color: rgba(0,0,0,0.1) !important; }
+
+/* --- Top Celebs page: filter panel --- */
+html[data-theme="light"] .top-filter-field input,
+html[data-theme="light"] .top-filter-field select {
+    background: #fff !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+html[data-theme="light"] .top-filter-toggle { background: #e0e0e0 !important; color: #111 !important; }
+html[data-theme="light"] .top-filter-field { border-bottom-color: rgba(0,0,0,0.1) !important; }
+html[data-theme="light"] .top-filter-field label { color: #555 !important; }
+html[data-theme="light"] .top-filter-actions a {
+    background: #ddd !important;
+    color: #333 !important;
+}
+html[data-theme="light"] .top-filter-actions a:hover { background: #bbb !important; color: #111 !important; }

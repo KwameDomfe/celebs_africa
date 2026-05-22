@@ -238,13 +238,13 @@
         </div>
     </div>
     {% else %}
-    <div style="position:sticky; top:32px;">
+    <div class="cd-guest-block" style="position:sticky; top:32px;">
         <p style="font-size:0.8rem; margin:0 0 10px; line-height:1.5;">Join to like, follow and review your favourite African celebs.</p>
         <a href="{% url 'register' %}"
             style="display:block; text-align:center; background:red; color:#fff; border-radius:4px; padding:8px 0; font-size:0.8rem; font-weight:700; text-decoration:none; margin-bottom:6px;">
             Register
         </a>
-        <a href="{% url 'login' %}"
+        <a href="{% url 'login' %}" class="cd-guest-login-btn"
             style="display:block; text-align:center; color:rgba(255,255,255); border:1px solid #2a2a2a; border-radius:4px; padding:7px 0; font-size:0.8rem; text-decoration:none;">
             Login
         </a>
@@ -364,38 +364,38 @@
                 <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
                     {# ---- new flexible links ---- #}
                     {% for link in links %}
-                    <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                    <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:{{ link.get_color }}; text-decoration:none;">
                         {{ link.get_icon }} {{ link.get_platform_display }}
                     </a>
                     {% endfor %}
                     {# ---- legacy fields (shown only if no new link for that platform exists) ---- #}
                     {% if celeb.website and not links %}
-                    <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer"
+                    <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
                         🌐 Website
                     </a>
                     {% endif %}
                     {% if celeb.instagram and not links %}
-                    <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer"
+                    <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
                         📸 @{{ celeb.instagram }}
                     </a>
                     {% endif %}
                     {% if celeb.twitter and not links %}
-                    <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer"
+                    <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#1da1f2; text-decoration:none;">
                         𝕏 @{{ celeb.twitter }}
                     </a>
                     {% endif %}
                     {% if celeb.facebook and not links %}
-                    <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer"
+                    <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
                         📘 Facebook
                     </a>
                     {% endif %}
                     {% if celeb.youtube and not links %}
-                    <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer"
+                    <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
                         style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
                         ▶ YouTube
                     </a>
@@ -468,7 +468,7 @@
                     </div>
                     <div>
                         <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Caption (optional)</label>
-                        <input type="text" name="caption" placeholder="Caption for all uploaded photos"
+                        <input type="text" name="caption" placeholder="Caption for all uploaded photos" class="cd-caption-input"
                             style="padding:6px 10px; background:#1a1a1a; border:1px solid #444; border-radius:4px; color:#f0f0f0;">
                     </div>
                     <button type="submit" class="ba br0-25 pa0-25">Upload</button>
