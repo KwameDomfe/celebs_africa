@@ -54,6 +54,7 @@ class CelebAdmin(admin.ModelAdmin):
     list_editable = ('published',)
     search_fields = ('name', 'street_name')
     prepopulated_fields = {'slug': ('name',)}
+    filter_horizontal = ('managers',)
 
     class PhotoInline(admin.TabularInline):
         model = CelebPhoto

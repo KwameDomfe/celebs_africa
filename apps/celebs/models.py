@@ -87,6 +87,10 @@ class Celeb(models.Model):
 	youtube = models.CharField(max_length=100, blank=True, help_text='Channel name or URL slug')
 	featured_video = models.URLField(max_length=200, blank=True, help_text='YouTube video URL e.g. https://www.youtube.com/watch?v=...')
 	published = models.BooleanField(default=True, help_text='Unpublished celebs are hidden from all public listings and detail pages')
+	managers = models.ManyToManyField(
+		User, blank=True, related_name='managed_celebs',
+		help_text='Users (celebs/managers) who can edit this celeb page',
+	)
 
 	@property
 	def is_deceased(self):

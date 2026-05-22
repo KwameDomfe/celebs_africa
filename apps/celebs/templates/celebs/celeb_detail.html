@@ -327,8 +327,7 @@
                             </button>
                         </div>
                     </div>
-                    {% if user.is_staff %}
-                    <a href="{% url 'celeb_update' celeb.slug %}"
+                    {% if can_manage %}"
                         class="blue0 ba br0-25 pa0-25"
                     >Edit</a>
                     <a href="{% url 'celeb_delete' celeb.pk %}"
@@ -419,7 +418,7 @@
             {% endif %}
 
             {% with photos=celeb.photos.all %}
-            {% if photos or user.is_staff %}
+            {% if photos or can_manage %}
             <div style="margin-bottom:24px;" id="gallery">
                 <h3 style="margin-bottom:12px;">Gallery</h3>
                 {% if photos %}
@@ -438,7 +437,7 @@
                         {% if photo.caption %}
                         <p style="font-size:0.75rem; color:#aaa; margin:4px 0 0 0; text-align:center;">{{ photo.caption }}</p>
                         {% endif %}
-                        {% if user.is_staff %}
+                        {% if can_manage %}
                         <form method="post" action="{% url 'celeb_photo_delete' photo.pk %}"
                             onsubmit="return confirm('Delete this photo?')"
                             style="position:absolute; top:4px; right:4px;">
@@ -455,7 +454,7 @@
                 {% else %}
                 <p style="color:#666;">No photos yet.</p>
                 {% endif %}
-                {% if user.is_staff %}
+                {% if can_manage %}
                 <form method="post" action="{% url 'celeb_photo_upload' celeb.pk %}" enctype="multipart/form-data"
                     style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
                     {% csrf_token %}
@@ -574,7 +573,7 @@
                                     onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
                                     data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
                                 {% endif %}
-                                {% if comment.user == user or user.is_staff %}
+                                {% if comment.user == user or can_manage %}
                                 <button class="btn-link" style="color:#c00;"
                                     onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
                                 {% endif %}

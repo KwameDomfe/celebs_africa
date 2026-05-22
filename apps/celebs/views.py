@@ -1,8 +1,9 @@
 
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.db.models import Count, Avg
 from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto, CelebSocialLink
@@ -19,16 +20,6 @@ def _save_social_links(request, celeb):
 		if platform and url:
 			CelebSocialLink.objects.create(celeb=celeb, platform=platform, url=url, order=order)
 			order += 1
-
-
-def staff_required(view_func):
-    """Decorator: must be logged in and staff."""
-    @login_required
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_staff:
-            return HttpResponseForbidden('You do not have permission to perform this action.')
-        return view_func(request, *args, **kwargs)
-    return wrapper
 
 
 def celebs_home(request):
@@ -65,6 +56,14 @@ def celebs_home(request):
 		'selected_type': type_id,
 		'selected_country': country_id,
 		'q': q,
+		'can_manage_any': request.user.has_perm('celebs.add_celeb'),
+		'managed_celeb_pks': (
+			None  # sentinel: staff can manage all
+			if request.user.is_authenticated and request.user.is_staff
+			else set(request.user.managed_celebs.values_list('pk', flat=True))
+			if request.user.is_authenticated
+			else set()
+		),
 	})
 
 
@@ -75,9 +74,10 @@ def celeb_detail_by_pk(request, pk):
 
 def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	qs = Celeb.objects.select_related('type__family__category')
-	if not request.user.is_staff:
-		qs = qs.filter(published=True)
 	celeb = get_object_or_404(qs, slug=slug)
+	if not celeb.published and not request.user.has_perm('celebs.change_celeb', celeb):
+		from django.http import Http404
+		raise Http404
 	comments = celeb.comments.select_related('user').order_by('-created_at')
 	reviews = celeb.reviews.select_related('user').order_by('-created_at')
 	followers = celeb.followers.select_related('user').order_by('user__username')
@@ -110,6 +110,7 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		'user_following': user_following,
 		'user_review': user_review,
 		'user_followed_celebs': user_followed_celebs,
+		'can_manage': request.user.has_perm('celebs.change_celeb', celeb),
 	}
 
 	# OG / social sharing
@@ -211,8 +212,8 @@ def comment_edit(request, pk):
 @login_required
 def comment_delete(request, pk):
 	comment = get_object_or_404(Comment.objects.select_related('celeb__type__family__category'), pk=pk)
-	if comment.user != request.user and not request.user.is_staff:
-		return HttpResponseForbidden('You do not have permission to delete this comment.')
+	if comment.user != request.user and not request.user.has_perm('celebs.change_celeb', comment.celeb):
+		raise PermissionDenied
 	celeb_url = comment.celeb.get_absolute_url()
 	if request.method == 'POST':
 		comment.delete()
@@ -220,7 +221,7 @@ def comment_delete(request, pk):
 	return HttpResponseRedirect(celeb_url + '#comments')
 
 
-@staff_required
+@permission_required('celebs.add_celeb', raise_exception=True)
 def celeb_create(request):
 	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
 	countries = Country.objects.all()
@@ -256,9 +257,11 @@ def celeb_create(request):
 	})
 
 
-@staff_required
+@login_required
 def celeb_update(request, slug):
 	celeb = get_object_or_404(Celeb, slug=slug)
+	if not request.user.has_perm('celebs.change_celeb', celeb):
+		raise PermissionDenied
 	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
 	countries = Country.objects.all()
 	if request.method == 'POST':
@@ -284,18 +287,22 @@ def celeb_update(request, slug):
 	})
 
 
-@staff_required
+@login_required
 def celeb_delete(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
+	if not request.user.has_perm('celebs.delete_celeb', celeb):
+		raise PermissionDenied
 	if request.method == 'POST':
 		celeb.delete()
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_confirm_delete.html', {'celeb': celeb})
 
 
-@staff_required
+@login_required
 def celeb_photo_upload(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
+	if not request.user.has_perm('celebs.change_celeb', celeb):
+		raise PermissionDenied
 	if request.method == 'POST':
 		for f in request.FILES.getlist('photos'):
 			CelebPhoto.objects.create(
@@ -306,10 +313,12 @@ def celeb_photo_upload(request, pk):
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
 
 
-@staff_required
+@login_required
 def celeb_photo_delete(request, pk):
 	photo = get_object_or_404(CelebPhoto, pk=pk)
 	celeb = photo.celeb
+	if not request.user.has_perm('celebs.change_celeb', celeb):
+		raise PermissionDenied
 	if request.method == 'POST':
 		photo.image.delete(save=False)
 		photo.delete()

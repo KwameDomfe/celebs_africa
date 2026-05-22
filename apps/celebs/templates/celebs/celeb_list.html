@@ -171,7 +171,7 @@
     </aside>
 
     <div class="gc5s8 cl-main ph1-00">
-        {% if user.is_staff %}
+        {% if can_manage_any %}
         <div style="margin-bottom:16px;">
             <a href="{% url 'celeb_create' %}"
                 class="bg-red white-90 pa0-50 br0-25"
@@ -262,7 +262,7 @@
                                         &nbsp;·&nbsp;
                                         <span style="color:#e55; font-weight:bold;">{{ celeb.follower_count }}</span>
                                         follower{{ celeb.follower_count|pluralize }}
-                                        {% if user.is_staff %}
+                                        {% if user.is_staff or celeb.pk in managed_celeb_pks %}
                                         &nbsp;·&nbsp;
                                         <a href="{% url 'celeb_update' celeb.slug %}" style="color:#aaa;">Edit</a>
                                         &nbsp;
