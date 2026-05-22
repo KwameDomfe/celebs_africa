@@ -115,142 +115,142 @@
 
 <div class="grid gtc12 ggap1-00 mt2-00">
     <div class="gc1s3 white cd-sidebar">
-    {% if user.is_authenticated %}
-    <div class="flex flex-column justify-center items-center w-100 cd-user-sidebar"
-        style="position:sticky; top:32px; ">
-        <!-- Avatar -->
-        <div class = "flex flex-column justify-center items-center w-100 pa0-50" 
-            style="text-align:center; margin-bottom:12px;">
-            {% if user.profile.avatar %}
-            <img src="{{ user.profile.avatar.url }}"    
-                alt="{{ user.username }}"
-                style="width:64px; height:64px;  object-fit:cover;"
-                class="br0-25">
-                
-            {% else %}
-            <div style="width:64px; 
-                height:64px; 
-                background:#2a2a2a; .
-                border:2px solid #333; 
-                display:inline-flex; 
-                align-items:center; 
-                justify-content:center; 
-                ont-size:1.6rem; 
-                color:#666;">
-                &#9786;
-            </div>
-            {% endif %}
-            <p style="margin:6px 0 2px; 
-                font-size:0.85rem; 
-                font-weight:600; 
-                color:rgba(255,255,255,0.88);"
-            >
-                {{ user.get_full_name|default:user.username }}
-            </p>
-            {% if user.get_full_name %}
-            <p style="margin:0; font-size:0.75rem;"
-            >
-                @{{ user.username }}
-            </p>
-            {% endif %}
-        </div>
-        <div class="pa0-50 w-100">
-            <!-- Relation to this celeb -->
-            <div class="w-100"
-                style="border-top:1px solid #2a2a2a; 
-                    padding-top:10px; 
-                    display:flex; 
-                    flex-direction:column; 
-                    gap:6px;"
-            >
-                <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
-                    {% if user_liked %}
-                    <span style="color:red;">&#9829;</span>
-                    <span style="color:rgba(255,255,255);">Liked</span>
-                    {% else %}
-                    <span >&#9825;</span>
-                    <span>Not liked</span>
-                    {% endif %}
-                </div>
-                <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
-                    {% if user_following %}
-                    <span style="color:#4caf50;">&#10003;</span>
-                    <span style="color:rgba(255,255,255);">Following</span>
-                    {% else %}
-                    <span >&#8722;</span>
-                    <span >Not following</span>
-                    {% endif %}
-                </div>
-                {% if user_review %}
-                <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
-                    <span style="color:#f5a623;">&#9733;</span>
-                    <span style="color:rgba(255,255,255);">Rated {{ user_review.rating }}/5</span>
+        {% if user.is_authenticated %}
+        <div class="flex flex-column justify-center items-center w-100 cd-user-sidebar"
+            style="position:sticky; top:32px; ">
+            <!-- Avatar -->
+            <div class = "flex flex-column justify-center items-center w-100 pa0-50" 
+                style="text-align:center; margin-bottom:12px;">
+                {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}"    
+                    alt="{{ user.username }}"
+                    style="width:64px; height:64px;  object-fit:cover;"
+                    class="br0-25">
+                    
+                {% else %}
+                <div style="width:64px; 
+                    height:64px; 
+                    background:#2a2a2a; .
+                    border:2px solid #333; 
+                    display:inline-flex; 
+                    align-items:center; 
+                    justify-content:center; 
+                    ont-size:1.6rem; 
+                    color:#666;">
+                    &#9786;
                 </div>
                 {% endif %}
-            </div>
-            <div class="w-100" 
-                style="margin-top:12px; border-top:1px solid #2a2a2a; padding-top:10px;">
-                <a href="{% url 'profile' %}" style="font-size:0.78rem; text-decoration:none; display:block; margin-bottom:4px;">My Profile</a>
-                {% if can_manage or user.is_staff %}
-                <a href="{% url 'my_celebs' %}" style="font-size:0.78rem; text-decoration:none; display:block; margin-bottom:4px;">My Celebs</a>
-                {% endif %}
-                <a href="{% url 'celebs_home' %}" style="font-size:0.78rem; text-decoration:none; display:block;">All Celebs</a>
-            </div>
-            {% if user_followed_celebs %}
-            <div class="w-100" style="margin-top:12px; 
-                border-top:1px solid #2a2a2a; 
-                padding-top:10px;"
-            >
-                <p style="font-size:0.72rem; 
-                    text-transform:uppercase; 
-                    letter-spacing:0.06em; 
-                    margin:0 0 6px;"
+                <p style="margin:6px 0 2px; 
+                    font-size:0.85rem; 
+                    font-weight:600; 
+                    color:rgba(255,255,255,0.88);"
                 >
-                    Following
+                    {{ user.get_full_name|default:user.username }}
                 </p>
-                <ul style="list-style:none; 
-                    padding:0; 
-                    margin:0; 
-                    display:flex; 
-                    flex-direction:column; 
-                    gap:4px;">
-                {% for fc in user_followed_celebs %}
-                    <li style="display:flex; align-items:center; gap:6px;">
-                        {% if fc.image %}
-                        <img src="{{ fc.image.url }}" 
-                            alt="" 
-                            style="width:22px; 
-                                height:22px; 
-                                border-radius:50%; 
-                                object-fit:cover; 
-                                flex-shrink:0;">
-                        {% else %}
-                        <span style="width:22px; height:22px; border-radius:50%; background:#2a2a2a; display:inline-block; flex-shrink:0;"></span>
-                        {% endif %}
-                        <a href="{{ fc.get_absolute_url }}" 
-                            style="font-size:0.8rem; 
-                            color:{% if fc == celeb %}rgba(255,255,255,0.7){% else %}#555{% endif %}; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;{% if fc == celeb %} font-weight:600;{% endif %}">{{ fc.name }}</a>
-                    </li>
-                {% endfor %}
-                </ul>
+                {% if user.get_full_name %}
+                <p style="margin:0; font-size:0.75rem;"
+                >
+                    @{{ user.username }}
+                </p>
+                {% endif %}
             </div>
-            {% endif %}
+            <div class="pa0-50 w-100">
+                <!-- Relation to this celeb -->
+                <div class="w-100"
+                    style="border-top:1px solid #2a2a2a; 
+                        padding-top:10px; 
+                        display:flex; 
+                        flex-direction:column; 
+                        gap:6px;"
+                >
+                    <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                        {% if user_liked %}
+                        <span style="color:red;">&#9829;</span>
+                        <span style="color:rgba(255,255,255);">Liked</span>
+                        {% else %}
+                        <span >&#9825;</span>
+                        <span>Not liked</span>
+                        {% endif %}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                        {% if user_following %}
+                        <span style="color:#4caf50;">&#10003;</span>
+                        <span style="color:rgba(255,255,255);">Following</span>
+                        {% else %}
+                        <span >&#8722;</span>
+                        <span >Not following</span>
+                        {% endif %}
+                    </div>
+                    {% if user_review %}
+                    <div style="display:flex; align-items:center; gap:6px; font-size:0.8rem;">
+                        <span style="color:#f5a623;">&#9733;</span>
+                        <span style="color:rgba(255,255,255);">Rated {{ user_review.rating }}/5</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="w-100" 
+                    style="margin-top:12px; border-top:1px solid #2a2a2a; padding-top:10px;">
+                    <a href="{% url 'profile' %}" style="font-size:0.78rem; text-decoration:none; display:block; margin-bottom:4px;">My Profile</a>
+                    {% if can_manage or user.is_staff %}
+                    <a href="{% url 'my_celebs' %}" style="font-size:0.78rem; text-decoration:none; display:block; margin-bottom:4px;">My Celebs</a>
+                    {% endif %}
+                    <a href="{% url 'celebs_home' %}" style="font-size:0.78rem; text-decoration:none; display:block;">All Celebs</a>
+                </div>
+                {% if user_followed_celebs %}
+                <div class="w-100" style="margin-top:12px; 
+                    border-top:1px solid #2a2a2a; 
+                    padding-top:10px;"
+                >
+                    <p style="font-size:0.72rem; 
+                        text-transform:uppercase; 
+                        letter-spacing:0.06em; 
+                        margin:0 0 6px;"
+                    >
+                        Following
+                    </p>
+                    <ul style="list-style:none; 
+                        padding:0; 
+                        margin:0; 
+                        display:flex; 
+                        flex-direction:column; 
+                        gap:4px;">
+                    {% for fc in user_followed_celebs %}
+                        <li style="display:flex; align-items:center; gap:6px;">
+                            {% if fc.image %}
+                            <img src="{{ fc.image.url }}" 
+                                alt="" 
+                                style="width:22px; 
+                                    height:22px; 
+                                    border-radius:50%; 
+                                    object-fit:cover; 
+                                    flex-shrink:0;">
+                            {% else %}
+                            <span style="width:22px; height:22px; border-radius:50%; background:#2a2a2a; display:inline-block; flex-shrink:0;"></span>
+                            {% endif %}
+                            <a href="{{ fc.get_absolute_url }}" 
+                                style="font-size:0.8rem; 
+                                color:{% if fc == celeb %}rgba(255,255,255,0.7){% else %}#555{% endif %}; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;{% if fc == celeb %} font-weight:600;{% endif %}">{{ fc.name }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
         </div>
+        {% else %}
+        <div class="cd-guest-block" style="position:sticky; top:32px;">
+            <p style="font-size:0.8rem; margin:0 0 10px; line-height:1.5;">Join to like, follow and review your favourite African celebs.</p>
+            <a href="{% url 'register' %}"
+                style="display:block; text-align:center; background:red; color:#fff; border-radius:4px; padding:8px 0; font-size:0.8rem; font-weight:700; text-decoration:none; margin-bottom:6px;">
+                Register
+            </a>
+            <a href="{% url 'login' %}" class="cd-guest-login-btn"
+                style="display:block; text-align:center; color:rgba(255,255,255); border:1px solid #2a2a2a; border-radius:4px; padding:7px 0; font-size:0.8rem; text-decoration:none;">
+                Login
+            </a>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="cd-guest-block" style="position:sticky; top:32px;">
-        <p style="font-size:0.8rem; margin:0 0 10px; line-height:1.5;">Join to like, follow and review your favourite African celebs.</p>
-        <a href="{% url 'register' %}"
-            style="display:block; text-align:center; background:red; color:#fff; border-radius:4px; padding:8px 0; font-size:0.8rem; font-weight:700; text-decoration:none; margin-bottom:6px;">
-            Register
-        </a>
-        <a href="{% url 'login' %}" class="cd-guest-login-btn"
-            style="display:block; text-align:center; color:rgba(255,255,255); border:1px solid #2a2a2a; border-radius:4px; padding:7px 0; font-size:0.8rem; text-decoration:none;">
-            Login
-        </a>
-    </div>
-    {% endif %}
-</div>
     <div class="gc4s6 bg-black-90 white-90 cd-main">
         <div class="w-100 ">
             {% if celeb.image %}
@@ -630,8 +630,23 @@
             </div>
         </div>
     </div>
-    <div class="gc10s3 white cd-right"> </div>
-<div>
+    <div class="gc10s3 white cd-left"> 
+        Previous: 
+        {% if prev_celeb %}
+            <a href="{% url 'celeb_detail' prev_celeb.slug %}">{{ prev_celeb.name }}</a>
+        {% else %}
+            <span style="color:gray;">None</span>
+        {% endif %}
+    </div>
+    <div class="gc10s3 white cd-right"> 
+        Next: 
+        {% if next_celeb %}
+            <a href="{% url 'celeb_detail' next_celeb.slug %}">{{ next_celeb.name }}</a>
+        {% else %}
+            <span style="color:gray;">None</span>
+        {% endif %}
+    </div>
+</div>
 
 
 <script>
