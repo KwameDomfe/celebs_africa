@@ -594,22 +594,24 @@
                                     {% if celeb.date_of_birth %}
                                     <span title="Date of Birth"
                                     >
-                                        &#9679;{{ celeb.date_of_birth|date:"j M Y" }}
+                                        &#9679; {{ celeb.date_of_birth|date:"j M Y" }}
                                     </span>
                                     {% endif %}
 
-                                    {% if celeb.is_deceased %}
-                                    &nbsp;&nbsp;
-                                        <span style="color:#c0392b;" title="Date of Death"
-                                        >
-                                            &#10013; {{ celeb.date_of_death|date:"j M Y" }}
-                                        </span>
-                                        {% if celeb.age %}&nbsp;<p style="color:#888;">
-                                            (aged {{ celeb.age }})</p>
+                                    <div class="mb">
+                                        {% if celeb.is_deceased %}
+                                            
+                                            <span style="color:#c0392b;" title="Date of Death"
+                                            >
+                                                &#10013;{{ celeb.date_of_death|date:"j M Y" }}
+                                            </span>
+                                            {% if celeb.age %}&nbsp;<p class="mb0-00" style="color:#888;">
+                                                (aged {{ celeb.age }})</p>
+                                            {% endif %}
+                                        {% elif celeb.age %}
+                                            &nbsp;&nbsp;<p class="mb0-00">Age : {{ celeb.age }}</p>
                                         {% endif %}
-                                    {% elif celeb.age %}
-                                        &nbsp;&nbsp;<p >Age {{ celeb.age }}</p>
-                                    {% endif %}
+                                    </div>
                                 </p>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
