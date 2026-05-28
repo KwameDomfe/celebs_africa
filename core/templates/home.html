@@ -394,7 +394,19 @@
             <div class="aside-user-links">
                 <a href="{% url 'profile' %}">&#128100; Profile</a>
                 <a href="{% url 'profile_edit' %}">&#9998; Edit</a>
-                <a href="{% url 'logout' %}" class="aside-user-logout">Logout</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" 
+                        class="aside-user-logout bw0-50 br0-25" 
+                        style="background:none;
+                        border:all;
+                        padding:0.25rem;
+                        color:red;
+                        cursor:pointer;"
+                    >
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
         {% else %}
