@@ -337,14 +337,19 @@ def celeb_photo_delete(request, pk):
 @login_required
 def my_celebs(request):
 	if request.user.is_staff:
-		celebs = Celeb.objects.select_related('type__family__category').order_by('name')
+		qs = Celeb.objects.select_related('type__family__category').order_by('name')
 	else:
-		celebs = (
+		qs = (
 			request.user.managed_celebs
 			.select_related('type__family__category')
 			.order_by('name')
 		)
+
+	published_celebs = qs.filter(published=True)
+	unpublished_celebs = qs.filter(published=False)
+
 	return render(request, 'celebs/my_celebs.html', {
-		'managed_celebs': celebs,
+		'published_celebs': published_celebs,
+		'unpublished_celebs': unpublished_celebs,
 		'can_create': request.user.has_perm('celebs.add_celeb'),
 	})

@@ -361,8 +361,11 @@
         <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
     </header>
 
-    <aside class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
-        style="top:80px; align-self:start;"
+    <aside class="gc1s4 
+        pa1-00 bg-black-80 
+        sticky home-aside" 
+        style="top:80px; 
+        align-self:start;"
     >
         {# ── User card ── #}
         {% if user.is_authenticated %}
@@ -382,14 +385,17 @@
                     {% endif %}
                 </div>
             </div>
-            {% comment %} {% if user.profile.bio %}
-            <p class="aside-user-bio">{{ user.profile.bio|truncatewords:18 }}</p>
+            {% if user.profile.bio %}
+                <p class="aside-user-bio"
+                >
+                    {{ user.profile.bio|truncatewords:20 }}
+                </p>
             {% endif %}
             <div class="aside-user-links">
                 <a href="{% url 'profile' %}">&#128100; Profile</a>
                 <a href="{% url 'profile_edit' %}">&#9998; Edit</a>
                 <a href="{% url 'logout' %}" class="aside-user-logout">Logout</a>
-            </div> {% endcomment %}
+            </div>
         </div>
         {% else %}
         <div class="aside-guest-prompt">
@@ -401,7 +407,7 @@
         </div>
         {% endif %}
 
-        <button class="home-filter-toggle pa1-00" 
+        <button class="home-filter-toggle pa0-50" 
             style="width:100%; 
                 background:#333; 
                 color:#fff; 
