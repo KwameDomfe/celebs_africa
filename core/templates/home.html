@@ -541,7 +541,7 @@
         {% if selected_sort == 'default' %}
         {% regroup celebs by type.family.category as category_groups %}
         {% for group in category_groups %}
-            <div class="mb1-00 bg-black-80 red pa0-50 f1-75">
+            <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
                 <h3>
                     {{ group.grouper|default:"Uncategorised" }}
                 </h3>
@@ -549,7 +549,7 @@
             <ul>
                 {% for celeb in group.list %}
                     <li class="mb2-00">
-                        <div class="flex flex-column flex-row-l bg-black-80 white-90 pa1-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 white-90 ma1-00 pa1-00">
                             <div>
                                 {% if celeb.image %}
                                 <img src="{{ celeb.image.url }}"
