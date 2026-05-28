@@ -356,9 +356,9 @@
 </script>
 
 <div id="home-content" class="grid gtc12 ggap2-0 bg-black-90 home-grid">
-    <header class="gc1s12 tc bg-black-80 white-90 ph1-00 pt2-00">
-        <h2 class="f2-50 mb2-00">Celebrities of <span class="f4-00">Africa</span></h2>
-        <p class="f2-00">Discover and explore celebrated celebrities from across Africa.</p>
+    <header class="gc1s12 tc bg-black-80 white-90 ph0-50 pt2-00">
+        <h2 class="f2-75 mb2-00">Celebrities of <span class="f5-00">Africa</span></h2>
+        <p class="f2-50 i mb0-00">Discover and explore celebrated celebrities from across Africa.</p>
     </header>
 
     <aside class="gc1s4 
@@ -374,9 +374,11 @@
                 {% if user.profile.avatar %}
                     <img src="{{ user.profile.avatar.url }}" 
                         alt="{{ user.username }}" 
-                        class="w4-00 br0-25">
+                        class="w4-00 h4-00 br0-25">
                 {% else %}
-                    <div class="aside-user-initials">{{ user.username|slice:":1" }}</div>
+                    <div class="aside-user-initials">
+                        {{ user.username|slice:":1" }}
+                    </div>
                 {% endif %}
                 <div style="overflow:hidden;">
                     <div class="aside-user-name">{{ user.username }}</div>
@@ -397,7 +399,7 @@
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" 
-                        class="aside-user-logout bw0-50 br0-25" 
+                        class="aside-user-logout bw0-25 br0-25" 
                         style="background:none;
                         border:all;
                         padding:0.25rem;
