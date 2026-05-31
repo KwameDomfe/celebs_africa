@@ -170,7 +170,8 @@
         {% for celeb in celebs %}
             <li class="mb1-00">
                 <div class="flex bg-black-80 white-90 br0-25" style="gap:16px; align-items:center;">
-                    <div style="font-size:1.5rem; 
+                    <div class="flex items-center justify-center h-100 bg-black-80" 
+                    style="font-size:1.5rem; 
                         font-weight:bold; 
                         color:#f5a623; 
                         min-width:2rem; 
@@ -178,7 +179,7 @@
                     >
                         {{ forloop.counter }}
                     </div>
-                    <div class="pa0-50">
+                    <div class="pa0-50 w-100">
                         <div style="flex-shrink:0;">
                             {% if celeb.image %}
                             <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"

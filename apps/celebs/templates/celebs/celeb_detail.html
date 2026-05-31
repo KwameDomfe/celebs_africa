@@ -218,7 +218,7 @@
                         <li style="display:flex; align-items:center; gap:6px;">
                             {% if fc.image %}
                             <img src="{{ fc.image.url }}" 
-                                alt="" 
+                                alt="{{ fc.name|default:'Followed celeb' }}" 
                                 style="width:22px; 
                                     height:22px; 
                                     border-radius:50%; 
@@ -547,7 +547,7 @@
                     {% for follow in followers %}
                     <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
                         {% if follow.user.profile.avatar %}
-                        <img src="{{ follow.user.profile.avatar.url }}" alt="" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+                        <img src="{{ follow.user.profile.avatar.url }}" alt="{{ follow.user.username|default:'Follower avatar' }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
                         {% endif %}
                         {{ follow.user.username }}
                     </li>
@@ -747,7 +747,7 @@ function doShareCopyLink(btn, url) {
     <button id="imgModalClose" class="img-modal-close" aria-label="Close">&times;</button>
     <div class="img-modal-stage">
         <button id="imgModalPrev" class="img-modal-arrow prev" aria-label="Previous">&#8249;</button>
-        <img id="imgModalImg" class="img-modal-img" src="" alt="">
+        <img id="imgModalImg" class="img-modal-img" src="" alt="Modal image">
         <button id="imgModalNext" class="img-modal-arrow next" aria-label="Next">&#8250;</button>
     </div>
     <div id="imgModalCaption" class="img-modal-caption"></div>

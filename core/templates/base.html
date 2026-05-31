@@ -66,6 +66,31 @@
         }
         @media (min-width: 769px) { .nav-close { display: none; } }
     </style>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "CelebsAfrica",
+            "url": "https://celebsafrica.com/",
+            "logo": "https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}",
+            "sameAs": [
+                "https://twitter.com/celebsafrica",
+                "https://facebook.com/celebsafrica"
+            ]
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://celebsafrica.com/",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://celebsafrica.com/search/?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
 </head>
 <body class="vh-100 flex flex-column justify-between">
     <header class="bg-black text-white db w-100 fixed top-0 left-0 z-999">
