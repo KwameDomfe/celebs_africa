@@ -39,7 +39,7 @@
     {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="CelebsAfrica">
-    <meta property="og:title" content="{% block og_title %}{% block title2 %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://celebsafrica.com{{ request.path }}{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
@@ -47,7 +47,7 @@
 
     {# Twitter / X card #}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}{% block title2 %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
 

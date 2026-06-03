@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}{{ celeb.name }} | African Celebrity Profile | CelebsAfrica{% endblock %}
-{% block title2 %}{{ celeb.name }} | African Celebrity Profile | CelebsAfrica{% endblock %}
+{% block og_title %}{{ celeb.name }} | African Celebrity Profile | CelebsAfrica{% endblock %}
 {% block og_type %}profile{% endblock %}
 {% block canonical %}https://celebsafrica.com{{ celeb.get_absolute_url }}{% endblock %}
 {% block og_url %}https://celebsafrica.com{{ celeb.get_absolute_url }}{% endblock %}
 {% block meta_description %}{{ og_description }}{% endblock %}
 {% block og_description %}{{ og_description }}{% endblock %}
 {% block og_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
-{% block twitter_title %}{{ celeb.name }} | CelebsAfrica{% endblock %}
+{% block twitter_title %}{{ celeb.name }} | African Celebrity Profile | CelebsAfrica{% endblock %}
 {% block twitter_description %}{{ og_description }}{% endblock %}
 {% block twitter_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 {% block content %}
