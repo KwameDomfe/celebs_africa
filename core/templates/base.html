@@ -23,32 +23,32 @@
     </script>
     {% endif %}
 
-    <title>{% block title %}CelebsAfrica{% endblock %}</title>
+    <title>{% block title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}</title>
     <meta name="description" 
         content="{% block meta_description %}
-            Discover and explore celebrated personalities from across Africa — musicians, athletes, actors, professors and more.
+            Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates on CelebsAfrica.
             {% endblock %}">
     <meta name="keywords" 
         content="{% block meta_keywords %}
-            African celebrities, celebs, Africa, celebs africa, celebsAfrica, celebrities, African musicians, African athletes, African actors, African professors, African Business, Africa
+            African celebrities, African musicians, African actors, African athletes, African entertainers, celebrity profiles, Africa entertainment, celebrity news, public figures
         {% endblock %}">
     <meta name="author" content="CelebsAfrica">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{% block canonical %}https://celebs-africa-o3zfi.ondigitalocean.app{{ request.path }}{% endblock %}">
+    <link rel="canonical" href="{% block canonical %}https://celebsafrica.com{{ request.path }}{% endblock %}">
 
     {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="CelebsAfrica">
-    <meta property="og:title" content="{% block og_title %}{% block title2 %}CelebsAfrica{% endblock %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Discover and explore celebrated personalities from across Africa.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% block title2 %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://celebsafrica.com{{ request.path }}{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
     <meta property="og:locale" content="en_GB">
 
     {# Twitter / X card #}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}CelebsAfrica{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Discover and explore celebrated personalities from across Africa.{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block title2 %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
 
     {# Theme / PWA hints #}
@@ -92,7 +92,7 @@
             "url": "https://celebsafrica.com/",
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://celebsafrica.com/search/?q={search_term_string}",
+                "target": "https://celebsafrica.com/celebs/?q={search_term_string}",
                 "query-input": "required name=search_term_string"
             }
         }

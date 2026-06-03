@@ -1,5 +1,7 @@
 from apps.celebs.models import Celeb, Category, Country
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.db.models import Count, Avg, F, Q
 
 SORT_OPTIONS = {
@@ -89,3 +91,26 @@ def top_celebs(request):
         'selected_type': type_id,
         'q': q,
     })
+
+
+def sitemap_xml(request):
+    urls = [
+        (request.build_absolute_uri(reverse('home')), '1.0', 'weekly'),
+        (request.build_absolute_uri(reverse('top_celebs')), '0.9', 'weekly'),
+        (request.build_absolute_uri(reverse('celebs_home')), '0.9', 'weekly'),
+    ]
+
+    for celeb in Celeb.objects.filter(published=True).select_related('type__family__category').order_by('name'):
+        urls.append((request.build_absolute_uri(celeb.get_absolute_url()), '0.7', 'weekly'))
+
+    xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for url, priority, changefreq in urls:
+        xml_lines.extend([
+            '  <url>',
+            f'    <loc>{url}</loc>',
+            f'    <changefreq>{changefreq}</changefreq>',
+            f'    <priority>{priority}</priority>',
+            '  </url>',
+        ])
+    xml_lines.append('</urlset>')
+    return HttpResponse('\n'.join(xml_lines), content_type='application/xml')

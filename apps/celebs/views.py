@@ -9,6 +9,28 @@ from django.db.models import Count, Avg
 from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto, CelebSocialLink
 
 
+def _seo_description(celeb):
+	"""Build a concise, keyword-rich description for search engines and social cards."""
+	parts = []
+	if celeb.bio:
+		words = celeb.bio.split()
+		parts.append(' '.join(words[:26]) + ('…' if len(words) > 26 else ''))
+	else:
+		details = []
+		if celeb.street_name:
+			details.append(celeb.street_name)
+		if celeb.type_id:
+			details.append(str(celeb.type))
+		if celeb.nationality:
+			details.append(celeb.nationality.name)
+		base = f"{celeb.name} is a {' '.join(details) if details else 'featured celebrity'} on CelebsAfrica."
+		parts.append(base)
+	if celeb.awards:
+		award_words = celeb.awards.split()
+		parts.append('Awards: ' + ' '.join(award_words[:14]) + ('…' if len(award_words) > 14 else ''))
+	return ' '.join(parts)
+
+
 def _save_social_links(request, celeb):
 	"""Parse link_platform / link_url POST lists and replace all social links for celeb."""
 	platforms = request.POST.getlist('link_platform')
@@ -124,12 +146,7 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	if celeb.image:
 		img_url = celeb.image.url
 		og_image = img_url if img_url.startswith('http') else request.build_absolute_uri(img_url)
-	words = celeb.bio.split() if celeb.bio else []
-	og_description = (
-		' '.join(words[:30]) + ('…' if len(words) > 30 else '')
-		if words
-		else f'{celeb.name} — {celeb.type.family.category} celebrity on CelebsAfrica.'
-	)
+	og_description = _seo_description(celeb)
 	share_url = request.build_absolute_uri(celeb.get_absolute_url())
 	context.update({'og_image': og_image, 'og_description': og_description, 'share_url': share_url})
 
