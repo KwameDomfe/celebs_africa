@@ -64,7 +64,7 @@ def home(request):
         Category.objects.annotate(
             celeb_count=Count(
                 'families__types__celebs',
-                filter=Q(families__types__celebs__published=True),
+                filter=Q(families__types__celebs__published=True) & Q(families__types__celebs__nationality__isnull=False),
                 distinct=True,
             )
         )
