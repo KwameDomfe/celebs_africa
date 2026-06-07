@@ -243,6 +243,9 @@
     line-height: 1.15;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
+.hero-copy {
+    color: #d8d8d8 !important;
+}
 .hero-cta-row {
     display: flex;
     gap: 10px;
@@ -274,6 +277,9 @@
     border-radius: 6px;
     padding: 10px;
 }
+.preview-card-title { color: #f1f1f1; }
+.preview-card-subtitle { color: #c7c7c7; }
+.preview-card-meta { color: #9d9d9d; }
 .preview-photo {
     width: 100%;
     height: 112px;
@@ -303,6 +309,28 @@
     color: #fff;
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(2px);
+    pointer-events: none;
+}
+.preview-locked-content {
+    position: relative;
+    z-index: 2;
+}
+.preview-lock-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    background: #e11919;
+    color: #fff;
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.preview-lock-cta-icon {
+    font-size: 0.9rem;
+    line-height: 1;
 }
 .category-pills {
     display: flex;
@@ -324,6 +352,7 @@
     margin: 10px;
     background: linear-gradient(135deg, rgba(36, 10, 10, 0.9), rgba(16, 16, 16, 0.95));
 }
+.unlock-copy { color: #c8c8c8; }
 .category-media-row {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -374,6 +403,20 @@
     background: #171717;
     display: block;
 }
+
+html[data-theme="light"] .hero-kicker,
+html[data-theme="light"] .hero-copy,
+html[data-theme="light"] .hero-media-badge,
+html[data-theme="light"] .preview-card-title,
+html[data-theme="light"] .preview-card-subtitle,
+html[data-theme="light"] .preview-card-meta,
+html[data-theme="light"] .unlock-copy {
+    color: #f0f0f0 !important;
+}
+html[data-theme="light"] .hero-cta-secondary {
+    color: #f0f0f0 !important;
+    border-color: #8d8d8d;
+}
 @media (max-width: 1024px) {
     .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .hero-layout,
@@ -389,7 +432,7 @@
         <div>
             <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
             <h1 class="f2-25 mb0-50 hero-headline">Discover Verified African Talent Before Everyone Else</h1>
-            <p class="mb1-00" style="max-width:72ch; color:#d8d8d8;">
+            <p class="mb1-00 hero-copy" style="max-width:72ch;">
                 Explore fast-rising celebrities, musicians, actors and creators by category and country. Create a free account to unlock full rankings, profile engagement and deeper discovery.
             </p>
             <div class="hero-cta-row">
@@ -417,7 +460,12 @@
 <div class="bg-black-80 white-90 pa1-00 mb1-00">
     <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
         <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
-        <p class="mb0-00 f0-85" style="color:#9e9e9e;">Preview unlocked: 5 profiles</p>
+        <div class="flex items-center" style="gap:8px; flex-wrap:wrap;">
+            <p class="mb0-00 f0-85" style="color:#9e9e9e;">Preview unlocked: 5 profiles</p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
+            {% endif %}
+        </div>
     </div>
     <div class="preview-grid mt0-75">
         {% for celeb in trending_celebs|slice:":5" %}
@@ -427,18 +475,23 @@
                 {% else %}
                     <div class="preview-photo preview-photo-placeholder"></div>
                 {% endif %}
-                <p class="mb0-25 b">{{ celeb.name }}</p>
-                <p class="mb0-25 f0-85" style="color:#c7c7c7;">{{ celeb.street_name|default:"Public Figure" }}</p>
-                <p class="mb0-00 f0-80" style="color:#9d9d9d;">
+                <p class="mb0-25 b preview-card-title">{{ celeb.name }}</p>
+                <p class="mb0-25 f0-85 preview-card-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
+                <p class="mb0-00 f0-80 preview-card-meta">
                     {% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}
                 </p>
             </a>
         {% endfor %}
         <div class="preview-card preview-locked" aria-hidden="true">
-            <div class="preview-photo preview-photo-placeholder"></div>
-            <p class="mb0-25 b">Rising Talent #6</p>
-            <p class="mb0-25 f0-85">Hidden profile</p>
-            <p class="mb0-00 f0-80">Unlock to see full ranking</p>
+            <div class="preview-locked-content">
+                <div class="preview-photo preview-photo-placeholder"></div>
+                <p class="mb0-25 b preview-card-title">Rising Talent #6</p>
+                <p class="mb0-25 f0-85 preview-card-subtitle">Hidden profile</p>
+                <p class="mb0-00 f0-80 preview-card-meta">Unlock to see full ranking</p>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
@@ -474,7 +527,7 @@
     <div class="unlock-layout">
         <div>
             <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
-            <p class="mb0-75" style="color:#c8c8c8;">
+            <p class="mb0-75 unlock-copy">
                 Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
             </p>
             {% if not user.is_authenticated %}
