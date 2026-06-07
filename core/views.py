@@ -90,7 +90,18 @@ def home(request):
             'celeb': representative,
         })
 
-    ghana_nigeria_count = published_celebs.filter(nationality__code__in=['GH', 'NG']).count()
+    selected_country_name = ''
+    if country_id:
+        selected_country_obj = countries.filter(pk=country_id).first()
+        if selected_country_obj:
+            selected_country_name = selected_country_obj.name
+
+    # Keep this metric aligned with the active list filters shown on the page.
+    geo_profiles_count = (
+        filters.count()
+        if country_id else
+        filters.exclude(nationality=None).count()
+    )
 
     is_filtered = any([cat_id, family_id, type_id, country_id, q_filter])
     context = {
@@ -110,7 +121,8 @@ def home(request):
         'trending_celebs': trending_celebs,
         'spotlight_categories': spotlight_categories,
         'category_media_items': category_media_items,
-        'ghana_nigeria_count': ghana_nigeria_count,
+        'geo_profiles_count': geo_profiles_count,
+        'geo_scope_label': selected_country_name or 'Africa',
         'visible_celebs': visible_celebs,
         'locked_profiles_count': locked_profiles_count,
         'is_soft_gated': (not request.user.is_authenticated) and locked_profiles_count > 0,

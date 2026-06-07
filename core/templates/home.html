@@ -622,7 +622,7 @@ html[data-theme="light"] .unlock-panel {
             <p class="mb0-25 b preview-card-title">Top Celebs</p>
             <p class="mb0-25 f0-85 preview-card-subtitle">See the full top list this week</p>
             <p class="mb0-00 f0-80 preview-card-meta">Updated with top profiles across Africa</p>
-            <a href="{% url 'top_celebs' %}" class="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
+            <a href="{% url 'top_celebs' %}" cass="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
         </div>
     </div>
 </div>
@@ -654,7 +654,7 @@ html[data-theme="light"] .unlock-panel {
 <div class="bg-black-80 white-90 pa1-00 mb1-00">
     <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
         <h2 class="mb0-00 f1-50">Browse by Talent Category</h2>
-        <p class="mb0-00 f0-85 muted-meta">{{ ghana_nigeria_count }} profiles currently from Ghana and Nigeria</p>
+        <p class="mb0-00 f0-85 muted-meta">{{ geo_profiles_count }} profiles currently from {{ geo_scope_label }}</p>
     </div>
     <div class="category-pills mt0-75">
         {% for category in spotlight_categories %}
