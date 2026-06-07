@@ -397,6 +397,8 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     margin-bottom: 12px;
+    max-height: 320px;
+    overflow-y: auto;
 }
 .category-modal-gallery img {
     width: 100%;
@@ -660,6 +662,7 @@ html[data-theme="light"] .unlock-panel {
         {% for category in spotlight_categories %}
             <a href="{% url 'home' %}?category={{ category.pk }}"
                data-category-modal="true"
+                    data-category-id="{{ category.pk }}"
                data-category-name="{{ category.name }}"
                data-category-count="{{ category.celeb_count }}"
                class="{% if selected_category == category.pk|stringformat:'s' %}is-active{% endif %}">
@@ -672,6 +675,7 @@ html[data-theme="light"] .unlock-panel {
             {% if item.celeb %}
                 <a href="{{ item.celeb.get_absolute_url }}" class="category-media-card" style="text-decoration:none;"
                    data-category-modal="true"
+                         data-category-id="{{ item.category.pk }}"
                    data-category-name="{{ item.category.name }}"
                    data-category-count="{{ item.category.celeb_count }}">
                     <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
@@ -1054,6 +1058,18 @@ html[data-theme="light"] .unlock-panel {
         </div>
         <div>
         {% if selected_sort == 'default' %}
+        <div id="category-modal-image-sources" hidden>
+            {% for item in category_gallery_items %}
+            <div data-category-images="{{ item.category.pk }}">
+                {% for celeb in item.celebs %}
+                    {% if celeb.image %}
+                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
         {% regroup visible_celebs by type.family.category as category_groups %}
         {% for group in category_groups %}
             <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
@@ -1268,11 +1284,12 @@ html[data-theme="light"] .unlock-panel {
     var title = document.getElementById('category-modal-title');
     var copy = document.getElementById('category-modal-copy');
     var gallery = document.getElementById('category-modal-gallery');
+    var imageSources = document.getElementById('category-modal-image-sources');
     var links = document.querySelectorAll('[data-category-modal="true"]');
 
-    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !gallery || !links.length) return;
+    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !gallery || !imageSources || !links.length) return;
 
-    function collectCategoryImages(activeLink, categoryName) {
+    function collectCategoryImages(activeLink, categoryName, categoryId) {
         var images = [];
         var seen = {};
 
@@ -1287,14 +1304,17 @@ html[data-theme="light"] .unlock-panel {
             });
         }
 
-        addImage(activeLink.querySelector('img'));
+        var sourceGroup = imageSources.querySelector('[data-category-images="' + categoryId + '"]');
+        if (sourceGroup) {
+            sourceGroup.querySelectorAll('img').forEach(addImage);
+        }
 
-        document.querySelectorAll('.category-media-row [data-category-modal="true"]').forEach(function (node) {
-            if ((node.getAttribute('data-category-name') || '') !== categoryName) return;
-            addImage(node.querySelector('img'));
-        });
+        // Fallback when source group is empty.
+        if (!images.length) {
+            addImage(activeLink.querySelector('img'));
+        }
 
-        return images.slice(0, 6);
+        return images;
     }
 
     function renderGallery(images) {
@@ -1323,9 +1343,10 @@ html[data-theme="light"] .unlock-panel {
             event.preventDefault();
             var name = link.getAttribute('data-category-name') || 'Category';
             var count = link.getAttribute('data-category-count') || '0';
+            var categoryId = link.getAttribute('data-category-id') || '';
             title.textContent = name;
             copy.textContent = count + ' profiles found. Open this category view?';
-            renderGallery(collectCategoryImages(link, name));
+            renderGallery(collectCategoryImages(link, name, categoryId));
             confirmLink.setAttribute('href', link.getAttribute('href'));
             overlay.style.display = 'flex';
             overlay.setAttribute('aria-hidden', 'false');

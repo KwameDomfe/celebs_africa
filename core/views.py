@@ -73,22 +73,32 @@ def home(request):
     )
 
     category_media_items = []
-    for category in spotlight_categories[:4]:
-        representative = (
-            published_celebs.filter(type__family__category=category, image__isnull=False)
+    category_gallery_items = []
+    for category in spotlight_categories:
+        ranked_with_images = (
+            published_celebs.filter(
+                type__family__category=category,
+                image__isnull=False,
+                nationality__isnull=False,
+            )
             .exclude(image='')
             .annotate(
                 follower_count=Count('followers', distinct=True),
                 avg_rating=Avg('reviews__rating', distinct=True),
             )
-            .only('name', 'image', 'slug')
             .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')
-            .first()
         )
-        category_media_items.append({
+
+        category_gallery_items.append({
             'category': category,
-            'celeb': representative,
+            'celebs': ranked_with_images,
         })
+
+        if len(category_media_items) < 4:
+            category_media_items.append({
+                'category': category,
+                'celeb': ranked_with_images.first(),
+            })
 
     selected_country_name = ''
     if country_id:
@@ -121,6 +131,7 @@ def home(request):
         'trending_celebs': trending_celebs,
         'spotlight_categories': spotlight_categories,
         'category_media_items': category_media_items,
+        'category_gallery_items': category_gallery_items,
         'geo_profiles_count': geo_profiles_count,
         'geo_scope_label': selected_country_name or 'Africa',
         'visible_celebs': visible_celebs,
