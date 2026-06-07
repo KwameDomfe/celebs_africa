@@ -94,7 +94,7 @@ def home(request):
             'celebs': ranked_with_images,
         })
 
-        if len(category_media_items) < 4:
+        if len(category_media_items) < 6:
             category_media_items.append({
                 'category': category,
                 'celeb': ranked_with_images.first(),
