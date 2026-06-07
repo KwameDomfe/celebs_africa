@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db import OperationalError, ProgrammingError
 from django import forms
 import json
 
@@ -23,15 +24,19 @@ ALLOWED_TRACK_EVENTS = {
 def _record_funnel_event(request, event_name, source_path='', metadata=None):
     if metadata is None:
         metadata = {}
-    if not request.session.session_key:
-        request.session.save()
-    FunnelEvent.objects.create(
-        event_name=event_name,
-        source_path=(source_path or request.path)[:300],
-        metadata=metadata,
-        session_key=request.session.session_key or '',
-        user=request.user if request.user.is_authenticated else None,
-    )
+    try:
+        if not request.session.session_key:
+            request.session.save()
+        FunnelEvent.objects.create(
+            event_name=event_name,
+            source_path=(source_path or request.path)[:300],
+            metadata=metadata,
+            session_key=request.session.session_key or '',
+            user=request.user if request.user.is_authenticated else None,
+        )
+    except (ProgrammingError, OperationalError):
+        # Tracking should never block auth flows during partial deploys/migration lag.
+        return
 
 
 class RegisterForm(UserCreationForm):

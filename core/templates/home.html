@@ -364,7 +364,7 @@
 }
 .category-media-row img,
 .category-media-fallback {
-    height: 86px;
+    height: 344px;
     width: 100%;
     border-radius: 6px;
     object-fit: cover;
@@ -426,6 +426,11 @@ html[data-theme="light"] .hero-cta-secondary {
     .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+@media (min-width: 1025px) {
+    .hero-kicker { font-size: 1.56rem; }
+    .hero-headline { font-size: 3.5rem !important; }
+    .hero-copy { font-size: 2rem !important; }
+}
 </style>
 <div class="discovery-hero white-90 pa1-00 mb1-00">
     <div class="hero-layout">
@@ -482,16 +487,12 @@ html[data-theme="light"] .hero-cta-secondary {
                 </p>
             </a>
         {% endfor %}
-        <div class="preview-card preview-locked" aria-hidden="true">
-            <div class="preview-locked-content">
-                <div class="preview-photo preview-photo-placeholder"></div>
-                <p class="mb0-25 b preview-card-title">Rising Talent #6</p>
-                <p class="mb0-25 f0-85 preview-card-subtitle">Hidden profile</p>
-                <p class="mb0-00 f0-80 preview-card-meta">Unlock to see full ranking</p>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
-                {% endif %}
-            </div>
+        <div class="preview-card">
+            <div class="preview-photo preview-photo-placeholder"></div>
+            <p class="mb0-25 b preview-card-title">Top Celebs</p>
+            <p class="mb0-25 f0-85 preview-card-subtitle">See the full top list this week</p>
+            <p class="mb0-00 f0-80 preview-card-meta">Updated with top profiles across Africa</p>
+            <a href="{% url 'top_celebs' %}" class="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
         </div>
     </div>
 </div>
