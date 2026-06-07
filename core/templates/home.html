@@ -356,6 +356,53 @@
     border-color: #c51e1e;
     color: #fff;
 }
+.category-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.72);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.category-modal {
+    width: min(560px, 100%);
+    background: #141414;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 16px;
+    color: #f1f1f1;
+}
+.category-modal h3 {
+    margin-bottom: 6px;
+}
+.category-modal p {
+    color: #c8c8c8;
+    margin-bottom: 12px;
+}
+.category-modal-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.category-modal-actions a,
+.category-modal-actions button {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+.category-modal-confirm {
+    background: #d91a1a;
+    color: #fff;
+}
+.category-modal-cancel {
+    background: #2b2b2b;
+    color: #ddd;
+}
 .unlock-gate {
     border: 1px dashed rgba(255, 100, 100, 0.4);
     border-radius: 8px;
@@ -427,6 +474,18 @@ html[data-theme="light"] .unlock-copy {
 html[data-theme="light"] .hero-cta-secondary {
     color: #f0f0f0 !important;
     border-color: #8d8d8d;
+}
+html[data-theme="light"] .category-modal {
+    background: #f8f8f8;
+    border-color: #d5d5d5;
+    color: #111;
+}
+html[data-theme="light"] .category-modal p {
+    color: #333;
+}
+html[data-theme="light"] .category-modal-cancel {
+    background: #dedede;
+    color: #222;
 }
 @media (max-width: 1024px) {
     .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -516,6 +575,9 @@ html[data-theme="light"] .hero-cta-secondary {
     <div class="category-pills mt0-75">
         {% for category in spotlight_categories %}
             <a href="{% url 'home' %}?category={{ category.pk }}"
+               data-category-modal="true"
+               data-category-name="{{ category.name }}"
+               data-category-count="{{ category.celeb_count }}"
                class="{% if selected_category == category.pk|stringformat:'s' %}is-active{% endif %}">
                 {{ category.name }} · {{ category.celeb_count }}
             </a>
@@ -524,7 +586,10 @@ html[data-theme="light"] .hero-cta-secondary {
     <div class="category-media-row">
         {% for item in category_media_items %}
             {% if item.celeb %}
-                <a href="{{ item.celeb.get_absolute_url }}" class="category-media-card" style="text-decoration:none;">
+                <a href="{{ item.celeb.get_absolute_url }}" class="category-media-card" style="text-decoration:none;"
+                   data-category-modal="true"
+                   data-category-name="{{ item.category.name }}"
+                   data-category-count="{{ item.category.celeb_count }}">
                     <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
                     <span class="category-media-label">{{ item.category.name }}</span>
                 </a>
@@ -557,6 +622,17 @@ html[data-theme="light"] .hero-cta-secondary {
                     <div class="unlock-collage-fallback"></div>
                 {% endif %}
             {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="category-modal-overlay" class="category-modal-overlay" aria-hidden="true">
+    <div class="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
+        <h3 id="category-modal-title">Browse Category</h3>
+        <p id="category-modal-copy">Continue to browse this category.</p>
+        <div class="category-modal-actions">
+            <a id="category-modal-confirm" class="category-modal-confirm" href="#">View Category</a>
+            <button id="category-modal-cancel" type="button" class="category-modal-cancel">Close</button>
         </div>
     </div>
 </div>
@@ -1118,6 +1194,44 @@ html[data-theme="light"] .hero-cta-secondary {
             var eventName = node.getAttribute('data-track-event');
             if (eventName) sendTrack(eventName);
         });
+    });
+})();
+</script>
+<script>
+(function () {
+    var overlay = document.getElementById('category-modal-overlay');
+    var confirmLink = document.getElementById('category-modal-confirm');
+    var cancelBtn = document.getElementById('category-modal-cancel');
+    var title = document.getElementById('category-modal-title');
+    var copy = document.getElementById('category-modal-copy');
+    var links = document.querySelectorAll('[data-category-modal="true"]');
+
+    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !links.length) return;
+
+    function closeModal() {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    links.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            var name = link.getAttribute('data-category-name') || 'Category';
+            var count = link.getAttribute('data-category-count') || '0';
+            title.textContent = name;
+            copy.textContent = count + ' profiles found. Open this category view?';
+            confirmLink.setAttribute('href', link.getAttribute('href'));
+            overlay.style.display = 'flex';
+            overlay.setAttribute('aria-hidden', 'false');
+        });
+    });
+
+    cancelBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeModal();
     });
 })();
 </script>
