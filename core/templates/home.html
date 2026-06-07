@@ -1355,10 +1355,15 @@ html[data-theme="light"] .unlock-panel {
             var name = link.getAttribute('data-category-name') || 'Category';
             var count = link.getAttribute('data-category-count') || '0';
             var categoryId = link.getAttribute('data-category-id') || '';
+            var categoryUrl = new URL(window.location.href);
+            if (categoryId) {
+                categoryUrl.searchParams.set('category', categoryId);
+            }
             title.textContent = name;
             copy.textContent = count + ' profiles found. Open this category view?';
+            confirmLink.textContent = 'View ' + name;
             renderGallery(collectCategoryImages(link, name, categoryId));
-            confirmLink.setAttribute('href', link.getAttribute('href'));
+            confirmLink.setAttribute('href', categoryUrl.pathname + '?' + categoryUrl.searchParams.toString());
             overlay.style.display = 'flex';
             overlay.setAttribute('aria-hidden', 'false');
         });
