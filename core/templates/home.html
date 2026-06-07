@@ -381,6 +381,21 @@
     color: #c8c8c8;
     margin-bottom: 12px;
 }
+.category-modal-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.category-modal-gallery img {
+    width: 100%;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #161616;
+    display: block;
+}
 .category-modal-actions {
     display: flex;
     gap: 8px;
@@ -495,6 +510,7 @@ html[data-theme="light"] .category-modal-cancel {
 @media (max-width: 767px) {
     .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .category-modal-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 1025px) {
     .hero-kicker { font-size: 1.56rem; }
@@ -630,6 +646,7 @@ html[data-theme="light"] .category-modal-cancel {
     <div class="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
         <h3 id="category-modal-title">Browse Category</h3>
         <p id="category-modal-copy">Continue to browse this category.</p>
+        <div id="category-modal-gallery" class="category-modal-gallery" hidden></div>
         <div class="category-modal-actions">
             <a id="category-modal-confirm" class="category-modal-confirm" href="#">View Category</a>
             <button id="category-modal-cancel" type="button" class="category-modal-cancel">Close</button>
@@ -1204,9 +1221,51 @@ html[data-theme="light"] .category-modal-cancel {
     var cancelBtn = document.getElementById('category-modal-cancel');
     var title = document.getElementById('category-modal-title');
     var copy = document.getElementById('category-modal-copy');
+    var gallery = document.getElementById('category-modal-gallery');
     var links = document.querySelectorAll('[data-category-modal="true"]');
 
-    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !links.length) return;
+    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !gallery || !links.length) return;
+
+    function collectCategoryImages(activeLink, categoryName) {
+        var images = [];
+        var seen = {};
+
+        function addImage(node) {
+            if (!node) return;
+            var src = node.getAttribute('src');
+            if (!src || seen[src]) return;
+            seen[src] = true;
+            images.push({
+                src: src,
+                alt: node.getAttribute('alt') || (categoryName + ' profile')
+            });
+        }
+
+        addImage(activeLink.querySelector('img'));
+
+        document.querySelectorAll('.category-media-row [data-category-modal="true"]').forEach(function (node) {
+            if ((node.getAttribute('data-category-name') || '') !== categoryName) return;
+            addImage(node.querySelector('img'));
+        });
+
+        return images.slice(0, 6);
+    }
+
+    function renderGallery(images) {
+        gallery.innerHTML = '';
+        if (!images.length) {
+            gallery.hidden = true;
+            return;
+        }
+
+        images.forEach(function (item) {
+            var img = document.createElement('img');
+            img.src = item.src;
+            img.alt = item.alt;
+            gallery.appendChild(img);
+        });
+        gallery.hidden = false;
+    }
 
     function closeModal() {
         overlay.style.display = 'none';
@@ -1220,6 +1279,7 @@ html[data-theme="light"] .category-modal-cancel {
             var count = link.getAttribute('data-category-count') || '0';
             title.textContent = name;
             copy.textContent = count + ' profiles found. Open this category view?';
+            renderGallery(collectCategoryImages(link, name));
             confirmLink.setAttribute('href', link.getAttribute('href'));
             overlay.style.display = 'flex';
             overlay.setAttribute('aria-hidden', 'false');
