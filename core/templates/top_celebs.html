@@ -82,6 +82,29 @@
     color: #ccc;
 }
 .top-filter-actions a:hover { background: #555; color: #fff; }
+.top-filter-toggle-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.top-muted { color: #aaa; }
+.top-rank { color: #f5a623; }
+.top-rating { color: #f5a623; font-weight: bold; }
+.top-followers { color: #e55; font-weight: bold; }
+.top-no-rating { color: #666; }
+.top-empty { color: gray; }
+
+html[data-theme="light"] .top-muted { color: #555 !important; }
+html[data-theme="light"] .top-no-rating { color: #666 !important; }
+html[data-theme="light"] .top-empty { color: #666 !important; }
 </style>
 <div class="bg-black-80 white-90 pa1-00 mb1-00">
     <p class="mb0-00 f1-00">
@@ -97,10 +120,9 @@
     <aside class="gc1s4 bg-black-20 top-aside" 
         style="position:sticky; 
             top:80px; 
-            align-self:start;"\
+            align-self:start;"
         >
-        <button class="top-filter-toggle"
-            style="width:100%; padding:8px 12px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:1rem; text-align:left; margin-bottom:8px;"
+        <button class="top-filter-toggle top-filter-toggle-btn"
             onclick="var f=document.getElementById('top-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';"
         >Filters ▼</button>
         <div id="top-filters" class="top-filters">
@@ -183,11 +205,11 @@
                     <div class="flex items-center justify-center h-100 bg-black-80" 
                     style="font-size:1.5rem; 
                         font-weight:bold; 
-                        color:#f5a623; 
+                        color:inherit; 
                         min-width:2rem; 
                         text-align:center;"
                     >
-                        {{ forloop.counter }}
+                        <span class="top-rank">{{ forloop.counter }}</span>
                     </div>
                     <div class="pa0-50 w-100">
                         <div style="flex-shrink:0;">
@@ -211,26 +233,26 @@
                             <p style="margin:4px 0 0 0;">
                                 {{ celeb.street_name }}
                             </p>
-                            <p style="margin:6px 0 0 0; color:#aaa;">
+                            <div class="top-muted" style="margin:6px 0 0 0;">
                                 {% if celeb.date_of_birth %}
-                                    <span style="color:#aaa;">
+                                    <span>
                                         Date of Birth: {{ celeb.date_of_birth|date:"j M" }}
                                     </span>
                                 {% endif %}
                                 {% if celeb.type %}
-                                    <p class = "mb0-00" style="color:#aaa;">
+                                    <p class="mb0-00">
                                         {{ celeb.type }}
                                     </p>
                                 {% endif %}
-                            </p>
+                            </div>
                             <p style="margin:6px 0 0 0;">
                                 {% if celeb.avg_rating %}
-                                <span style="color:#f5a623; font-weight:bold;">★ {{ celeb.avg_rating|floatformat:1 }}</span>
+                                <span class="top-rating">★ {{ celeb.avg_rating|floatformat:1 }}</span>
                                 {% else %}
-                                <span style="color:#666;">No ratings yet</span>
+                                <span class="top-no-rating">No ratings yet</span>
                                 {% endif %}
                                 &nbsp;·&nbsp;
-                                <span style="color:#e55; font-weight:bold;">{{ celeb.follower_count }}</span>
+                                <span class="top-followers">{{ celeb.follower_count }}</span>
                                 follower{{ celeb.follower_count|pluralize }}
                             </p>
                         </div>
@@ -238,7 +260,7 @@
                 </div>
             </li>
         {% empty %}
-            <li style="color:gray;">No celebs found.</li>
+            <li class="top-empty">No celebs found.</li>
         {% endfor %}
         </ul>
     </div>

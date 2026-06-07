@@ -258,6 +258,14 @@
     font-size: 0.9rem;
     font-weight: 700;
 }
+.hero-cta-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
 .hero-cta-primary {
     background: #e11919;
     color: #fff;
@@ -331,6 +339,9 @@
 .preview-lock-cta-icon {
     font-size: 0.9rem;
     line-height: 1;
+}
+.muted-meta {
+    color: #9e9e9e;
 }
 .category-pills {
     display: flex;
@@ -418,6 +429,9 @@
     background: #2b2b2b;
     color: #ddd;
 }
+.unlock-panel {
+    border: 1px dashed rgba(255,255,255,0.2);
+}
 .unlock-gate {
     border: 1px dashed rgba(255, 100, 100, 0.4);
     border-radius: 8px;
@@ -426,6 +440,10 @@
     background: linear-gradient(135deg, rgba(36, 10, 10, 0.9), rgba(16, 16, 16, 0.95));
 }
 .unlock-copy { color: #c8c8c8; }
+.celeb-meta { margin: 2px 0 4px 0; font-size: 0.85rem; color: #aaa; }
+.celeb-deceased { color: #c0392b; }
+.celeb-age-muted { color: #888; }
+.unlock-gate-copy { color: #d5d5d5; }
 .category-media-row {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -482,13 +500,29 @@ html[data-theme="light"] .hero-copy,
 html[data-theme="light"] .hero-media-badge,
 html[data-theme="light"] .preview-card-title,
 html[data-theme="light"] .preview-card-subtitle,
-html[data-theme="light"] .preview-card-meta,
-html[data-theme="light"] .unlock-copy {
+html[data-theme="light"] .preview-card-meta {
     color: #f0f0f0 !important;
 }
 html[data-theme="light"] .hero-cta-secondary {
     color: #f0f0f0 !important;
     border-color: #8d8d8d;
+}
+html[data-theme="light"] .muted-meta {
+    color: #555 !important;
+}
+html[data-theme="light"] .category-pills a {
+    background: #f4f4f4;
+    color: #222;
+    border-color: #bcbcbc;
+}
+html[data-theme="light"] .category-pills a:hover {
+    background: #e8e8e8;
+    border-color: #9c9c9c;
+}
+html[data-theme="light"] .category-pills a.is-active {
+    background: #cc2a2a;
+    border-color: #b32222;
+    color: #fff;
 }
 html[data-theme="light"] .category-modal {
     background: #f8f8f8;
@@ -501,6 +535,16 @@ html[data-theme="light"] .category-modal p {
 html[data-theme="light"] .category-modal-cancel {
     background: #dedede;
     color: #222;
+}
+html[data-theme="light"] .unlock-copy {
+    color: #333 !important;
+}
+html[data-theme="light"] .celeb-meta { color: #555 !important; }
+html[data-theme="light"] .celeb-deceased { color: #9e2a1f !important; }
+html[data-theme="light"] .celeb-age-muted { color: #666 !important; }
+html[data-theme="light"] .unlock-gate-copy { color: #444 !important; }
+html[data-theme="light"] .unlock-panel {
+    border-color: rgba(0,0,0,0.2);
 }
 @media (max-width: 1024px) {
     .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -552,7 +596,7 @@ html[data-theme="light"] .category-modal-cancel {
     <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
         <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
         <div class="flex items-center" style="gap:8px; flex-wrap:wrap;">
-            <p class="mb0-00 f0-85" style="color:#9e9e9e;">Preview unlocked: 5 profiles</p>
+            <p class="mb0-00 f0-85 muted-meta">Preview unlocked: 5 profiles</p>
             {% if not user.is_authenticated %}
                 <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
             {% endif %}
@@ -583,10 +627,34 @@ html[data-theme="light"] .category-modal-cancel {
     </div>
 </div>
 
+
+<div class="bg-black-80 white-90 pa1-00 mb1-00 unlock-panel">
+    <div class="unlock-layout">
+        <div>
+            <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
+            <p class="mb0-75 unlock-copy">
+                Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
+            </p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="hero-cta-link hero-cta-primary js-track-click" data-track-event="unlock_register_click">Create Free Account</a>
+            {% endif %}
+        </div>
+        <div class="unlock-collage" aria-hidden="true">
+            {% for celeb in trending_celebs|slice:":3" %}
+                {% if celeb.image %}
+                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
+                {% else %}
+                    <div class="unlock-collage-fallback"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 <div class="bg-black-80 white-90 pa1-00 mb1-00">
     <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
         <h2 class="mb0-00 f1-50">Browse by Talent Category</h2>
-        <p class="mb0-00 f0-85" style="color:#9e9e9e;">{{ ghana_nigeria_count }} profiles currently from Ghana and Nigeria</p>
+        <p class="mb0-00 f0-85 muted-meta">{{ ghana_nigeria_count }} profiles currently from Ghana and Nigeria</p>
     </div>
     <div class="category-pills mt0-75">
         {% for category in spotlight_categories %}
@@ -619,28 +687,6 @@ html[data-theme="light"] .category-modal-cancel {
     </div>
 </div>
 
-<div class="bg-black-80 white-90 pa1-00 mb1-00" style="border:1px dashed rgba(255,255,255,0.2);">
-    <div class="unlock-layout">
-        <div>
-            <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
-            <p class="mb0-75 unlock-copy">
-                Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
-            </p>
-            {% if not user.is_authenticated %}
-                <a href="{% url 'register' %}" class="hero-cta-primary js-track-click" data-track-event="unlock_register_click" style="display:inline-block; text-decoration:none;">Create Free Account</a>
-            {% endif %}
-        </div>
-        <div class="unlock-collage" aria-hidden="true">
-            {% for celeb in trending_celebs|slice:":3" %}
-                {% if celeb.image %}
-                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
-                {% else %}
-                    <div class="unlock-collage-fallback"></div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</div>
 
 <div id="category-modal-overlay" class="category-modal-overlay" aria-hidden="true">
     <div class="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
@@ -1059,7 +1105,7 @@ html[data-theme="light"] .category-modal-cancel {
                                         {{ celeb.follower_count }}
                                     </span> follower{{ celeb.follower_count|pluralize }} )
                                 </p>
-                                <p style="margin:2px 0 4px 0; font-size:0.85rem; color:#aaa;">
+                                <p class="celeb-meta">
                                     {% if celeb.date_of_birth %}
                                     <span title="Date of Birth"
                                     >
@@ -1070,11 +1116,11 @@ html[data-theme="light"] .category-modal-cancel {
                                     <div class="mb">
                                         {% if celeb.is_deceased %}
                                             
-                                            <span style="color:#c0392b;" title="Date of Death"
+                                            <span class="celeb-deceased" title="Date of Death"
                                             >
                                                 &#10013;{{ celeb.date_of_death|date:"j M Y" }}
                                             </span>
-                                            {% if celeb.age %}&nbsp;<p class="mb0-00" style="color:#888;">
+                                            {% if celeb.age %}&nbsp;<p class="mb0-00 celeb-age-muted">
                                                 (aged {{ celeb.age }})</p>
                                             {% endif %}
                                         {% elif celeb.age %}
@@ -1132,13 +1178,13 @@ html[data-theme="light"] .category-modal-cancel {
                                 <span class="b"><span class="gold1">★</span> {{ celeb.avg_rating|floatformat:1 }}</span>,
                                 {% endif %}
                             <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
-                            <p style="margin:2px 0 4px 0; font-size:0.85rem; color:#aaa;">
+                            <p class="celeb-meta">
                                 {% if celeb.date_of_birth %}
                                 <span title="Date of Birth">&#9679; Born {{ celeb.date_of_birth|date:"j M Y" }}</span>
                                 {% endif %}
                                 {% if celeb.is_deceased %}
-                                &nbsp;&nbsp;<span style="color:#c0392b;" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
-                                {% if celeb.age %}&nbsp;<span style="color:#888;">(aged {{ celeb.age }})</span>{% endif %}
+                                &nbsp;&nbsp;<span class="celeb-deceased" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
+                                {% if celeb.age %}&nbsp;<span class="celeb-age-muted">(aged {{ celeb.age }})</span>{% endif %}
                                 {% elif celeb.age %}
                                 &nbsp;&nbsp;<span>Age {{ celeb.age }}</span>
                                 {% endif %}
@@ -1163,8 +1209,8 @@ html[data-theme="light"] .category-modal-cancel {
         {% if is_soft_gated %}
         <div class="unlock-gate white-90">
             <h3 class="mb0-50">{{ locked_profiles_count }} more profile{{ locked_profiles_count|pluralize }} are locked</h3>
-            <p class="mb0-75" style="color:#d5d5d5;">Create a free account to view the full directory, deeper rankings and profile engagement tools.</p>
-            <a href="{% url 'register' %}" class="hero-cta-primary js-track-click" data-track-event="directory_gate_register_click" style="display:inline-block; text-decoration:none;">Unlock Full Directory</a>
+            <p class="mb0-75 unlock-gate-copy">Create a free account to view the full directory, deeper rankings and profile engagement tools.</p>
+            <a href="{% url 'register' %}" class="hero-cta-link hero-cta-primary js-track-click" data-track-event="directory_gate_register_click">Unlock Full Directory</a>
         </div>
         {% endif %}
        
