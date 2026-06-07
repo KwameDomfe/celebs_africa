@@ -44,6 +44,7 @@ class LoginRequiredMiddleware:
         '/',
         '/accounts/login/',
         '/accounts/register/',
+        '/accounts/track-event/',
         '/accounts/logout/',
     }
 

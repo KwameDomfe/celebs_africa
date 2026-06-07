@@ -6,6 +6,7 @@ from .views import CustomLoginView
 urlpatterns = [
     path('', views.account_home, name='account_home'),
     path('register/', views.register, name='register'),
+    path('track-event/', views.track_event, name='track_event'),
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', views.profile, name='profile'),

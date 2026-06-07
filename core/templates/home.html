@@ -190,11 +190,307 @@
     border-radius: 3px;
     display: block;
 }
+
+.discovery-hero {
+    background: linear-gradient(135deg, #100b0b 0%, #1e1111 40%, #331414 100%);
+    border: 1px solid rgba(255, 90, 90, 0.35);
+    border-radius: 8px;
+}
+.hero-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+}
+.hero-media {
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 220px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #111;
+    position: relative;
+}
+.hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.hero-media-fallback {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    background: radial-gradient(circle at top right, #4a1d1d, #171717 55%);
+}
+.hero-media-badge {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    background: rgba(0, 0, 0, 0.72);
+    padding: 7px 9px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #f0f0f0;
+}
+.hero-kicker {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ff8b8b;
+}
+.hero-headline {
+    color: #f8f8f8 !important;
+    line-height: 1.15;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.hero-cta-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.hero-cta-row a {
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+.hero-cta-primary {
+    background: #e11919;
+    color: #fff;
+}
+.hero-cta-secondary {
+    border: 1px solid #595959;
+    color: #d9d9d9;
+}
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+.preview-card {
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 6px;
+    padding: 10px;
+}
+.preview-photo {
+    width: 100%;
+    height: 112px;
+    border-radius: 5px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 8px;
+    background: #202020;
+}
+.preview-photo-placeholder {
+    background: linear-gradient(135deg, #222, #141414);
+}
+.preview-locked {
+    position: relative;
+    overflow: hidden;
+}
+.preview-locked::after {
+    content: 'Sign up to unlock rankings';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.76rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(2px);
+}
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.category-pills span {
+    border: 1px solid #444;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    color: #d8d8d8;
+    background: #151515;
+}
+.unlock-gate {
+    border: 1px dashed rgba(255, 100, 100, 0.4);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 10px;
+    background: linear-gradient(135deg, rgba(36, 10, 10, 0.9), rgba(16, 16, 16, 0.95));
+}
+.category-media-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+.category-media-card {
+    position: relative;
+}
+.category-media-row img,
+.category-media-fallback {
+    height: 86px;
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #171717;
+    display: block;
+}
+.category-media-label {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    color: #f3f3f3;
+    background: rgba(0, 0, 0, 0.72);
+}
+.unlock-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 12px;
+    align-items: center;
+}
+.unlock-collage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+.unlock-collage img,
+.unlock-collage-fallback {
+    width: 100%;
+    height: 108px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #171717;
+    display: block;
+}
+@media (max-width: 1024px) {
+    .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .hero-layout,
+    .unlock-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+    .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 </style>
+<div class="discovery-hero white-90 pa1-00 mb1-00">
+    <div class="hero-layout">
+        <div>
+            <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
+            <h1 class="f2-25 mb0-50 hero-headline">Discover Verified African Talent Before Everyone Else</h1>
+            <p class="mb1-00" style="max-width:72ch; color:#d8d8d8;">
+                Explore fast-rising celebrities, musicians, actors and creators by category and country. Create a free account to unlock full rankings, profile engagement and deeper discovery.
+            </p>
+            <div class="hero-cta-row">
+                {% if user.is_authenticated %}
+                    <a class="hero-cta-primary js-track-click" data-track-event="hero_explore_click" href="{% url 'celebs_home' %}">Explore Full Directory</a>
+                {% else %}
+                    <a class="hero-cta-primary js-track-click" data-track-event="hero_register_click" href="{% url 'register' %}">Unlock Trending Celebrities</a>
+                    <a class="hero-cta-secondary js-track-click" data-track-event="hero_login_click" href="{% url 'login' %}">I already have an account</a>
+                {% endif %}
+            </div>
+        </div>
+        {% with hero_celeb=trending_celebs|first %}
+        <div class="hero-media">
+            {% if hero_celeb and hero_celeb.image %}
+                <img src="{{ hero_celeb.image.url }}" alt="{{ hero_celeb.name }}">
+                <div class="hero-media-badge">Featured: {{ hero_celeb.name }}</div>
+            {% else %}
+                <div class="hero-media-fallback"></div>
+            {% endif %}
+        </div>
+        {% endwith %}
+    </div>
+</div>
+
 <div class="bg-black-80 white-90 pa1-00 mb1-00">
-    <p class="mb0-00 f1-00">
-        CelebsAfrica indexes African celebrities, musicians, actors, athletes, presenters, professors and business personalities so people can discover them by name, country, category or type.
-    </p>
+    <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
+        <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
+        <p class="mb0-00 f0-85" style="color:#9e9e9e;">Preview unlocked: 5 profiles</p>
+    </div>
+    <div class="preview-grid mt0-75">
+        {% for celeb in trending_celebs|slice:":5" %}
+            <a href="{{ celeb.get_absolute_url }}" class="preview-card js-track-click" data-track-event="trending_preview_open" style="text-decoration:none; color:inherit;">
+                {% if celeb.image %}
+                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="preview-photo">
+                {% else %}
+                    <div class="preview-photo preview-photo-placeholder"></div>
+                {% endif %}
+                <p class="mb0-25 b">{{ celeb.name }}</p>
+                <p class="mb0-25 f0-85" style="color:#c7c7c7;">{{ celeb.street_name|default:"Public Figure" }}</p>
+                <p class="mb0-00 f0-80" style="color:#9d9d9d;">
+                    {% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}
+                </p>
+            </a>
+        {% endfor %}
+        <div class="preview-card preview-locked" aria-hidden="true">
+            <div class="preview-photo preview-photo-placeholder"></div>
+            <p class="mb0-25 b">Rising Talent #6</p>
+            <p class="mb0-25 f0-85">Hidden profile</p>
+            <p class="mb0-00 f0-80">Unlock to see full ranking</p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-black-80 white-90 pa1-00 mb1-00">
+    <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
+        <h2 class="mb0-00 f1-50">Browse by Talent Category</h2>
+        <p class="mb0-00 f0-85" style="color:#9e9e9e;">{{ ghana_nigeria_count }} profiles currently from Ghana and Nigeria</p>
+    </div>
+    <div class="category-pills mt0-75">
+        {% for category in spotlight_categories %}
+            <span>{{ category.name }} · {{ category.celeb_count }}</span>
+        {% endfor %}
+    </div>
+    <div class="category-media-row">
+        {% for item in category_media_items %}
+            {% if item.celeb %}
+                <a href="{{ item.celeb.get_absolute_url }}" class="category-media-card" style="text-decoration:none;">
+                    <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
+                    <span class="category-media-label">{{ item.category.name }}</span>
+                </a>
+            {% else %}
+                <div class="category-media-card">
+                    <div class="category-media-fallback"></div>
+                    <span class="category-media-label">{{ item.category.name }}</span>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="bg-black-80 white-90 pa1-00 mb1-00" style="border:1px dashed rgba(255,255,255,0.2);">
+    <div class="unlock-layout">
+        <div>
+            <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
+            <p class="mb0-75" style="color:#c8c8c8;">
+                Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
+            </p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="hero-cta-primary js-track-click" data-track-event="unlock_register_click" style="display:inline-block; text-decoration:none;">Create Free Account</a>
+            {% endif %}
+        </div>
+        <div class="unlock-collage" aria-hidden="true">
+            {% for celeb in trending_celebs|slice:":3" %}
+                {% if celeb.image %}
+                    <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
+                {% else %}
+                    <div class="unlock-collage-fallback"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {# ── Skeleton overlay — shown while filter navigation is in flight ── #}
 <div id="home-skeleton" style="display:none;" aria-hidden="true" class="grid gtc12 ggap2-0 bg-black-90 home-grid">
@@ -551,7 +847,7 @@
         </div>
         <div>
         {% if selected_sort == 'default' %}
-        {% regroup celebs by type.family.category as category_groups %}
+        {% regroup visible_celebs by type.family.category as category_groups %}
         {% for group in category_groups %}
             <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
                 <h3>
@@ -650,7 +946,7 @@
         {% else %}
         {# Flat sorted list — no category grouping #}
         <ul>
-            {% for celeb in celebs %}
+            {% for celeb in visible_celebs %}
                 <li class="mb2-00">
                     <div class="flex flex-column flex-row-l bg-black-80 white-90 pa1-00">
                         <div>
@@ -702,8 +998,59 @@
             {% endfor %}
         </ul>
         {% endif %}
+
+        {% if is_soft_gated %}
+        <div class="unlock-gate white-90">
+            <h3 class="mb0-50">{{ locked_profiles_count }} more profile{{ locked_profiles_count|pluralize }} are locked</h3>
+            <p class="mb0-75" style="color:#d5d5d5;">Create a free account to view the full directory, deeper rankings and profile engagement tools.</p>
+            <a href="{% url 'register' %}" class="hero-cta-primary js-track-click" data-track-event="directory_gate_register_click" style="display:inline-block; text-decoration:none;">Unlock Full Directory</a>
+        </div>
+        {% endif %}
        
     </div>
 </div>
 </div>{# /home-content #}
+<script>
+(function () {
+    var tracked = document.querySelectorAll('.js-track-click');
+    if (!tracked.length) return;
+
+    function sendInternal(eventName) {
+        var payload = JSON.stringify({
+            event: eventName,
+            path: window.location.pathname,
+            meta: { ua: navigator.userAgent.slice(0, 120) }
+        });
+        if (navigator.sendBeacon) {
+            var blob = new Blob([payload], { type: 'application/json' });
+            navigator.sendBeacon('{% url "track_event" %}', blob);
+            return;
+        }
+        fetch('{% url "track_event" %}', {
+            method: 'POST',
+            body: payload,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            keepalive: true
+        }).catch(function () {});
+    }
+
+    function sendTrack(eventName) {
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, {
+                event_category: 'conversion',
+                event_label: 'homepage'
+            });
+        }
+        sendInternal(eventName);
+    }
+
+    tracked.forEach(function (node) {
+        node.addEventListener('click', function () {
+            var eventName = node.getAttribute('data-track-event');
+            if (eventName) sendTrack(eventName);
+        });
+    });
+})();
+</script>
 {% endblock %}

@@ -4,7 +4,34 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django import forms
+import json
+
+from .models import FunnelEvent
+
+
+ALLOWED_TRACK_EVENTS = {
+    FunnelEvent.EVENT_HERO_REGISTER_CLICK,
+    FunnelEvent.EVENT_UNLOCK_REGISTER_CLICK,
+    FunnelEvent.EVENT_DIRECTORY_GATE_REGISTER_CLICK,
+}
+
+
+def _record_funnel_event(request, event_name, source_path='', metadata=None):
+    if metadata is None:
+        metadata = {}
+    if not request.session.session_key:
+        request.session.save()
+    FunnelEvent.objects.create(
+        event_name=event_name,
+        source_path=(source_path or request.path)[:300],
+        metadata=metadata,
+        session_key=request.session.session_key or '',
+        user=request.user if request.user.is_authenticated else None,
+    )
 
 
 class RegisterForm(UserCreationForm):
@@ -55,11 +82,36 @@ def register(request):
             user = form.save()
             user.profile.role = form.cleaned_data['role']
             user.profile.save()
+            _record_funnel_event(
+                request,
+                FunnelEvent.EVENT_SIGNUP_SUCCESS,
+                source_path=request.path,
+                metadata={'role': form.cleaned_data['role']},
+            )
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('account_home')
     else:
         form = RegisterForm()
+        _record_funnel_event(request, FunnelEvent.EVENT_REGISTER_PAGE_VIEW, source_path=request.path)
     return render(request, 'accounts/register.html', {'form': form})
+
+
+@csrf_exempt
+@require_POST
+def track_event(request):
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({'ok': False, 'error': 'invalid_payload'}, status=400)
+
+    event_name = payload.get('event', '').strip()
+    if event_name not in ALLOWED_TRACK_EVENTS:
+        return JsonResponse({'ok': False, 'error': 'invalid_event'}, status=400)
+
+    source_path = payload.get('path') or request.path
+    metadata = payload.get('meta') if isinstance(payload.get('meta'), dict) else {}
+    _record_funnel_event(request, event_name, source_path=source_path, metadata=metadata)
+    return JsonResponse({'ok': True})
 
 
 @login_required

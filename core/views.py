@@ -13,6 +13,7 @@ SORT_OPTIONS = {
 DEFAULT_ORDER = ('type__family__category__name', 'type__family__name', 'type__name', 'name')
 
 def home(request):
+    published_celebs = Celeb.objects.filter(published=True)
     categories = Category.objects.prefetch_related('families__types').order_by('name')
     countries = Country.objects.all()
     cat_id = request.GET.get('category', '')
@@ -24,7 +25,7 @@ def home(request):
     q_filter = q.strip()
 
     # Base filter queryset (no annotations — for accurate counting)
-    filters = Celeb.objects.filter(published=True)
+    filters = published_celebs
     if cat_id:
         filters = filters.filter(type__family__category_id=cat_id)
     if family_id:
@@ -42,6 +43,51 @@ def home(request):
         avg_rating=Avg('reviews__rating', distinct=True),
     ).order_by(*SORT_OPTIONS.get(sort, DEFAULT_ORDER))
 
+    visible_limit = 12
+    if request.user.is_authenticated:
+        visible_celebs = celebs
+        locked_profiles_count = 0
+    else:
+        visible_celebs = celebs[:visible_limit]
+        locked_profiles_count = max(filters.count() - visible_limit, 0)
+
+    trending_celebs = (
+        published_celebs.select_related('type__family__category', 'nationality')
+        .annotate(
+            follower_count=Count('followers', distinct=True),
+            avg_rating=Avg('reviews__rating', distinct=True),
+        )
+        .order_by(F('follower_count').desc(nulls_last=True), F('avg_rating').desc(nulls_last=True), 'name')[:10]
+    )
+
+    spotlight_categories = (
+        Category.objects.annotate(
+            celeb_count=Count(
+                'families__types__celebs',
+                filter=Q(families__types__celebs__published=True),
+                distinct=True,
+            )
+        )
+        .filter(celeb_count__gt=0)
+        .order_by('-celeb_count', 'name')[:6]
+    )
+
+    category_media_items = []
+    for category in spotlight_categories[:4]:
+        representative = (
+            published_celebs.filter(type__family__category=category, image__isnull=False)
+            .exclude(image='')
+            .only('name', 'image', 'slug')
+            .order_by('name')
+            .first()
+        )
+        category_media_items.append({
+            'category': category,
+            'celeb': representative,
+        })
+
+    ghana_nigeria_count = published_celebs.filter(nationality__code__in=['GH', 'NG']).count()
+
     is_filtered = any([cat_id, family_id, type_id, country_id, q_filter])
     context = {
         'celebs': celebs,
@@ -53,10 +99,17 @@ def home(request):
         'selected_country': country_id,
         'selected_sort': sort,
         'q': q,
-        'total_celebs': Celeb.objects.filter(published=True).count(),
+        'total_celebs': published_celebs.count(),
         'celebs_count': filters.count(),
         'is_filtered': is_filtered,
-        'country_count': Celeb.objects.filter(published=True).values('nationality').distinct().exclude(nationality=None).count(),
+        'country_count': published_celebs.values('nationality').distinct().exclude(nationality=None).count(),
+        'trending_celebs': trending_celebs,
+        'spotlight_categories': spotlight_categories,
+        'category_media_items': category_media_items,
+        'ghana_nigeria_count': ghana_nigeria_count,
+        'visible_celebs': visible_celebs,
+        'locked_profiles_count': locked_profiles_count,
+        'is_soft_gated': (not request.user.is_authenticated) and locked_profiles_count > 0,
     }
     return render(request, 'home.html', context)
 
