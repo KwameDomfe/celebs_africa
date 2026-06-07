@@ -77,8 +77,12 @@ def home(request):
         representative = (
             published_celebs.filter(type__family__category=category, image__isnull=False)
             .exclude(image='')
+            .annotate(
+                follower_count=Count('followers', distinct=True),
+                avg_rating=Avg('reviews__rating', distinct=True),
+            )
             .only('name', 'image', 'slug')
-            .order_by('name')
+            .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')
             .first()
         )
         category_media_items.append({
