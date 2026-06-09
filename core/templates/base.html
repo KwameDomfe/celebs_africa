@@ -118,11 +118,11 @@
             </div>
             {# Desktop nav links — hidden on mobile via menu.css #}
             <div class="flex justify-end ggap1-00 nav-items w-100 h-100" id="navItemsDesktop">
-                <div class="flex items-center justify-center">
-                    <a href="/celebs/">Celebs</a>
+                 <div class="flex items-center justify-center">
+                    <a href="{% url 'posts_home' %}">Posts</a>
                 </div>
                 <div class="flex items-center justify-center">
-                    <a href="{% url 'posts_home' %}">Posts</a>
+                    <a href="/celebs/">Celebs</a>
                 </div>
                 <div class="flex items-center justify-center">
                     <a href="{% url 'top_celebs' %}">⭐ Top</a>
