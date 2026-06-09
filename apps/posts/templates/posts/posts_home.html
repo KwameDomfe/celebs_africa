@@ -147,7 +147,11 @@
 </style>
 
 <div class="grid gtc12 ggap2-00 bg-black-90 posts-grid">
-    <aside class="gc1s4 pa1-00 bg-black-80 sticky posts-aside" style="top:80px; align-self:start;">
+    <aside class="gc1s4 pa1-00 bg-black-80 sticky posts-aside" style="top:0px; align-self:start;">
+        <div style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
+            <h1 style="margin:0; color:#f0f0f0;">Posts</h1>
+            <p style="margin:4px 0 0; color:#777;">Manage your posts and interactions</p>
+        </div>
         <div class="posts-aside-box">
             <p class="posts-aside-title">Posts Hub</p>
             <p style="margin:0; color:#aaa; line-height:1.4;">Write updates, join conversations, and manage your content from one place.</p>
@@ -155,10 +159,10 @@
 
         <div class="posts-aside-box">
             <p class="posts-aside-title">Your Activity</p>
-            <div class="posts-aside-stat"><span>Live posts</span><strong>{{ posts|length }}</strong></div>
-            <div class="posts-aside-stat"><span>Liked posts</span><strong>{{ liked_post_ids|length }}</strong></div>
-            <div class="posts-aside-stat"><span>Deleted posts</span><strong>{{ deleted_posts|length }}</strong></div>
-            <div class="posts-aside-stat"><span>Deleted comments</span><strong>{{ deleted_comments|length }}</strong></div>
+            <div class="posts-aside-stat gray"><span>Live posts</span><strong>{{ posts|length }}</strong></div>
+            <div class="posts-aside-stat gray"><span>Liked posts</span><strong>{{ liked_post_ids|length }}</strong></div>
+            <div class="posts-aside-stat gray"><span>Deleted posts</span><strong>{{ deleted_posts|length }}</strong></div>
+            <div class="posts-aside-stat gray"><span>Deleted comments</span><strong>{{ deleted_comments|length }}</strong></div>
         </div>
 
         <div class="posts-aside-box">
@@ -170,14 +174,35 @@
         </div>
     </aside>
 
-    <div class="gc5s8 posts-main ph1-00">
-        <div class="posts-wrap pa1-00">
-            <h2 style="margin:0 0 16px;">Community Posts</h2>
+    <div class="gc5s8 posts-main ph1-00"
+    >
+        <div class="posts-wrap pa1-00"
+        >            
+            <h2 class="gray"style="margin:0 0 16px;"
+            >
+                Posts Hub
+            </h2>
 
-            <form method="post" action="{% url 'post_create' %}" class="post-create" enctype="multipart/form-data">
+            <form method="post" 
+                action="{% url 'post_create' %}" 
+                class="post-create" 
+                enctype="multipart/form-data"
+            >
                 {% csrf_token %}
-                <label for="id_post_text" style="display:block; margin-bottom:8px; color:#bbb; font-weight:600;">Create a post</label>
-                <textarea id="id_post_text" name="text" rows="4" maxlength="1200" placeholder="Share an update with everyone..."></textarea>
+                <label for="id_post_text" 
+                    style="display:block; 
+                    margin-bottom:8px; 
+                    color:#bbb; 
+                    font-weight:600;"
+                >
+                    Create a post
+                </label>
+                <textarea id="id_post_text" 
+                    name="text" 
+                    rows="4" 
+                    maxlength="1200" 
+                    placeholder="Share an update with everyone..."
+                ></textarea>
                 <label for="id_post_image" style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Add image (optional)</label>
                 <input id="id_post_image" type="file" name="image" accept="image/*" style="display:block; color:#aaa;">
                 <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
@@ -188,146 +213,153 @@
             </form>
 
             {% for post in posts %}
-            <article id="post-{{ post.pk }}" class="post-card">
-        <div class="post-meta">
-            <strong>{{ post.user.get_full_name|default:post.user.username }}</strong>
-            · {{ post.created_at|date:"d M Y, H:i" }}
-            {% if post.updated_at != post.created_at %}
-            · edited {{ post.updated_at|timesince }} ago
-            {% endif %}
-        </div>
-
-        <p class="post-text">{{ post.text }}</p>
-        {% if post.image %}
-        <div class="post-media">
-            <img src="{{ post.image.url }}" alt="Post image by {{ post.user.username }}">
-        </div>
-        {% endif %}
-
-        {% if request.user == post.user %}
-        <details style="margin:0 0 12px;">
-            <summary style="cursor:pointer; color:#bbb;">Edit post</summary>
-            <form method="post" action="{% url 'post_edit' post.pk %}" style="margin-top:8px;" enctype="multipart/form-data">
-                {% csrf_token %}
-                <textarea class="post-comment-input" name="text" rows="3" maxlength="1200">{{ post.text }}</textarea>
-                <label style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Replace image (optional)</label>
-                <input type="file" name="image" accept="image/*" style="display:block; color:#aaa;" id="id_post_image_edit_{{ post.pk }}">
-                <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
-                <div id="id_post_edit_preview_{{ post.pk }}" class="post-upload-preview" style="display:none;"></div>
-                {% if post.image %}
-                <label style="display:flex; align-items:center; gap:8px; margin-top:8px; color:#aaa; font-size:0.88rem;">
-                    <input type="checkbox" name="remove_image"> Remove current image
-                </label>
-                {% endif %}
-                <div style="margin-top:8px;">
-                    <button type="submit" class="post-btn post-btn-secondary">Save post</button>
-                </div>
-            </form>
-        </details>
-        <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Delete this post?');" style="margin:0 0 12px;">
-            {% csrf_token %}
-            <button type="submit" class="post-btn post-btn-danger">Move post to trash</button>
-        </form>
-        {% endif %}
-
-        <div class="post-actions">
-            <form method="post" action="{% url 'post_like' post.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="post-btn">
-                    {% if post.pk in liked_post_ids %}Unlike{% else %}Like{% endif %}
-                    ({{ post.like_count }})
-                </button>
-            </form>
-
-            <span style="color:#888;">Comments: {{ post.comment_count }}</span>
-            <span style="color:#888;">Shares: {{ post.share_count }}</span>
-        </div>
-
-        <div class="share-links" style="margin-bottom:10px;">
-            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'facebook' %}">Share to Facebook</a>
-            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'twitter' %}">Share to Twitter/X</a>
-            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'whatsapp' %}">Share to WhatsApp</a>
-            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'telegram' %}">Share to Telegram</a>
-        </div>
-
-        <form method="post" action="{% url 'post_comment' post.pk %}">
-            {% csrf_token %}
-            <label for="id_comment_{{ post.pk }}" style="display:block; margin-bottom:6px; color:#bbb;">Add comment</label>
-            <textarea id="id_comment_{{ post.pk }}" class="post-comment-input" name="text" rows="2" maxlength="600" placeholder="Write a comment..."></textarea>
-            <div style="margin-top:8px;">
-                <button type="submit" class="post-btn">Comment</button>
-            </div>
-        </form>
-
-        {% for comment in post.comments.all %}
-        <div class="comment-item">
-            <p style="margin:0; font-size:0.88rem;"><strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong> <span style="color:#777;">{{ comment.created_at|date:"d M Y, H:i" }}</span>{% if comment.updated_at != comment.created_at %} <span style="color:#666;">· edited {{ comment.updated_at|timesince }} ago</span>{% endif %}</p>
-            <p>{{ comment.text }}</p>
-            {% if request.user == comment.user %}
-            <details style="margin-top:6px;">
-                <summary style="cursor:pointer; color:#888; font-size:0.85rem;">Edit comment</summary>
-                <form method="post" action="{% url 'post_comment_edit' comment.pk %}" style="margin-top:6px;">
-                    {% csrf_token %}
-                    <textarea class="post-comment-input" name="text" rows="2" maxlength="600">{{ comment.text }}</textarea>
-                    <div style="margin-top:8px;">
-                        <button type="submit" class="post-btn post-btn-secondary">Save comment</button>
+                <article id="post-{{ post.pk }}" class="post-card">
+                    <div class="post-meta">
+                        <strong>{{ post.user.get_full_name|default:post.user.username }}</strong>
+                        · {{ post.created_at|date:"d M Y, H:i" }}
+                        {% if post.updated_at != post.created_at %}
+                        · edited {{ post.updated_at|timesince }} ago
+                        {% endif %}
                     </div>
-                </form>
-            </details>
-            <form method="post" action="{% url 'post_comment_delete' comment.pk %}" onsubmit="return confirm('Delete this comment?');" style="margin-top:8px;">
-                {% csrf_token %}
-                <button type="submit" class="post-btn post-btn-danger">Move comment to trash</button>
-            </form>
-            {% endif %}
-        </div>
-        {% empty %}
-        <p style="color:#777; margin-top:10px;">No comments yet.</p>
-        {% endfor %}
-            </article>
+
+                    <p class="post-text">{{ post.text }}</p>
+                    {% if post.image %}
+                        <div class="post-media">
+                            <img src="{{ post.image.url }}" alt="Post image by {{ post.user.username }}">
+                        </div>
+                    {% endif %}
+
+                    {% if request.user == post.user %}
+                    <details style="margin:0 0 12px;">
+                        <div>
+                            <summary class="ba br0-25" style="cursor:pointer; color:#bbb;">
+                                Edit post
+                            </summary>
+                        </div>
+                        <form method="post" action="{% url 'post_edit' post.pk %}" style="margin-top:8px;" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <textarea class="post-comment-input" name="text" rows="3" maxlength="1200">{{ post.text }}</textarea>
+                            <label style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Replace image (optional)</label>
+                            <input type="file" name="image" accept="image/*" style="display:block; color:#aaa;" id="id_post_image_edit_{{ post.pk }}">
+                            <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
+                            <div id="id_post_edit_preview_{{ post.pk }}" class="post-upload-preview" style="display:none;"></div>
+                            {% if post.image %}
+                            <label style="display:flex; align-items:center; gap:8px; margin-top:8px; color:#aaa; font-size:0.88rem;">
+                                <input type="checkbox" name="remove_image"> Remove current image
+                            </label>
+                            {% endif %}
+                            <div style="margin-top:8px;">
+                                <button type="submit" class="post-btn post-btn-secondary">Save post</button>
+                            </div>
+                        </form>
+                    </details>
+                    <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Delete this post?');" style="margin:0 0 12px;">
+                        {% csrf_token %}
+                        <button type="submit" class="post-btn post-btn-danger">Move post to trash</button>
+                    </form>
+                    {% endif %}
+
+                    <div class="post-actions">
+                        <form method="post" action="{% url 'post_like' post.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="post-btn">
+                                {% if post.pk in liked_post_ids %}Unlike{% else %}Like{% endif %}
+                                ({{ post.like_count }})
+                            </button>
+                        </form>
+
+                        <span style="color:#888;">Comments: {{ post.comment_count }}</span>
+                        <span style="color:#888;">Shares: {{ post.share_count }}</span>
+                    </div>
+
+                    <div class="share-links" style="margin-bottom:10px;">
+                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'facebook' %}">Share to Facebook</a>
+                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'twitter' %}">Share to Twitter/X</a>
+                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'whatsapp' %}">Share to WhatsApp</a>
+                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'telegram' %}">Share to Telegram</a>
+                    </div>
+
+                    <form method="post" action="{% url 'post_comment' post.pk %}">
+                        {% csrf_token %}
+                        <label for="id_comment_{{ post.pk }}" style="display:block; margin-bottom:6px; color:#bbb;">Add comment</label>
+                        <textarea id="id_comment_{{ post.pk }}" class="post-comment-input" name="text" rows="2" maxlength="600" placeholder="Write a comment..."></textarea>
+                        <div style="margin-top:8px;">
+                            <button type="submit" class="post-btn">Comment</button>
+                        </div>
+                    </form>
+
+                    {% for comment in post.comments.all %}
+                    <div class="comment-item">
+                        <p style="margin:0; font-size:0.88rem;"><strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong> <span style="color:#777;">{{ comment.created_at|date:"d M Y, H:i" }}</span>{% if comment.updated_at != comment.created_at %} <span style="color:#666;">· edited {{ comment.updated_at|timesince }} ago</span>{% endif %}</p>
+                        <p>{{ comment.text }}</p>
+                        {% if request.user == comment.user %}
+                        <details style="margin-top:6px;">
+                            <summary style="cursor:pointer; color:#888; font-size:0.85rem;">Edit comment</summary>
+                            <form method="post" action="{% url 'post_comment_edit' comment.pk %}" style="margin-top:6px;">
+                                {% csrf_token %}
+                                <textarea class="post-comment-input" name="text" rows="2" maxlength="600">{{ comment.text }}</textarea>
+                                <div style="margin-top:8px;">
+                                    <button type="submit" class="post-btn post-btn-secondary">Save comment</button>
+                                </div>
+                            </form>
+                        </details>
+                        <form method="post" action="{% url 'post_comment_delete' comment.pk %}" onsubmit="return confirm('Delete this comment?');" style="margin-top:8px;">
+                            {% csrf_token %}
+                            <button type="submit" class="post-btn post-btn-danger">Move comment to trash</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p style="color:#777; margin-top:10px;">No comments yet.</p>
+                    {% endfor %}
+                </article>
             {% empty %}
-            <div class="post-card">
-                <p style="margin:0; color:#aaa;">No posts yet. Be the first to post something.</p>
-            </div>
+                <div class="post-card">
+                    <p style="margin:0; color:#aaa;">No posts yet. Be the first to post something.</p>
+                </div>
             {% endfor %}
 
             {% if deleted_posts or deleted_comments %}
-            <div id="trash" class="post-card" style="margin-top:20px;">
-        <h3 style="margin:0 0 8px; color:#ddd;">Trash</h3>
-        <p style="margin:0 0 12px; color:#888;">Items here are hidden from the feed until restored.</p>
+                <div id="trash" class="post-card" style="margin-top:20px;"
+                >
+                    <h3 style="margin:0 0 8px; color:#ddd;">Trash</h3>
+                    <p style="margin:0 0 12px; color:#888;">
+                        Items here are hidden from the feed until restored.
+                    </p>
 
-        {% if deleted_posts %}
-        <h4 style="margin:8px 0; color:#bbb;">Deleted posts</h4>
-        {% for post in deleted_posts %}
-        <div class="comment-item" style="border-top:1px solid #333;">
-            <p style="margin:0 0 6px; color:#888;">Deleted {{ post.deleted_at|timesince }} ago</p>
-            <p style="margin:0 0 8px;">{{ post.text|truncatechars:180 }}</p>
-            {% if post.image %}
-            <div class="post-media">
-                <img src="{{ post.image.url }}" alt="Deleted post image">
-            </div>
-            {% endif %}
-            <form method="post" action="{% url 'post_restore' post.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="post-btn post-btn-secondary">Restore post</button>
-            </form>
-        </div>
-        {% endfor %}
-        {% endif %}
+                    {% if deleted_posts %}
+                        <h4 style="margin:8px 0; color:#bbb;">Deleted posts</h4>
+                        {% for post in deleted_posts %}
+                            <div class="comment-item" style="border-top:1px solid #333;">
+                                <p style="margin:0 0 6px; color:#888;">Deleted {{ post.deleted_at|timesince }} ago</p>
+                                <p style="margin:0 0 8px;">{{ post.text|truncatechars:180 }}</p>
+                                {% if post.image %}
+                                <div class="post-media">
+                                    <img src="{{ post.image.url }}" alt="Deleted post image">
+                                </div>
+                                {% endif %}
+                                <form method="post" action="{% url 'post_restore' post.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="post-btn post-btn-secondary">Restore post</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
-        {% if deleted_comments %}
-        <h4 style="margin:14px 0 8px; color:#bbb;">Deleted comments</h4>
-        {% for comment in deleted_comments %}
-        <div class="comment-item" style="border-top:1px solid #333;">
-            <p style="margin:0 0 6px; color:#888;">On {{ comment.post.user.get_full_name|default:comment.post.user.username }}'s post · deleted {{ comment.deleted_at|timesince }} ago</p>
-            <p style="margin:0 0 8px;">{{ comment.text|truncatechars:160 }}</p>
-            <form method="post" action="{% url 'post_comment_restore' comment.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="post-btn post-btn-secondary">Restore comment</button>
-            </form>
-        </div>
-        {% endfor %}
-        {% endif %}
-            </div>
+                    {% if deleted_comments %}
+                        <h4 style="margin:14px 0 8px; color:#bbb;">Deleted comments</h4>
+                        {% for comment in deleted_comments %}
+                        <div class="comment-item" style="border-top:1px solid #333;">
+                            <p style="margin:0 0 6px; color:#888;">On {{ comment.post.user.get_full_name|default:comment.post.user.username }}'s post · deleted {{ comment.deleted_at|timesince }} ago</p>
+                            <p style="margin:0 0 8px;">{{ comment.text|truncatechars:160 }}</p>
+                            <form method="post" action="{% url 'post_comment_restore' comment.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="post-btn post-btn-secondary">Restore comment</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>
