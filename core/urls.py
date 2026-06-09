@@ -13,6 +13,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('celebs/', include('apps.celebs.urls')),
+    path('posts/', include('apps.posts.urls')),
 ]
 
 if settings.DEBUG:

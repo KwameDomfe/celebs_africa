@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'storages',
     'apps.accounts',
     'apps.celebs',
+    'apps.posts',
 ]
 
 MIDDLEWARE = [
