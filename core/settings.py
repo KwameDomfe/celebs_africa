@@ -31,7 +31,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-CHANGE_THIS_TO_A_RANDOM_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ('127.0.0.1', 'localhost','celebs-africa-o3zfi.ondigitalocean.app','www.celebsafrica.com','celebsafrica.com')
 
