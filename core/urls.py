@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from .views import home, top_celebs, sitemap_xml
-
+handler404 = 'core.views.custom_404'
 urlpatterns = [
     path("", home, name="home"),
     path('top-celebs/', top_celebs, name='top_celebs'),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('celebs/', include('apps.celebs.urls')),
     path('posts/', include('apps.posts.urls')),
+    
 ]
 
 if settings.DEBUG:

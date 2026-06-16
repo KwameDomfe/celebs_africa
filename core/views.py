@@ -194,3 +194,7 @@ def sitemap_xml(request):
         ])
     xml_lines.append('</urlset>')
     return HttpResponse('\n'.join(xml_lines), content_type='application/xml')
+
+def custom_404(request, exception):
+
+    return render(request, '404.html', status=404)
