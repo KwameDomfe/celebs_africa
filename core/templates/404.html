@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}
 {% block og_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}
 {% block twitter_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}
@@ -6,14 +7,37 @@
 {% block og_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
 {% block twitter_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities on CelebsAfrica.{% endblock %}
 {% block content %}
-    <div>
-        <h1>Oops! Celebrity Not Found</h1>
-        <p>
-        The page you're looking for may have been removed,
-        renamed, or is still trending somewhere else.
-        </p>
+    <div class="flex flex-column flex-row-m" style="height:calc(100vh - 128px);">
 
-        <a href="/">Back to CelebsAfrica</a>
-        <a href="/top-celebs/">Explore Top Celebs</a>
+        <div class="flex flex-column item-center justify-around w-50-m h-100 tc pa1-00">
+            <h1 class="f3-00 ">Oops! Celebrity Not Found</h1>
+            <p class="f1-50">
+            The page you're looking for may have been removed,
+            renamed, or is still trending somewhere else.
+            </p>
+
+            <div>
+                <a href="/" 
+                    class="pa0-25 ba br0-25 b--red red"
+                >
+                    Back to CelebsAfrica</a>
+                <a href="/top-celebs/" 
+                    class="pa0-25 ba br0-25 b--red red"
+                >
+                    Explore Top Celebs
+                </a>
+            </div>
+        </div>
+
+        <div class="flex w-50 bg-red">
+            
+        </div>
+
     </div>
+    {% comment %} <div class=""
+    >   <img src="{% static "images/og-default.jpg" %}"
+            class="w-100 vh-50 cover"
+        />
+    
+    </div> {% endcomment %}
 {% endblock content %}
