@@ -28,11 +28,29 @@
     <title>{% block title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}</title>
     <meta name="description" 
         content="{% block meta_description %}
-            Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates on CelebsAfrica.
+            Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates on Celebs of Africa.
             {% endblock %}">
     <meta name="keywords" 
         content="{% block meta_keywords %}
-            African celebrities, African musicians, African actors, African athletes, African entertainers, African Celebs, CelebsAfrica, Celebs Africa, celebrity profiles, Africa entertainment, celebrity news, public figures
+            Africa, 
+            AfricaCelebs,  
+            AfricaCelebs,    
+            Africa Celebrities, 
+            Africa entertainment, 
+            African actors, 
+            African athletes,  
+            African celebrities,  
+            African Celebs, 
+            African entertainers, 
+            African musicians, 
+            African public figures,
+            Celebs, 
+            Celebs of Africa, 
+            CelebsAfrica, 
+            Celebs Africa, 
+            celebrity profiles, 
+            celebrity news, 
+            public figures
         {% endblock %}">
     <meta name="author" content="CelebsAfrica">
     <meta name="robots" content="index, follow">
@@ -41,8 +59,12 @@
     {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="CelebsAfrica">
-    <meta property="og:title" content="{% block og_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
+    <meta property="og:title" 
+        content="{% block og_title %}
+            African Celebrities, Musicians, Actors & Athletes | CelebsAfrica
+        {% endblock %}"
+    >
+    <meta property="og:description" content="{% block og_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles,  photos, ratings and updates on Celebs of Africa{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://celebsafrica.com{{ request.path }}{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
     <meta property="og:locale" content="en_GB">
@@ -50,7 +72,7 @@
     {# Twitter / X card #}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates.{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles,  photos, ratings and updates on Celebs of Africa{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
 
     {# Theme / PWA hints #}
