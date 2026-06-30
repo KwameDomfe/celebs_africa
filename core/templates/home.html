@@ -489,7 +489,7 @@
 .unlock-collage img,
 .unlock-collage-fallback {
     width: 100%;
-    height: 108px;
+    height: 128px;
     object-fit: cover;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -535,7 +535,7 @@
 }
 .celeb-carousel-photo {
     width: 100%;
-    height: 140px;
+    height: 256px;
     object-fit: cover;
     border-radius: 6px;
     background: #1f1f1f;
@@ -756,9 +756,11 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
         </div>
     </div>
 </div> {% endcomment %}
-<div id="celeb-carousel" class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All celebs carousel">
+<div id="celeb-carousel" 
+    class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All celebs carousel"
+>
     <div class="celeb-carousel-head mb0-75">
-        <h2 class="mb0-00 f1-50">All Celebs Carousel</h2>
+        <h2 class="mb0-00 f1-50">All Published Celebs</h2>
         <div class="celeb-carousel-controls" aria-label="Carousel controls">
             <button type="button" class="celeb-carousel-btn" data-carousel-prev aria-label="Previous celebs">Prev</button>
             <button type="button" class="celeb-carousel-btn" data-carousel-next aria-label="Next celebs">Next</button>
@@ -775,7 +777,16 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
                     {% endif %}
                     <p class="celeb-carousel-title">{{ celeb.name }}</p>
                     <p class="celeb-carousel-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
-                    <p class="celeb-carousel-meta">{% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}</p>
+                    <p class="celeb-carousel-meta">
+                        {% if celeb.avg_rating %}
+                            ★ {{ celeb.avg_rating|floatformat:1 }}
+                        {% else %}Unrated
+                        {% endif %} 
+                        · 
+                        {{ celeb.follower_count }} 
+                            follower
+                        {{ celeb.follower_count|pluralize }}
+                    </p>
                 </a>
             {% empty %}
                 <div class="celeb-carousel-slide">
@@ -787,7 +798,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
             {% endfor %}
         </div>
     </div>
-    <div class="celeb-carousel-dots" data-carousel-dots></div>
+    {% comment %} <div class="celeb-carousel-dots" data-carousel-dots></div> {% endcomment %}
 </div>
 
 <div class="bg-black-80 white-90 pa1-00 mb1-00 unlock-panel">
