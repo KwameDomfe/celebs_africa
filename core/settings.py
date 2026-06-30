@@ -31,9 +31,15 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-CHANGE_THIS_TO_A_RANDOM_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'Tru'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ('127.0.0.1', 'localhost','celebs-africa-o3zfi.ondigitalocean.app','www.celebsafrica.com','celebsafrica.com')
+ALLOWED_HOSTS = (
+    '127.0.0.1', 
+    'localhost',
+    'celebs-africa-o3zfi.ondigitalocean.app',
+    'www.celebsafrica.com',
+    'celebsafrica.com'
+)
 
 CSRF_TRUSTED_ORIGINS = [
     'https://www.celebsafrica.com',
@@ -149,6 +155,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# Keep legacy integer primary keys for existing models and silence W042.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Static files (CSS, JavaScript, Images)

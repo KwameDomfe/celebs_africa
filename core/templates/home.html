@@ -4,7 +4,7 @@
 {% block twitter_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}
 {% block meta_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
 {% block og_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
-{% block twitter_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities on CelebsAfrica.{% endblock %}
+{% block twitter_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
 {% block content %}
 <style>
 @media (max-width: 767px) {
@@ -497,6 +497,101 @@
     display: block;
 }
 
+.celeb-carousel-shell {
+    background: linear-gradient(135deg, #111 0%, #1a1010 100%);
+    border: 1px solid rgba(255, 90, 90, 0.28);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.celeb-carousel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.celeb-carousel-track-wrap {
+    overflow: hidden;
+    position: relative;
+}
+.celeb-carousel-track {
+    display: flex;
+    gap: 10px;
+    transition: transform 0.4s ease;
+    will-change: transform;
+}
+.celeb-carousel-slide {
+    min-width: calc((100% - 30px) / 4);
+    background: #121212;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.celeb-carousel-slide:hover {
+    border-color: rgba(255, 120, 120, 0.55);
+}
+.celeb-carousel-photo {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #1f1f1f;
+    margin-bottom: 8px;
+}
+.celeb-carousel-placeholder {
+    background: linear-gradient(135deg, #2a2a2a, #191919);
+}
+.celeb-carousel-title {
+    color: #f2f2f2;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+.celeb-carousel-subtitle {
+    color: #bfbfbf;
+    margin: 0 0 4px;
+}
+.celeb-carousel-meta {
+    color: #999;
+    margin: 0;
+    font-size: 0.8rem;
+}
+.celeb-carousel-controls {
+    display: flex;
+    gap: 6px;
+}
+.celeb-carousel-btn {
+    border: 1px solid #4a4a4a;
+    background: #202020;
+    color: #eee;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+.celeb-carousel-btn:hover {
+    background: #2c2c2c;
+}
+.celeb-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+.celeb-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 0;
+    background: #5a5a5a;
+    cursor: pointer;
+    padding: 0;
+}
+.celeb-carousel-dot.is-active {
+    background: #e33;
+}
+
 html[data-theme="light"] .hero-kicker,
 html[data-theme="light"] .hero-copy,
 html[data-theme="light"] .hero-media-badge,
@@ -548,15 +643,45 @@ html[data-theme="light"] .unlock-gate-copy { color: #444 !important; }
 html[data-theme="light"] .unlock-panel {
     border-color: rgba(0,0,0,0.2);
 }
+html[data-theme="light"] .celeb-carousel-shell {
+    background: linear-gradient(135deg, #f1f1f1 0%, #f8e6e6 100%);
+    border-color: rgba(170, 40, 40, 0.3);
+}
+html[data-theme="light"] .celeb-carousel-slide {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .celeb-carousel-title {
+    color: #161616;
+}
+html[data-theme="light"] .celeb-carousel-subtitle {
+    color: #4a4a4a;
+}
+html[data-theme="light"] .celeb-carousel-meta {
+    color: #666;
+}
+html[data-theme="light"] .celeb-carousel-btn {
+    background: #efefef;
+    color: #222;
+    border-color: #bcbcbc;
+}
+html[data-theme="light"] .celeb-carousel-btn:hover {
+    background: #e5e5e5;
+}
 @media (max-width: 1024px) {
     .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .hero-layout,
     .unlock-layout { grid-template-columns: 1fr; }
+    .celeb-carousel-slide { min-width: calc((100% - 20px) / 3); }
 }
 @media (max-width: 767px) {
     .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .category-modal-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .celeb-carousel-slide { min-width: calc((100% - 10px) / 2); }
+}
+@media (max-width: 520px) {
+    .celeb-carousel-slide { min-width: 100%; }
 }
 @media (min-width: 1025px) {
     .hero-kicker { font-size: 1.56rem; }
@@ -597,7 +722,7 @@ html[data-theme="light"] .unlock-panel {
     </div>
 </div>
 
-<div class="bg-black-80 white-90 pa1-00 mb1-00">
+{% comment %} <div class="bg-black-80 white-90 pa1-00 mb1-00">
     <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
         <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
         <div class="flex items-center" style="gap:8px; flex-wrap:wrap;">
@@ -630,8 +755,40 @@ html[data-theme="light"] .unlock-panel {
             <a href="{% url 'top_celebs' %}" class="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
         </div>
     </div>
+</div> {% endcomment %}
+<div id="celeb-carousel" class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All celebs carousel">
+    <div class="celeb-carousel-head mb0-75">
+        <h2 class="mb0-00 f1-50">All Celebs Carousel</h2>
+        <div class="celeb-carousel-controls" aria-label="Carousel controls">
+            <button type="button" class="celeb-carousel-btn" data-carousel-prev aria-label="Previous celebs">Prev</button>
+            <button type="button" class="celeb-carousel-btn" data-carousel-next aria-label="Next celebs">Next</button>
+        </div>
+    </div>
+    <div class="celeb-carousel-track-wrap">
+        <div class="celeb-carousel-track" data-carousel-track>
+            {% for celeb in carousel_celebs %}
+                <a href="{{ celeb.get_absolute_url }}" class="celeb-carousel-slide js-track-click" data-track-event="carousel_card_open">
+                    {% if celeb.image %}
+                        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="celeb-carousel-photo" loading="lazy">
+                    {% else %}
+                        <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
+                    {% endif %}
+                    <p class="celeb-carousel-title">{{ celeb.name }}</p>
+                    <p class="celeb-carousel-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
+                    <p class="celeb-carousel-meta">{% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}</p>
+                </a>
+            {% empty %}
+                <div class="celeb-carousel-slide">
+                    <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
+                    <p class="celeb-carousel-title">No trending celebs yet</p>
+                    <p class="celeb-carousel-subtitle">Check back soon for updates.</p>
+                    <p class="celeb-carousel-meta">Profiles will appear here automatically.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="celeb-carousel-dots" data-carousel-dots></div>
 </div>
-
 
 <div class="bg-black-80 white-90 pa1-00 mb1-00 unlock-panel">
     <div class="unlock-layout">
@@ -1376,6 +1533,121 @@ html[data-theme="light"] .unlock-panel {
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') closeModal();
     });
+})();
+</script>
+<script>
+(function () {
+    var root = document.getElementById('celeb-carousel');
+    if (!root) return;
+
+    var track = root.querySelector('[data-carousel-track]');
+    var prevBtn = root.querySelector('[data-carousel-prev]');
+    var nextBtn = root.querySelector('[data-carousel-next]');
+    var dotsWrap = root.querySelector('[data-carousel-dots]');
+    if (!track || !prevBtn || !nextBtn || !dotsWrap) return;
+
+    var slides = Array.prototype.slice.call(track.children);
+    if (!slides.length) return;
+
+    var index = 0;
+    var pageCount = 1;
+    var autoplayTimer = null;
+
+    function getVisibleCount() {
+        if (window.innerWidth <= 520) return 1;
+        if (window.innerWidth <= 767) return 2;
+        if (window.innerWidth <= 1024) return 3;
+        return 4;
+    }
+
+    function getGap() {
+        var styles = window.getComputedStyle(track);
+        var gap = parseFloat(styles.columnGap || styles.gap || '10');
+        return Number.isFinite(gap) ? gap : 10;
+    }
+
+    function maxIndex() {
+        return Math.max(0, slides.length - getVisibleCount());
+    }
+
+    function renderDots(activeIndex) {
+        dotsWrap.innerHTML = '';
+        var visible = getVisibleCount();
+        pageCount = Math.max(1, slides.length - visible + 1);
+
+        for (var i = 0; i < pageCount; i++) {
+            var dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'celeb-carousel-dot' + (i === activeIndex ? ' is-active' : '');
+            dot.setAttribute('aria-label', 'Go to carousel position ' + (i + 1));
+            (function (target) {
+                dot.addEventListener('click', function () {
+                    index = target;
+                    update();
+                    resetAutoplay();
+                });
+            })(i);
+            dotsWrap.appendChild(dot);
+        }
+    }
+
+    function update() {
+        index = Math.max(0, Math.min(index, maxIndex()));
+        var slideWidth = slides[0].getBoundingClientRect().width;
+        var x = index * (slideWidth + getGap());
+        track.style.transform = 'translateX(' + (-x) + 'px)';
+        renderDots(index);
+    }
+
+    function next() {
+        if (index >= maxIndex()) {
+            index = 0;
+        } else {
+            index += 1;
+        }
+        update();
+    }
+
+    function prev() {
+        if (index <= 0) {
+            index = maxIndex();
+        } else {
+            index -= 1;
+        }
+        update();
+    }
+
+    function stopAutoplay() {
+        if (autoplayTimer) {
+            clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(next, 4500);
+    }
+
+    function resetAutoplay() {
+        startAutoplay();
+    }
+
+    prevBtn.addEventListener('click', function () {
+        prev();
+        resetAutoplay();
+    });
+    nextBtn.addEventListener('click', function () {
+        next();
+        resetAutoplay();
+    });
+
+    root.addEventListener('mouseenter', stopAutoplay);
+    root.addEventListener('mouseleave', startAutoplay);
+    window.addEventListener('resize', update);
+
+    update();
+    startAutoplay();
 })();
 </script>
 {% endblock %}

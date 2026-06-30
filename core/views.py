@@ -60,6 +60,15 @@ def home(request):
         .order_by(F('follower_count').desc(nulls_last=True), F('avg_rating').desc(nulls_last=True), 'name')[:10]
     )
 
+    carousel_celebs = (
+        published_celebs.select_related('type__family__category', 'nationality')
+        .annotate(
+            follower_count=Count('followers', distinct=True),
+            avg_rating=Avg('reviews__rating', distinct=True),
+        )
+        .order_by('name')
+    )
+
     spotlight_categories = (
         Category.objects.annotate(
             celeb_count=Count(
@@ -129,6 +138,7 @@ def home(request):
         'is_filtered': is_filtered,
         'country_count': published_celebs.values('nationality').distinct().exclude(nationality=None).count(),
         'trending_celebs': trending_celebs,
+        'carousel_celebs': carousel_celebs,
         'spotlight_categories': spotlight_categories,
         'category_media_items': category_media_items,
         'category_gallery_items': category_gallery_items,
