@@ -467,11 +467,11 @@
 }
 .category-media-label {
     position: absolute;
-    left: 6px;
-    bottom: 6px;
-    padding: 3px 7px;
-    border-radius: 999px;
-    font-size: 0.7rem;
+    left: 12px;
+    bottom: 12px;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 1.00rem;
     color: #f3f3f3;
     background: rgba(0, 0, 0, 0.72);
 }
@@ -693,7 +693,9 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
     <div class="hero-layout">
         <div>
             <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
-            <h1 class="f2-25 mb0-50 hero-headline">Discover Verified African Talent Before Everyone Else</h1>
+            <h1 class="f2-25 mb0-50 hero-headline">
+                Discover African Celebs across several categories and countries.
+            </h1>
             <p class="mv1-00 hero-copy" style="max-width:72ch;">
                 Explore fast-rising celebrities, musicians, actors and creators by category and country.
             </p>
@@ -829,7 +831,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
         <h2 class="mb0-00 f1-50">Browse by Celeb Category</h2>
         <p class="mb0-00 f0-85 muted-meta">{{ geo_profiles_count }} profiles currently from {{ geo_scope_label }}</p>
     </div>
-    <div class="category-pills mt0-75">
+    {% comment %} <div class="category-pills mt0-75">
         {% for category in spotlight_categories %}
             <a href="{% url 'home' %}?category={{ category.pk }}"
                data-category-modal="true"
@@ -840,17 +842,27 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
                 {{ category.name }} · {{ category.celeb_count }}
             </a>
         {% endfor %}
-    </div>
+    </div> {% endcomment %}
     <div class="category-media-row">
         {% for item in category_media_items %}
             {% if item.celeb %}
-                <a href="{{ item.celeb.get_absolute_url }}" class="category-media-card" style="text-decoration:none;"
+                <a href="{{ item.celeb.get_absolute_url }}" class="w-100 category-media-card" style="text-decoration:none;"
                    data-category-modal="true"
                          data-category-id="{{ item.category.pk }}"
                    data-category-name="{{ item.category.name }}"
                    data-category-count="{{ item.category.celeb_count }}">
                     <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
-                    <span class="category-media-label">{{ item.category.name }}</span>
+                    <div class="category-media-label flex justify-between items-center" 
+                    >
+                    <span class="">
+                            {{  item.category.name  }}
+                    </span> &nbsp; &nbsp;
+                        || &nbsp; &nbsp;<span class="f1-50">
+                            {{  item.category.celeb_count  }}
+                        </span>
+                       
+                       
+                    </div>
                 </a>
             {% else %}
                 <div class="category-media-card">
@@ -1395,9 +1407,18 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
 
         {% if is_soft_gated %}
         <div class="unlock-gate white-90">
-            <h3 class="mb0-50">{{ locked_profiles_count }} more profile{{ locked_profiles_count|pluralize }} are locked</h3>
-            <p class="mb0-75 unlock-gate-copy">Create a free account to view the full directory, deeper rankings and profile engagement tools.</p>
-            <a href="{% url 'register' %}" class="hero-cta-link hero-cta-primary js-track-click" data-track-event="directory_gate_register_click">Unlock Full Directory</a>
+            <h3 class="mb0-50">
+                {{ locked_profiles_count }} more {{ locked_profiles_count|pluralize }} are locked
+            </h3>
+            <p class="mb0-75 unlock-gate-copy"
+            >
+                Create a free account to view the full directory, deeper rankings and profile engagement tools.
+            </p>
+            <a href="{% url 'register' %}" 
+                class="hero-cta-link hero-cta-primary js-track-click" data-track-event="directory_gate_register_click"
+            >
+                Unlock Full Directory
+            </a>
         </div>
         {% endif %}
        
