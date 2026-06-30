@@ -454,6 +454,7 @@
 }
 .category-media-card {
     position: relative;
+    text-align: center;
 }
 .category-media-row img,
 .category-media-fallback {
@@ -469,6 +470,7 @@
     position: absolute;
     left: 12px;
     bottom: 12px;
+    right: 12px;
     padding: 8px;
     border-radius: 6px;
     font-size: 1.00rem;
@@ -846,22 +848,26 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
     <div class="category-media-row">
         {% for item in category_media_items %}
             {% if item.celeb %}
-                <a href="{{ item.celeb.get_absolute_url }}" class="w-100 category-media-card" style="text-decoration:none;"
-                   data-category-modal="true"
-                         data-category-id="{{ item.category.pk }}"
-                   data-category-name="{{ item.category.name }}"
-                   data-category-count="{{ item.category.celeb_count }}">
+                <a href="{{ item.celeb.get_absolute_url }}" 
+                    class="w-100 category-media-card" 
+                    style="text-decoration:none;"
+                    data-category-modal="true"
+                    data-category-id="{{ item.category.pk }}"
+                    data-category-name="{{ item.category.name }}"
+                    data-category-count="{{ item.category.celeb_count }}">
                     <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
-                    <div class="category-media-label flex justify-between items-center" 
+                    <div class="category-media-label 
+                        flex 
+                        flex-column 
+                        justify-between 
+                        items-center" 
                     >
-                    <span class="">
-                            {{  item.category.name  }}
-                    </span> &nbsp; &nbsp;
-                        || &nbsp; &nbsp;<span class="f1-50">
-                            {{  item.category.celeb_count  }}
-                        </span>
-                       
-                       
+                        <span class="">
+                                {{  item.category.name  }}
+                        </span> 
+                        <span class="f1-50 b">
+                            (&nbsp;{{  item.category.celeb_count  }}&nbsp;)
+                        </span>   
                     </div>
                 </a>
             {% else %}
