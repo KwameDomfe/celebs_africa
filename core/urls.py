@@ -4,10 +4,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import home, top_celebs, sitemap_xml
+from .views import home, robots_txt, top_celebs, sitemap_xml
 handler404 = 'core.views.custom_404'
 urlpatterns = [
     path("", home, name="home"),
+    path('robots.txt', robots_txt, name='robots_txt'),
     path('top-celebs/', top_celebs, name='top_celebs'),
     path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
     path('admin/', admin.site.urls),

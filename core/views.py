@@ -183,6 +183,16 @@ def top_celebs(request):
     })
 
 
+def robots_txt(request):
+    sitemap_url = request.build_absolute_uri(reverse('sitemap_xml'))
+    lines = [
+        'User-agent: *',
+        'Disallow:',
+        f'Sitemap: {sitemap_url}',
+    ]
+    return HttpResponse('\n'.join(lines), content_type='text/plain')
+
+
 def sitemap_xml(request):
     urls = [
         (request.build_absolute_uri(reverse('home')), '1.0', 'weekly'),
