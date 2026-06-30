@@ -757,7 +757,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
     </div>
 </div> {% endcomment %}
 <div id="celeb-carousel" 
-    class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All celebs carousel"
+    class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All published celebs carousel"
 >
     <div class="celeb-carousel-head mb0-75">
         <h2 class="mb0-00 f1-50">All Published Celebs</h2>
@@ -791,7 +791,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
             {% empty %}
                 <div class="celeb-carousel-slide">
                     <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
-                    <p class="celeb-carousel-title">No trending celebs yet</p>
+                    <p class="celeb-carousel-title">No published celebs yet</p>
                     <p class="celeb-carousel-subtitle">Check back soon for updates.</p>
                     <p class="celeb-carousel-meta">Profiles will appear here automatically.</p>
                 </div>
@@ -1555,7 +1555,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
     var prevBtn = root.querySelector('[data-carousel-prev]');
     var nextBtn = root.querySelector('[data-carousel-next]');
     var dotsWrap = root.querySelector('[data-carousel-dots]');
-    if (!track || !prevBtn || !nextBtn || !dotsWrap) return;
+    if (!track || !prevBtn || !nextBtn) return;
 
     var slides = Array.prototype.slice.call(track.children);
     if (!slides.length) return;
@@ -1582,6 +1582,7 @@ html[data-theme="light"] .celeb-carousel-btn:hover {
     }
 
     function renderDots(activeIndex) {
+        if (!dotsWrap) return;
         dotsWrap.innerHTML = '';
         var visible = getVisibleCount();
         pageCount = Math.max(1, slides.length - visible + 1);
