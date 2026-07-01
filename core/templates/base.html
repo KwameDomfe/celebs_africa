@@ -54,8 +54,8 @@
         {% endblock %}">
     <meta name="author" content="CelebsAfrica">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{% block canonical %}https://celebsafrica.com{{ request.path }}{% endblock %}">
-
+    <link rel="canonical" href="{% block canonical %}"https://celebsafrica.com{{ request.path }}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"{% endblock %}">
+    
     {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="CelebsAfrica">

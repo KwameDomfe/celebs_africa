@@ -69,3 +69,19 @@ class LoginRequiredMiddleware:
                     return redirect_to_login(request.get_full_path())
         return self.get_response(request)
 
+class CanonicalDomainMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        host = request.get_host().split(":")[0]
+
+        if host == "www.celebsafrica.com":
+            return self.redirect_to_canonical(request)
+
+        return self.get_response(request)
+
+    def redirect_to_canonical(self, request):
+        url = f"https://celebsafrica.com{request.get_full_path()}"
+        from django.http import HttpResponsePermanentRedirect
+        return HttpResponsePermanentRedirect(url)

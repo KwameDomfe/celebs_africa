@@ -1,7 +1,3 @@
-# Static files (CSS, JavaScript, Images)
-# Redirect to accounts home after login
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
 """
 Django settings for core project.
 
@@ -37,9 +33,13 @@ ALLOWED_HOSTS = (
     '127.0.0.1', 
     'localhost',
     'celebs-africa-o3zfi.ondigitalocean.app',
-    'www.celebsafrica.com',
-    'celebsafrica.com'
+    'celebsafrica.com',
+    'www.celebsafrica.com'
 )
+# Static files (CSS, JavaScript, Images)
+# Redirect to accounts home after login
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 CSRF_TRUSTED_ORIGINS = [
     'https://www.celebsafrica.com',
@@ -50,8 +50,13 @@ CSRF_TRUSTED_ORIGINS = [
 # Trust the X-Forwarded-Proto header set by DigitalOcean's HTTPS proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Application definition
+# Force HTTPS + clean host handling
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -67,6 +72,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.CanonicalDomainMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
