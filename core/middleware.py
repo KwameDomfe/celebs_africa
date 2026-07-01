@@ -42,6 +42,10 @@ class LoginRequiredMiddleware:
     # Exact paths that are always public
     PUBLIC_EXACT = {
         '/',
+        '/robots.txt',
+        '/robots.txt/',
+        '/sitemap.xml',
+        '/sitemap.xml/',
         '/accounts/login/',
         '/accounts/register/',
         '/accounts/track-event/',
