@@ -1,4 +1,6 @@
 
+import json
+
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -42,6 +44,54 @@ def _save_social_links(request, celeb):
 		if platform and url:
 			CelebSocialLink.objects.create(celeb=celeb, platform=platform, url=url, order=order)
 			order += 1
+
+
+def _person_schema(celeb, page_url, image_url, avg_rating, review_count, follow_count):
+	"""Build JSON-LD Person data for the celeb profile page."""
+	schema = {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		'name': celeb.name,
+		'url': page_url,
+		'mainEntityOfPage': page_url,
+	}
+	if celeb.street_name:
+		schema['alternateName'] = celeb.street_name
+	if image_url:
+		schema['image'] = image_url
+	if celeb.date_of_birth:
+		schema['birthDate'] = celeb.date_of_birth.isoformat()
+	if celeb.date_of_death:
+		schema['deathDate'] = celeb.date_of_death.isoformat()
+	if celeb.nationality:
+		schema['nationality'] = {
+			'@type': 'Country',
+			'name': celeb.nationality.name,
+		}
+	if celeb.type_id:
+		schema['jobTitle'] = celeb.type.name
+		schema['knowsAbout'] = [
+			celeb.type.family.category.name,
+			celeb.type.family.name,
+			celeb.type.name,
+		]
+	if celeb.bio:
+		schema['description'] = celeb.bio[:500]
+	if avg_rating is not None and review_count > 0:
+		schema['aggregateRating'] = {
+			'@type': 'AggregateRating',
+			'ratingValue': round(float(avg_rating), 2),
+			'ratingCount': review_count,
+			'bestRating': 5,
+			'worstRating': 1,
+		}
+	if follow_count > 0:
+		schema['interactionStatistic'] = [{
+			'@type': 'InteractionCounter',
+			'interactionType': {'@type': 'FollowAction'},
+			'userInteractionCount': follow_count,
+		}]
+	return json.dumps(schema, ensure_ascii=True)
 
 
 def celebs_home(request):
@@ -148,7 +198,20 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		og_image = img_url if img_url.startswith('http') else request.build_absolute_uri(img_url)
 	og_description = _seo_description(celeb)
 	share_url = request.build_absolute_uri(celeb.get_absolute_url())
-	context.update({'og_image': og_image, 'og_description': og_description, 'share_url': share_url})
+	person_schema_json = _person_schema(
+		celeb=celeb,
+		page_url=share_url,
+		image_url=og_image,
+		avg_rating=avg_rating,
+		review_count=review_count,
+		follow_count=follow_count,
+	)
+	context.update({
+		'og_image': og_image,
+		'og_description': og_description,
+		'share_url': share_url,
+		'person_schema_json': person_schema_json,
+	})
 
 	return render(request, 'celebs/celeb_detail.html', context)
 

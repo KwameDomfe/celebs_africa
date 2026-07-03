@@ -25,11 +25,9 @@
     </script>
     {% endif %}
 
-    <title>{% block title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}</title>
+    <title>{% block title %}African Celebrities and Public Figures | CelebsAfrica{% endblock %}</title>
     <meta name="description" 
-        content="{% block meta_description %}
-            Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates on Celebs of Africa.
-            {% endblock %}">
+        content="{% block meta_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles, photos, ratings and updates on Celebs of Africa.{% endblock %}">
     <meta name="keywords" 
         content="{% block meta_keywords %}
             Africa, 
@@ -53,27 +51,26 @@
             public figures
         {% endblock %}">
     <meta name="author" content="CelebsAfrica">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{% block canonical %}"https://celebsafrica.com{{ request.path }}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}"{% endblock %}">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="{% block canonical %}https://celebsafrica.com{{ request.path }}{% endblock %}">
     
     {# Open Graph — controls how the page appears when shared on Facebook, WhatsApp, LinkedIn #}
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:site_name" content="CelebsAfrica">
-    <meta property="og:title" 
-        content="{% block og_title %}
-            African Celebrities, Musicians, Actors & Athletes | CelebsAfrica
-        {% endblock %}"
-    >
+    <meta property="og:title" content="{% block og_title %}African Celebrities and Public Figures | CelebsAfrica{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles,  photos, ratings and updates on Celebs of Africa{% endblock %}">
     <meta property="og:url" content="{% block og_url %}https://celebsafrica.com{{ request.path }}{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
+    <meta property="og:image:alt" content="{% block og_image_alt %}CelebsAfrica - African celebrity profiles and rankings{% endblock %}">
     <meta property="og:locale" content="en_GB">
 
     {# Twitter / X card #}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{% block twitter_title %}African Celebrities, Musicians, Actors & Athletes | CelebsAfrica{% endblock %}">
+    <meta name="twitter:site" content="@celebsafrica">
+    <meta name="twitter:title" content="{% block twitter_title %}African Celebrities and Public Figures | CelebsAfrica{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Discover African celebrities, musicians, actors, athletes and public figures with profiles,  photos, ratings and updates on Celebs of Africa{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endblock %}">
+    <meta name="twitter:image:alt" content="{% block twitter_image_alt %}CelebsAfrica - African celebrity profiles and rankings{% endblock %}">
 
     {# Theme / PWA hints #}
     {% comment %} <meta name="theme-color" content="#333333">
@@ -121,6 +118,7 @@
             }
         }
         </script>
+        {% block structured_data %}{% endblock %}
 </head>
 <body class="vh-100 flex flex-column justify-between">
     <header class="bg-black text-white db w-100 fixed top-0 left-0 z-999">
