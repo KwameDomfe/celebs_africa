@@ -155,6 +155,18 @@ class Celeb(models.Model):
 
 	def get_absolute_url(self):
 		from django.urls import reverse
+		# Some legacy rows may have an empty slug; backfill a unique value on demand
+		# so URL reversing and detail routing remain stable.
+		if not self.slug:
+			base_slug = slugify(self.name) or (f"celeb-{self.pk}" if self.pk else "celeb")
+			slug = base_slug
+			n = 1
+			while Celeb.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+				slug = f"{base_slug}-{n}"
+				n += 1
+			if self.pk:
+				Celeb.objects.filter(pk=self.pk).update(slug=slug)
+			self.slug = slug
 		if self.type_id:
 			cat_slug = self.type.family.category.slug
 			family_slug = self.type.family.slug
