@@ -183,9 +183,25 @@ AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT_URL', '')  # e.g. https://
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
+# Serve public media with stable URLs (no query-signature params).
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_ADDRESSING_STYLE = 'virtual'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+_spaces_host = urlparse(AWS_S3_ENDPOINT_URL).netloc if AWS_S3_ENDPOINT_URL else ''
+AWS_S3_CUSTOM_DOMAIN = (
+    f'{AWS_STORAGE_BUCKET_NAME}.{_spaces_host}'
+    if AWS_STORAGE_BUCKET_NAME and _spaces_host
+    else ''
+)
+
 if AWS_ACCESS_KEY_ID and AWS_STORAGE_BUCKET_NAME:
     # Production: store and serve media via DigitalOcean Spaces
-    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+    MEDIA_URL = (
+        f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+        if AWS_S3_CUSTOM_DOMAIN
+        else f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/'
+    )
     STORAGES = {
         'default': {'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage'},
         'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
