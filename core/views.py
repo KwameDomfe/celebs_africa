@@ -23,6 +23,7 @@ def home(request):
     q = request.GET.get('q', '')
     sort = request.GET.get('sort', 'default') or 'default'
     q_filter = q.strip()
+    is_filtered = any([cat_id, family_id, type_id, country_id, q_filter])
 
     # Base filter queryset (no annotations — for accurate counting)
     filters = published_celebs
@@ -43,71 +44,85 @@ def home(request):
         avg_rating=Avg('reviews__rating', distinct=True),
     ).order_by(*SORT_OPTIONS.get(sort, DEFAULT_ORDER))
 
+    filters_count = filters.count()
+    total_celebs = published_celebs.count()
+    country_count = published_celebs.values('nationality').distinct().exclude(nationality=None).count()
+
     visible_limit = 12
     if request.user.is_authenticated:
         visible_celebs = celebs
         locked_profiles_count = 0
     else:
         visible_celebs = celebs[:visible_limit]
-        locked_profiles_count = max(filters.count() - visible_limit, 0)
+        locked_profiles_count = max(filters_count - visible_limit, 0)
 
-    trending_celebs = (
-        published_celebs.select_related('type__family__category', 'nationality')
-        .annotate(
-            follower_count=Count('followers', distinct=True),
-            avg_rating=Avg('reviews__rating', distinct=True),
-        )
-        .order_by(F('follower_count').desc(nulls_last=True), F('avg_rating').desc(nulls_last=True), 'name')[:10]
-    )
-
-    carousel_celebs = (
-        published_celebs.select_related('type__family__category', 'nationality')
-        .annotate(
-            follower_count=Count('followers', distinct=True),
-            avg_rating=Avg('reviews__rating', distinct=True),
-        )
-        .order_by('name')
-    )
-
-    spotlight_categories = (
-        Category.objects.annotate(
-            celeb_count=Count(
-                'families__types__celebs',
-                filter=Q(families__types__celebs__published=True) & Q(families__types__celebs__nationality__isnull=False),
-                distinct=True,
-            )
-        )
-        .filter(celeb_count__gt=0)
-        .order_by('-celeb_count', 'name')[:6]
-    )
-
-    category_media_items = []
-    category_gallery_items = []
-    for category in spotlight_categories:
-        ranked_with_images = (
-            published_celebs.filter(
-                type__family__category=category,
-                image__isnull=False,
-                nationality__isnull=False,
-            )
-            .exclude(image='')
+    if is_filtered:
+        # Search/filter mode: skip heavyweight sections so results paint faster.
+        trending_celebs = []
+        carousel_celebs = []
+        spotlight_categories = []
+        category_media_items = []
+        category_gallery_items = []
+    else:
+        trending_celebs = (
+            published_celebs.select_related('type__family__category', 'nationality')
             .annotate(
                 follower_count=Count('followers', distinct=True),
                 avg_rating=Avg('reviews__rating', distinct=True),
             )
-            .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')
+            .order_by(F('follower_count').desc(nulls_last=True), F('avg_rating').desc(nulls_last=True), 'name')[:10]
         )
 
-        category_gallery_items.append({
-            'category': category,
-            'celebs': ranked_with_images,
-        })
+        # Keep carousel payload bounded to avoid rendering hundreds of cards on home.
+        carousel_celebs = (
+            published_celebs.select_related('type__family__category', 'nationality')
+            .annotate(
+                follower_count=Count('followers', distinct=True),
+                avg_rating=Avg('reviews__rating', distinct=True),
+            )
+            .order_by('name')[:80]
+        )
 
-        if len(category_media_items) < 8:
-            category_media_items.append({
+        spotlight_categories = (
+            Category.objects.annotate(
+                celeb_count=Count(
+                    'families__types__celebs',
+                    filter=Q(families__types__celebs__published=True) & Q(families__types__celebs__nationality__isnull=False),
+                    distinct=True,
+                )
+            )
+            .filter(celeb_count__gt=0)
+            .order_by('-celeb_count', 'name')[:6]
+        )
+
+        category_media_items = []
+        category_gallery_items = []
+        for category in spotlight_categories:
+            ranked_with_images = list(
+                published_celebs.filter(
+                    type__family__category=category,
+                    image__isnull=False,
+                    nationality__isnull=False,
+                )
+                .exclude(image='')
+                .select_related('type__family__category', 'nationality')
+                .annotate(
+                    follower_count=Count('followers', distinct=True),
+                    avg_rating=Avg('reviews__rating', distinct=True),
+                )
+                .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')[:18]
+            )
+
+            category_gallery_items.append({
                 'category': category,
-                'celeb': ranked_with_images.first(),
+                'celebs': ranked_with_images,
             })
+
+            if len(category_media_items) < 8:
+                category_media_items.append({
+                    'category': category,
+                    'celeb': ranked_with_images[0] if ranked_with_images else None,
+                })
 
     selected_country_name = ''
     if country_id:
@@ -117,12 +132,11 @@ def home(request):
 
     # Keep this metric aligned with the active list filters shown on the page.
     geo_profiles_count = (
-        filters.count()
+        filters_count
         if country_id else
         filters.exclude(nationality=None).count()
     )
 
-    is_filtered = any([cat_id, family_id, type_id, country_id, q_filter])
     context = {
         'celebs': celebs,
         'categories': categories,
@@ -133,10 +147,10 @@ def home(request):
         'selected_country': country_id,
         'selected_sort': sort,
         'q': q,
-        'total_celebs': published_celebs.count(),
-        'celebs_count': filters.count(),
+        'total_celebs': total_celebs,
+        'celebs_count': filters_count,
         'is_filtered': is_filtered,
-        'country_count': published_celebs.values('nationality').distinct().exclude(nationality=None).count(),
+        'country_count': country_count,
         'trending_celebs': trending_celebs,
         'carousel_celebs': carousel_celebs,
         'spotlight_categories': spotlight_categories,
