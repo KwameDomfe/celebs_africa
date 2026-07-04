@@ -257,17 +257,17 @@
         {% endif %}
     </div>
     <div class="gc4s6 bg-black-90 white-90 cd-main">
-        <div class="w-100 ">
+        <div class="w-100 mb2-00">
             {% if celeb.image %}
             <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
-                class="cover h16-00"
+                class="cover h24-00 mb2-00"
                 data-gallery-item
                 data-src="{{ celeb.image.url }}"
                 data-caption="{{ celeb.name }}"
                 onclick="openImgModal(this)"
                 style="cursor:pointer;">
             {% endif %}
-            <div class="celeb-header-info pa1-00">
+            <div class="celeb-header-info">
                 <h1 style="margin-top:0;">{{ celeb.name }}</h1>
                 <p style="margin:4px 0; color:gray;">{{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
                 <p style="margin:4px 0;"><strong>Street Name:</strong> {{ celeb.street_name }}</p>
@@ -347,7 +347,7 @@
             </div>
         </div>
 
-        <div class="pa1-00">
+        <div class="">
             {% if celeb.bio %}
                 <div style="margin-bottom:24px;">
                     <h3 style="margin-bottom:8px;">About</h3>
@@ -640,32 +640,90 @@
             </div>
         </div>
     </div>
-    <div class="gc10s3 white cd-left pa1-00"> 
-        Previous: 
-        {% if prev_celeb %}
-            <a href="{{ prev_celeb.get_absolute_url }}"
-                class="red"
-            >
-                {{ prev_celeb.name }}
-            </a>
-        {% else %}
-            <span style="color:gray;"
-            >
-                None
-            </span>
-        {% endif %}
-    </div>
-    <div class="gc10s3 white cd-right pa1-00"> 
-        Next: 
-        {% if next_celeb %}
-            <a href="{{ next_celeb.get_absolute_url }}"
-                class="red"
-            >
-                {{ next_celeb.name }}
-            </a>
-        {% else %}
-            <span style="color:gray;">None</span>
-        {% endif %}
+    <div class="gc10s3 flex flex-column items-center justify-between vh-80 pa1-00 white cd-left">
+        <div class="w-100"> 
+            Previous: 
+            {% if prev_celeb %}
+                <div class ="pa0-50 mt1-00 ba b--gray br0-50">
+                    <a href="{{ prev_celeb.get_absolute_url }}"
+                        class="red flex items-center justify-start"
+                    >
+                        {% if prev_celeb.image %}
+                        <img src="{{ prev_celeb.image.url }}"
+                            alt="{{ prev_celeb.name }}"
+                            class="w4-00 h4-00 br0-50"
+                            style=" object-fit:cover; vertical-align:middle; margin-right:4px;"
+                        >
+                        {% endif %}
+                        <div class="pt0-50 w-100">
+                            <div class="mb1-00">
+                                {{ prev_celeb.name }}
+                            </div>
+                            {% if prev_celeb.nationality %}
+                                {% if prev_celeb.nationality.code %}
+                                <div class="fi fi-{{ prev_celeb.nationality.code|lower }}"
+                                    style="font-size:1rem"
+                                    title="{{ prev_celeb.nationality.name }}">
+                                </div>
+                                {% elif prev_celeb.nationality.flag %}
+                                <div class="w-100"style="margin-left:6px;" 
+                                    title="{{ prev_celeb.nationality.name }}"
+                                >
+                                    {{ prev_celeb.nationality.flag }}
+                                </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                    </a>
+                </div>
+            {% else %}
+                <span style="color:gray;"
+                >
+                    None
+                </span>
+            {% endif %}
+        </div>
+        <div class="w-100 mb2-00"> 
+            Next: 
+            {% if next_celeb %}
+                <div class ="pa0-50 mt1-00 ba b--gray br0-50">
+                    <a href="{{ next_celeb.get_absolute_url }}"
+                        class="red flex items-center justify-start"
+                    >
+                        {% if next_celeb.image %}
+                        <img src="{{ next_celeb.image.url }}"
+                            alt="{{ next_celeb.name }}"
+                            class="w4-00 h4-00 br0-50"
+                            style=" object-fit:cover; vertical-align:middle; margin-right:4px;"
+                        >
+                        {% endif %}
+                        <div class="pt0-50">
+                        <div class="mb1-00">
+                            {{ next_celeb.name }}
+                        </div>
+                        {% if next_celeb.nationality %}
+                            {% if next_celeb.nationality.code %}
+                            <div class="fi fi-{{ next_celeb.nationality.code|lower }}"
+                                style="font-size:1rem"
+                                title="{{ next_celeb.nationality.name }}">
+                            </div>
+                            {% elif next_celeb.nationality.flag %}
+                            <div style="margin-left:6px;" 
+                                title="{{ next_celeb.nationality.name }}"
+                            >
+                                {{ next_celeb.nationality.flag }}
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                        </div>
+
+                    </a>
+                </div>
+            {% else %}
+                <span style="color:gray;">None</span>
+            {% endif %}
+        </div>
     </div>
 </div>
 

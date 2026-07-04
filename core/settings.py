@@ -47,14 +47,13 @@ CSRF_TRUSTED_ORIGINS = [
     'https://celebs-africa-o3zfi.ondigitalocean.app',
 ]
 
-# Trust the X-Forwarded-Proto header set by DigitalOcean's HTTPS proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Force HTTPS + clean host handling
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Trust the X-Forwarded-Proto header set by the production HTTPS proxy.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Enforce HTTPS-related settings in production only.
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 # Application definition
 INSTALLED_APPS = [
