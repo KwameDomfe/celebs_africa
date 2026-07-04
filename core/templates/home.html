@@ -861,18 +861,20 @@
                         data-category-id="{{ item.category.pk }}"
                         data-category-name="{{ item.category.name }}"
                         data-category-count="{{ item.category.celeb_count }}">
-                        <img src="{{ item.celeb.image.url }}" alt="{{ item.celeb.name }}">
+                        <img src="{{ item.celeb.image.url }}" 
+                            alt="{{ item.celeb.name }}"
+                        >
                         <div class="category-media-label 
                             flex 
                             flex-column 
                             justify-between 
                             items-center" 
                         >
-                            <span class="">
+                            <span class="mb1-00">
                                     {{  item.category.name  }}
                             </span> 
-                            <span class="f1-50 b">
-                                (&nbsp;{{  item.category.celeb_count  }}&nbsp;)
+                            <span class="f1-50 b ba pa0-50 bw2 br0-50">
+                                &nbsp;{{  item.category.celeb_count  }}&nbsp;
                             </span>   
                         </div>
                     </a>
