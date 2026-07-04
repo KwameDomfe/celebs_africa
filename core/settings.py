@@ -180,6 +180,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('SPACES_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.environ.get('SPACES_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('SPACES_BUCKET_NAME', '')
 AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT_URL', '')  # e.g. https://fra1.digitaloceanspaces.com
+SPACES_CDN_URL = os.environ.get('SPACES_CDN_URL', '').strip()
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
@@ -194,6 +195,15 @@ AWS_S3_CUSTOM_DOMAIN = (
     if AWS_STORAGE_BUCKET_NAME and _spaces_host
     else ''
 )
+
+if SPACES_CDN_URL:
+    _cdn = SPACES_CDN_URL.rstrip('/')
+    if _cdn.startswith('https://'):
+        AWS_S3_CUSTOM_DOMAIN = _cdn[len('https://'):]
+    elif _cdn.startswith('http://'):
+        AWS_S3_CUSTOM_DOMAIN = _cdn[len('http://'):]
+    else:
+        AWS_S3_CUSTOM_DOMAIN = _cdn
 
 if AWS_ACCESS_KEY_ID and AWS_STORAGE_BUCKET_NAME:
     # Production: store and serve media via DigitalOcean Spaces

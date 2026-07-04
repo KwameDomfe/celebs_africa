@@ -8,4 +8,6 @@ staticfiles/
 # Ignore IDE/editor specific files
 .vscode/
 .idea/
+*.txt
+
 
