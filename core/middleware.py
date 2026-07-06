@@ -2,16 +2,6 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 
-# Known social-media / SEO crawler user-agent substrings.
-# These bots must be able to read pages unauthenticated to generate previews.
-_CRAWLER_AGENTS = (
-    'facebookexternalhit', 'Facebot',
-    'Twitterbot', 'LinkedInBot',
-    'WhatsApp', 'Slackbot',
-    'TelegramBot', 'Discordbot',
-    'Googlebot', 'bingbot', 'DuckDuckBot',
-)
-
 class LastSeenMiddleware:
     """Updates UserProfile.last_seen on every authenticated request."""
 
@@ -36,12 +26,13 @@ class LastSeenMiddleware:
 
 class LoginRequiredMiddleware:
     """
-    Redirects unauthenticated users to the login page for every URL except
-    the explicitly whitelisted public paths.
+    Redirects unauthenticated users to the login page for non-public URLs.
+    Public content routes stay crawlable/indexable for both users and bots.
     """
     # Exact paths that are always public
     PUBLIC_EXACT = {
         '/',
+        '/top-celebs/',
         '/robots.txt',
         '/robots.txt/',
         '/sitemap.xml',
@@ -57,6 +48,7 @@ class LoginRequiredMiddleware:
         # Prefix-based public paths (built once at startup)
         self._public_prefixes = (
             '/admin/',
+            '/celebs/',
             settings.STATIC_URL or '/static/',
             settings.MEDIA_URL or '/media/',
         )
@@ -68,9 +60,7 @@ class LoginRequiredMiddleware:
                 path not in self.PUBLIC_EXACT
                 and not any(path.startswith(p) for p in self._public_prefixes)
             ):
-                ua = request.META.get('HTTP_USER_AGENT', '')
-                if not any(bot.lower() in ua.lower() for bot in _CRAWLER_AGENTS):
-                    return redirect_to_login(request.get_full_path())
+                return redirect_to_login(request.get_full_path())
         return self.get_response(request)
 
 class CanonicalDomainMiddleware:
