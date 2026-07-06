@@ -408,6 +408,21 @@
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: #161616;
         display: block;
+    .category-modal-placeholder {
+        width: 100%;
+        min-height: 88px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(135deg, #2b2b2b, #171717);
+        color: #d7d7d7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
     }
     .category-modal-actions {
         display: flex;
@@ -1263,9 +1278,7 @@
             {% for item in category_gallery_items %}
             <div data-category-images="{{ item.category.pk }}">
                 {% for celeb in item.celebs %}
-                    {% if celeb.image %}
-            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" data-celeb-url="{{ celeb.get_absolute_url }}">
-                    {% endif %}
+            <span data-gallery-item="true" data-src="{% if celeb.image %}{{ celeb.image.url }}{% endif %}" data-alt="{{ celeb.name }}" data-celeb-url="{{ celeb.get_absolute_url }}"></span>
                 {% endfor %}
             </div>
             {% endfor %}
@@ -1505,20 +1518,22 @@
 
         function addImage(node) {
             if (!node) return;
-            var src = node.getAttribute('src');
+            var src = node.getAttribute('data-src') || node.getAttribute('src') || '';
             var url = node.getAttribute('data-celeb-url') || '';
-            if (!src || seen[src]) return;
-            seen[src] = true;
+            var alt = node.getAttribute('data-alt') || node.getAttribute('alt') || (categoryName + ' profile');
+            var key = (url || alt) + '|' + src;
+            if (seen[key]) return;
+            seen[key] = true;
             images.push({
                 src: src,
-                alt: node.getAttribute('alt') || (categoryName + ' profile'),
+                alt: alt,
                 url: url
             });
         }
 
         var sourceGroup = imageSources.querySelector('[data-category-images="' + categoryId + '"]');
         if (sourceGroup) {
-            sourceGroup.querySelectorAll('img').forEach(addImage);
+            sourceGroup.querySelectorAll('[data-gallery-item="true"]').forEach(addImage);
         }
 
         // Fallback when source group is empty.
@@ -1541,10 +1556,17 @@
             link.href = item.url || '#';
             link.style.textDecoration = 'none';
 
-            var img = document.createElement('img');
-            img.src = item.src;
-            img.alt = item.alt;
-            link.appendChild(img);
+            if (item.src) {
+                var img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.alt;
+                link.appendChild(img);
+            } else {
+                var placeholder = document.createElement('div');
+                placeholder.className = 'category-modal-placeholder';
+                placeholder.textContent = item.alt || 'Profile';
+                link.appendChild(placeholder);
+            }
 
             gallery.appendChild(link);
         });

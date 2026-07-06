@@ -73,14 +73,13 @@ def home(request):
             .order_by(F('follower_count').desc(nulls_last=True), F('avg_rating').desc(nulls_last=True), 'name')[:10]
         )
 
-        # Keep carousel payload bounded to avoid rendering hundreds of cards on home.
         carousel_celebs = (
             published_celebs.select_related('type__family__category', 'nationality')
             .annotate(
                 follower_count=Count('followers', distinct=True),
                 avg_rating=Avg('reviews__rating', distinct=True),
             )
-            .order_by('name')[:80]
+            .order_by('name')
         )
 
         spotlight_categories = (
@@ -98,30 +97,33 @@ def home(request):
         category_media_items = []
         category_gallery_items = []
         for category in spotlight_categories:
-            ranked_with_images = list(
+            ranked_for_gallery = list(
                 published_celebs.filter(
                     type__family__category=category,
-                    image__isnull=False,
                     nationality__isnull=False,
                 )
-                .exclude(image='')
                 .select_related('type__family__category', 'nationality')
                 .annotate(
                     follower_count=Count('followers', distinct=True),
                     avg_rating=Avg('reviews__rating', distinct=True),
                 )
-                .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')[:18]
+                .order_by(F('avg_rating').desc(nulls_last=True), F('follower_count').desc(nulls_last=True), 'name')
+            )
+
+            lead_with_image = next(
+                (celeb for celeb in ranked_for_gallery if getattr(celeb, 'image', None)),
+                None,
             )
 
             category_gallery_items.append({
                 'category': category,
-                'celebs': ranked_with_images,
+                'celebs': ranked_for_gallery,
             })
 
             if len(category_media_items) < 8:
                 category_media_items.append({
                     'category': category,
-                    'celeb': ranked_with_images[0] if ranked_with_images else None,
+                    'celeb': lead_with_image,
                 })
 
     selected_country_name = ''
