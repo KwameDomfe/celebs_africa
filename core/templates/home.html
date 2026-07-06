@@ -408,6 +408,7 @@
         border: 1px solid rgba(255, 255, 255, 0.12);
         background: #161616;
         display: block;
+    }
     .category-modal-placeholder {
         width: 100%;
         min-height: 88px;
@@ -422,7 +423,6 @@
         padding: 10px;
         font-size: 0.8rem;
         line-height: 1.2;
-    }
     }
     .category-modal-actions {
         display: flex;
@@ -707,6 +707,7 @@
     }
 </style>
 <div>
+    {% if not is_filtered %}
     <div class="discovery-hero white-90 pa1-00 mb1-00">
         <div class="hero-layout">
             <div>
@@ -851,7 +852,11 @@
         <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
             <h2 class="mb0-00 f1-50">Browse by Celeb Category</h2>
             <p class="mb0-00 f0-85 muted-meta">
-                {{ geo_profiles_count }} profiles currently from {{ geo_scope_label }}
+                {% if selected_country and country_profiles_total is not None %}
+                    {{ country_profiles_total }} profiles currently from {{ geo_scope_label }}
+                {% else %}
+                    {{ continent_profiles_total }} profiles currently from Africa
+                {% endif %}
             </p>
         </div>
         {% comment %} <div class="category-pills mt0-75">
@@ -915,6 +920,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     {# ── Skeleton overlay — shown while filter navigation is in flight ── #}
     <div id="home-skeleton" 
         style="display:none;" 
@@ -1298,7 +1304,7 @@
                             <div>
                                 {% if celeb.image %}
                                 <img src="{{ celeb.image.url }}"
-                                    alt="Celeb Image"
+                                    alt="{{ celeb.name }}"
                                     class="w20-00-m h16-00 br0-25 cover"
                                     style="vertical-align:middle"
                                 >
@@ -1335,7 +1341,7 @@
                                         {{ celeb.follower_count }}
                                     </span> follower{{ celeb.follower_count|pluralize }} )
                                 </p>
-                                <p class="celeb-meta">
+                                <div class="celeb-meta">
                                     {% if celeb.date_of_birth %}
                                     <span title="Date of Birth"
                                     >
@@ -1343,21 +1349,17 @@
                                     </span>
                                     {% endif %}
 
-                                    <div class="mb">
-                                        {% if celeb.is_deceased %}
-                                            
-                                            <span class="celeb-deceased" title="Date of Death"
-                                            >
-                                                &#10013;{{ celeb.date_of_death|date:"j M Y" }}
-                                            </span>
-                                            {% if celeb.age %}&nbsp;<p class="mb0-00 celeb-age-muted">
-                                                (aged {{ celeb.age }})</p>
-                                            {% endif %}
-                                        {% elif celeb.age %}
-                                            &nbsp;&nbsp;<p class="mb0-00">Age : {{ celeb.age }}</p>
+                                    {% if celeb.is_deceased %}
+                                        <span class="celeb-deceased" title="Date of Death">
+                                            &#10013; {{ celeb.date_of_death|date:"j M Y" }}
+                                        </span>
+                                        {% if celeb.age %}
+                                            <span class="celeb-age-muted">(aged {{ celeb.age }})</span>
                                         {% endif %}
-                                    </div>
-                                </p>
+                                    {% elif celeb.age %}
+                                        <span>Age : {{ celeb.age }}</span>
+                                    {% endif %}
+                                </div>
                                 <div class="flex flex-column justify-between">
                                     {% if celeb.bio %}
                                         <p class="mb1-00 f1-25 tracked-tight"
@@ -1389,7 +1391,7 @@
                         <div>
                             {% if celeb.image %}
                             <img src="{{ celeb.image.url }}"
-                                alt="Celeb Image"
+                                alt="{{ celeb.name }}"
                                 class="w20-00-m h16-00 br0-25 cover"
                                 style="vertical-align:middle"
                             >

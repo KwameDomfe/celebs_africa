@@ -127,17 +127,14 @@ def home(request):
                 })
 
     selected_country_name = ''
+    country_profiles_total = None
     if country_id:
         selected_country_obj = countries.filter(pk=country_id).first()
         if selected_country_obj:
             selected_country_name = selected_country_obj.name
+            country_profiles_total = published_celebs.filter(nationality_id=country_id).count()
 
-    # Keep this metric aligned with the active list filters shown on the page.
-    geo_profiles_count = (
-        filters_count
-        if country_id else
-        filters.exclude(nationality=None).count()
-    )
+    continent_profiles_total = published_celebs.exclude(nationality=None).count()
 
     context = {
         'celebs': celebs,
@@ -158,7 +155,9 @@ def home(request):
         'spotlight_categories': spotlight_categories,
         'category_media_items': category_media_items,
         'category_gallery_items': category_gallery_items,
-        'geo_profiles_count': geo_profiles_count,
+        'active_profiles_count': filters_count,
+        'continent_profiles_total': continent_profiles_total,
+        'country_profiles_total': country_profiles_total,
         'geo_scope_label': selected_country_name or 'Africa',
         'visible_celebs': visible_celebs,
         'locked_profiles_count': locked_profiles_count,
