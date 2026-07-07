@@ -171,7 +171,16 @@ class Celeb(models.Model):
 		return slug
 
 	def save(self, *args, **kwargs):
-		if not self.slug:
+		should_refresh_slug = False
+		if not self.pk:
+			should_refresh_slug = True
+		else:
+			old = Celeb.objects.filter(pk=self.pk).values('name', 'street_name').first()
+			if old:
+				if (old['name'] != self.name) or (old['street_name'] != self.street_name):
+					should_refresh_slug = True
+
+		if should_refresh_slug or not self.slug:
 			self.slug = self._build_unique_slug()
 		super().save(*args, **kwargs)
 
