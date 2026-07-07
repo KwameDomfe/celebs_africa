@@ -142,15 +142,37 @@ class Celeb(models.Model):
 		dob = self.date_of_birth
 		return end.year - dob.year - ((end.month, end.day) < (dob.month, dob.day))
 
+	def _build_unique_slug(self):
+		"""Build a readable, mostly-stable unique slug for this celeb."""
+		candidates = []
+		name_slug = slugify(self.name) if self.name else ''
+		street_slug = slugify(self.street_name) if self.street_name else ''
+
+		if name_slug:
+			candidates.append(name_slug)
+		if name_slug and street_slug and street_slug != name_slug:
+			candidates.append(f"{name_slug}-{street_slug}")
+
+		base_slug = next((cand for cand in candidates if cand), '')
+		if not base_slug:
+			base_slug = f"celeb-{self.pk}" if self.pk else 'celeb'
+
+		for cand in candidates:
+			if not cand:
+				continue
+			if not Celeb.objects.filter(slug=cand).exclude(pk=self.pk).exists():
+				return cand
+
+		n = 1
+		slug = f"{base_slug}-{n}"
+		while Celeb.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+			n += 1
+			slug = f"{base_slug}-{n}"
+		return slug
+
 	def save(self, *args, **kwargs):
 		if not self.slug:
-			base_slug = slugify(self.name)
-			slug = base_slug
-			n = 1
-			while Celeb.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-				slug = f"{base_slug}-{n}"
-				n += 1
-			self.slug = slug
+			self.slug = self._build_unique_slug()
 		super().save(*args, **kwargs)
 
 	def get_absolute_url(self):
@@ -158,12 +180,7 @@ class Celeb(models.Model):
 		# Some legacy rows may have an empty slug; backfill a unique value on demand
 		# so URL reversing and detail routing remain stable.
 		if not self.slug:
-			base_slug = slugify(self.name) or (f"celeb-{self.pk}" if self.pk else "celeb")
-			slug = base_slug
-			n = 1
-			while Celeb.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-				slug = f"{base_slug}-{n}"
-				n += 1
+			slug = self._build_unique_slug()
 			if self.pk:
 				Celeb.objects.filter(pk=self.pk).update(slug=slug)
 			self.slug = slug
