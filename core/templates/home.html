@@ -711,8 +711,8 @@
         <div class="discovery-hero white-90 pa1-00 mb1-00">
             <div class="hero-layout">
                 <div>
-                    <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
-                    <h1 class="f2-25 mb0-50 hero-headline">
+                    {% comment %} <p class="hero-kicker mb0-50">Trending Now Across Africa</p> {% endcomment %}
+                    <h1 class="f2-25 mv2-00 hero-headline">
                         Discover and explore celebrated celebrities from across Africa.
                     </h1>
                     <p class="mv1-00 hero-copy" style="max-width:72ch;">
@@ -1129,10 +1129,10 @@
             <p class="f2-50 i mb0-00">Discover and explore celebrated celebrities from across Africa.</p>
         </header>
 
-        <aside class="gc1s3 
+        <aside class="gc1s4-m gc1s3-l 
             pa1-00 bg-black-80 
             sticky home-aside" 
-            style="top:80px; 
+            style="top:40px; 
             align-self:start;"
         >
             {# ── User card ── #}
@@ -1295,7 +1295,7 @@
             </div>
         </aside>
 
-        <main class="gc4s6 home-main">
+        <main class="gc4s6-l gc5s8-m home-main">
             <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00"
             >
                 {% comment %} <h3>All Celebs</h3> {% endcomment %}
@@ -1314,7 +1314,15 @@
                         {% for item in category_gallery_items %}
                         <div data-category-images="{{ item.category.pk }}">
                             {% for celeb in item.celebs %}
-                        <span data-gallery-item="true" data-src="{% if celeb.image %}{{ celeb.image.url }}{% endif %}" data-alt="{{ celeb.name }}" data-celeb-url="{{ celeb.get_absolute_url }}"></span>
+                                <span data-gallery-item="true" 
+                                    data-src="
+                                        {% if celeb.image %}
+                                            {{ celeb.image.url }}
+                                        {% endif %}
+                                    " 
+                                    data-alt="{{ celeb.name }}" 
+                                    data-celeb-url="{{ celeb.get_absolute_url }}"
+                                ></span>
                             {% endfor %}
                         </div>
                         {% endfor %}
@@ -1322,7 +1330,7 @@
 
                     {% regroup visible_celebs by type.family.category as category_groups %}
                     {% for group in category_groups %}
-                        <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
+                        <div class="mb1-00 bg-black-80 red f1-75">
                             <h3>
                                 {{ group.grouper|default:"Uncategorised" }}
                             </h3>
@@ -1330,26 +1338,29 @@
                         <ul>
                             {% for celeb in group.list %}
                                 <li class="mb2-00">
-                                    <div class="flex flex-column flex-row-l bg-black-80 white-90 ma1-00 pa0-50">
-                                        <div>
+                                    <div class="flex flex-column flex-row-m bg-white-20 white-90"
+                                    >
+                                        <div class="w-40-m br0-25" 
+                                            style="flex-shrink:0; min-width:64px;">
                                             {% if celeb.image %}
                                             <img src="{{ celeb.image.url }}"
                                                 alt="{{ celeb.name }}"
-                                                class="w20-00-m h16-00 br0-25 cover"
+                                                class=" br0-25 w-100 h16-00 h20-00-m cover"
                                                 style="vertical-align:middle"
                                             >
                                             {% endif %}
                                         </div>
-                                        <div class="flex flex-column w-100 h-100 ml1-00-l">
+                                        <div class="flex flex-column w-60-m mh1-00">
                                             <div class="flex justify-between items-center w-100">
-                                                <h2 class="mb0-00">
+                                                <h3 class="mb0-00">
                                                     {{ celeb.name }}
-                                                </h2>
+                                                </h3>
                                                 {% if celeb.nationality %} 
                                                 <p title="{{ celeb.nationality.name }}"
                                                     class="f2-00 mb0-00"
                                                 >
-                                                    <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.4rem;"></span>
+                                                    <span class="fi fi-{{ celeb.nationality.code|lower }}" 
+                                                        style="font-size:1.4rem;"></span>
                                                 </p>
                                                 {% endif %} 
                                             </div>
@@ -1390,14 +1401,14 @@
                                                     <span>Age : {{ celeb.age }}</span>
                                                 {% endif %}
                                             </div>
-                                            <div class="flex flex-column justify-between">
+                                            <div class="flex flex-column h-100 justify-between">
                                                 {% if celeb.bio %}
-                                                    <p class="mb1-00 f1-25 tracked-tight"
+                                                    <p class="mb1-00 tracked-tight lh-copy tj"
                                                     >
                                                         {{ celeb.bio|truncatewords:30 }}
                                                     </p>
                                                 {% endif %} 
-                                                <div>
+                                                <div class="mb1-00">
                                                     <a href="{{ celeb.get_absolute_url }}" 
                                                         class="ba br0-25 pa0-25 view-details-link">
                                                         View Details
@@ -1488,9 +1499,24 @@
             </div>
         
         </main>
-        
-        <aside class="gc10s3 ba br0-25 b--white-90 pa1-00" 
+
+        <aside class="gc10s3 
+            pa1-00 bg-black-80 
+            sticky home-aside" 
+            style="top:40px; 
+            align-self:start;" 
+
         >
+            <div class="ma1-00 white-40 ba br0-25 b--white-10">
+                <div>
+                    kdadesign technologies
+                </div>
+                and 
+                <div>
+                    3D Pyramid Music
+                </div>
+                Collaboration
+            </div>
         </aside>
 
         <script>
