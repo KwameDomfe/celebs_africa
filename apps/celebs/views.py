@@ -32,7 +32,6 @@ def _seo_description(celeb):
 		parts.append('Awards: ' + ' '.join(award_words[:14]) + ('…' if len(award_words) > 14 else ''))
 	return ' '.join(parts)
 
-
 def _save_social_links(request, celeb):
 	"""Parse link_platform / link_url POST lists and replace all social links for celeb."""
 	platforms = request.POST.getlist('link_platform')
@@ -44,7 +43,6 @@ def _save_social_links(request, celeb):
 		if platform and url:
 			CelebSocialLink.objects.create(celeb=celeb, platform=platform, url=url, order=order)
 			order += 1
-
 
 def _person_schema(celeb, page_url, image_url, avg_rating, review_count, follow_count):
 	"""Build JSON-LD Person data for the celeb profile page."""
@@ -93,7 +91,7 @@ def _person_schema(celeb, page_url, image_url, avg_rating, review_count, follow_
 		}]
 	return json.dumps(schema, ensure_ascii=True)
 
-
+@login_required
 def celebs_home(request):
 	categories = Category.objects.prefetch_related('families__types').order_by('name')
 	countries = Country.objects.all()
@@ -138,12 +136,12 @@ def celebs_home(request):
 		),
 	})
 
-
+@login_required
 def celeb_detail_by_pk(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
 	return redirect(celeb.get_absolute_url(), permanent=True)
 
-
+@login_required
 def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	qs = Celeb.objects.select_related('type__family__category')
 	celeb = get_object_or_404(qs, slug=slug)
@@ -215,7 +213,6 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 
 	return render(request, 'celebs/celeb_detail.html', context)
 
-
 @login_required
 def celeb_follow(request, pk):
 	celeb = get_object_or_404(Celeb.objects.select_related('type__family__category'), pk=pk)
@@ -224,7 +221,6 @@ def celeb_follow(request, pk):
 		if not created:
 			follow.delete()
 	return HttpResponseRedirect(celeb.get_absolute_url())
-
 
 @login_required
 def celeb_review(request, pk):
@@ -248,7 +244,6 @@ def celeb_review(request, pk):
 			messages.error(request, 'Please select a star rating before submitting.')
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#reviews')
 
-
 @login_required
 def celeb_review_delete(request, pk):
 	celeb = get_object_or_404(Celeb.objects.select_related('type__family__category'), pk=pk)
@@ -256,7 +251,6 @@ def celeb_review_delete(request, pk):
 		Review.objects.filter(celeb=celeb, user=request.user).delete()
 		messages.success(request, 'Your review has been deleted.')
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#reviews')
-
 
 @login_required
 def celeb_like(request, pk):
@@ -267,7 +261,6 @@ def celeb_like(request, pk):
 			like.delete()
 	return HttpResponseRedirect(celeb.get_absolute_url())
 
-
 @login_required
 def celeb_comment(request, pk):
 	celeb = get_object_or_404(Celeb.objects.select_related('type__family__category'), pk=pk)
@@ -277,7 +270,6 @@ def celeb_comment(request, pk):
 			Comment.objects.create(celeb=celeb, user=request.user, text=text)
 			messages.success(request, 'Comment posted.')
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#comments')
-
 
 @login_required
 def comment_edit(request, pk):
@@ -294,7 +286,6 @@ def comment_edit(request, pk):
 			messages.error(request, 'Comment cannot be empty.')
 	return HttpResponseRedirect(comment.celeb.get_absolute_url() + '#comments')
 
-
 @login_required
 def comment_delete(request, pk):
 	comment = get_object_or_404(Comment.objects.select_related('celeb__type__family__category'), pk=pk)
@@ -305,7 +296,6 @@ def comment_delete(request, pk):
 		comment.delete()
 		messages.success(request, 'Comment deleted.')
 	return HttpResponseRedirect(celeb_url + '#comments')
-
 
 @permission_required('celebs.add_celeb', raise_exception=True)
 def celeb_create(request):
@@ -345,7 +335,6 @@ def celeb_create(request):
 		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
 	})
 
-
 @login_required
 def celeb_update(request, slug):
 	celeb = get_object_or_404(Celeb, slug=slug)
@@ -375,7 +364,6 @@ def celeb_update(request, slug):
 		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
 	})
 
-
 @login_required
 def celeb_delete(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
@@ -385,7 +373,6 @@ def celeb_delete(request, pk):
 		celeb.delete()
 		return HttpResponseRedirect(reverse('celebs_home'))
 	return render(request, 'celebs/celeb_confirm_delete.html', {'celeb': celeb})
-
 
 @login_required
 def celeb_photo_upload(request, pk):
@@ -401,7 +388,6 @@ def celeb_photo_upload(request, pk):
 			)
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
 
-
 @login_required
 def celeb_photo_delete(request, pk):
 	photo = get_object_or_404(CelebPhoto, pk=pk)
@@ -412,7 +398,6 @@ def celeb_photo_delete(request, pk):
 		photo.image.delete(save=False)
 		photo.delete()
 	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
-
 
 @login_required
 def my_celebs(request):

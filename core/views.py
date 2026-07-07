@@ -1,4 +1,5 @@
 from apps.celebs.models import Celeb, Category, Country
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -165,7 +166,7 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-
+@login_required
 def top_celebs(request):
     cat_id = request.GET.get('category', '')
     family_id = request.GET.get('family', '')
