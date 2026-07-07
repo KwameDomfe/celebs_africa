@@ -357,9 +357,48 @@ def celeb_create(request):
 					new_celeb.managers.add(request.user)
 		except Exception:
 			logger.exception('Celeb create failed for user=%s', request.user.pk)
+			# Production fallback: if image upload/storage fails, create the celeb without image.
+			if image:
+				try:
+					with transaction.atomic():
+						new_celeb = Celeb.objects.create(
+							name=name,
+							street_name=street_name,
+							bio=bio,
+							type_id=type_id,
+							nationality_id=nationality_id,
+							discovered=discovered or None,
+							date_of_birth=date_of_birth or None,
+							date_of_death=date_of_death or None,
+							image=None,
+							awards=request.POST.get('awards', ''),
+							featured_video=request.POST.get('featured_video', ''),
+							published=request.POST.get('published') == 'on',
+						)
+						_save_social_links(request, new_celeb)
+						if not request.user.is_staff:
+							new_celeb.managers.add(request.user)
+				except Exception:
+					logger.exception('Celeb create fallback-without-image failed for user=%s', request.user.pk)
+					messages.error(
+						request,
+						'Could not create celeb right now. Please try again later.',
+					)
+					return render(request, 'celebs/celeb_form.html', {
+						'types': types,
+						'countries': countries,
+						'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+					})
+
+				messages.warning(
+					request,
+					'Celeb was created, but the image upload failed. You can upload the image later from Edit.',
+				)
+				return HttpResponseRedirect(new_celeb.get_absolute_url())
+
 			messages.error(
 				request,
-				'Could not create celeb right now. Please try again, or remove the image and retry.',
+				'Could not create celeb right now. Please try again later.',
 			)
 			return render(request, 'celebs/celeb_form.html', {
 				'types': types,
