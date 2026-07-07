@@ -354,7 +354,11 @@ def celeb_create(request):
 				_save_social_links(request, new_celeb)
 				# Auto-add non-staff creators as managers so they can edit their own celeb
 				if not request.user.is_staff:
-					new_celeb.managers.add(request.user)
+					try:
+						new_celeb.managers.add(request.user)
+					except Exception:
+						logger.exception('Could not attach creator as manager for celeb=%s user=%s', new_celeb.pk, request.user.pk)
+						messages.warning(request, 'Celeb created, but manager link could not be saved.')
 		except Exception:
 			logger.exception('Celeb create failed for user=%s', request.user.pk)
 			# Production fallback: if image upload/storage fails, create the celeb without image.
@@ -377,7 +381,11 @@ def celeb_create(request):
 						)
 						_save_social_links(request, new_celeb)
 						if not request.user.is_staff:
-							new_celeb.managers.add(request.user)
+							try:
+								new_celeb.managers.add(request.user)
+							except Exception:
+								logger.exception('Could not attach creator as manager during fallback for celeb=%s user=%s', new_celeb.pk, request.user.pk)
+								messages.warning(request, 'Celeb created, but manager link could not be saved.')
 				except Exception:
 					logger.exception('Celeb create fallback-without-image failed for user=%s', request.user.pk)
 					messages.error(
