@@ -1,5 +1,6 @@
 
 import json
+import logging
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
@@ -7,8 +8,12 @@ from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Count, Avg
 from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto, CelebSocialLink
+
+
+logger = logging.getLogger(__name__)
 
 
 def _seo_description(celeb):
@@ -302,33 +307,67 @@ def celeb_create(request):
 	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
 	countries = Country.objects.all()
 	if request.method == 'POST':
-		name = request.POST.get('name')
-		street_name = request.POST.get('street_name')
+		name = (request.POST.get('name') or '').strip()
+		street_name = (request.POST.get('street_name') or '').strip()
 		bio = request.POST.get('bio', '')
 		discovered = request.POST.get('discovered')
 		date_of_birth = request.POST.get('date_of_birth')
 		date_of_death = request.POST.get('date_of_death')
-		type_id = request.POST.get('type')
+		type_id = (request.POST.get('type') or '').strip()
 		nationality_id = request.POST.get('nationality') or None
 		image = request.FILES.get('image')
-		new_celeb = Celeb.objects.create(
-			name=name,
-			street_name=street_name,
-			bio=bio,
-			type_id=type_id,
-			nationality_id=nationality_id,
-			discovered=discovered or None,
-			date_of_birth=date_of_birth or None,
-			date_of_death=date_of_death or None,
-			image=image,
-			awards=request.POST.get('awards', ''),
-			featured_video=request.POST.get('featured_video', ''),
-			published=request.POST.get('published') == 'on',
-		)
-		_save_social_links(request, new_celeb)
-		# Auto-add non-staff creators as managers so they can edit their own celeb
-		if not request.user.is_staff:
-			new_celeb.managers.add(request.user)
+
+		# Avoid production 500s on malformed/empty required fields.
+		errors = []
+		if not name:
+			errors.append('Name is required.')
+		if not street_name:
+			errors.append('Street name is required.')
+		if not type_id:
+			errors.append('Category / Family / Type is required.')
+
+		if errors:
+			for err in errors:
+				messages.error(request, err)
+			return render(request, 'celebs/celeb_form.html', {
+				'types': types,
+				'countries': countries,
+				'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+			})
+
+		try:
+			with transaction.atomic():
+				new_celeb = Celeb.objects.create(
+					name=name,
+					street_name=street_name,
+					bio=bio,
+					type_id=type_id,
+					nationality_id=nationality_id,
+					discovered=discovered or None,
+					date_of_birth=date_of_birth or None,
+					date_of_death=date_of_death or None,
+					image=image,
+					awards=request.POST.get('awards', ''),
+					featured_video=request.POST.get('featured_video', ''),
+					published=request.POST.get('published') == 'on',
+				)
+				_save_social_links(request, new_celeb)
+				# Auto-add non-staff creators as managers so they can edit their own celeb
+				if not request.user.is_staff:
+					new_celeb.managers.add(request.user)
+		except Exception:
+			logger.exception('Celeb create failed for user=%s', request.user.pk)
+			messages.error(
+				request,
+				'Could not create celeb right now. Please try again, or remove the image and retry.',
+			)
+			return render(request, 'celebs/celeb_form.html', {
+				'types': types,
+				'countries': countries,
+				'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+			})
+
+		messages.success(request, 'Celeb created successfully.')
 		return HttpResponseRedirect(new_celeb.get_absolute_url())
 	return render(request, 'celebs/celeb_form.html', {
 		'types': types, 'countries': countries,
