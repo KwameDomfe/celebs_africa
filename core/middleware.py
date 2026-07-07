@@ -70,7 +70,11 @@ class CanonicalDomainMiddleware:
     def __call__(self, request):
         host = request.get_host().split(":")[0]
 
-        if host == "www.celebsafrica.com":
+        local_hosts = {'127.0.0.1', 'localhost'}
+        if settings.DEBUG and host in local_hosts:
+            return self.get_response(request)
+
+        if host != 'celebsafrica.com':
             return self.redirect_to_canonical(request)
 
         return self.get_response(request)

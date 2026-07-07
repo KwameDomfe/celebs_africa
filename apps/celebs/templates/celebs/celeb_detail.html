@@ -7,11 +7,11 @@
 {% block og_url %}https://celebsafrica.com{{ celeb.get_absolute_url }}{% endblock %}
 {% block meta_description %}{{ og_description }}{% endblock %}
 {% block og_description %}{{ og_description }}{% endblock %}
-{% block og_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block og_image %}{% if og_image %}{{ og_image }}{% else %}https://celebsafrica.com{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 {% block og_image_alt %}Photo of {{ celeb.name }} on CelebsAfrica{% endblock %}
 {% block twitter_title %}{{ celeb.name }} Biography, Profile and Influence | CelebsAfrica{% endblock %}
 {% block twitter_description %}{{ og_description }}{% endblock %}
-{% block twitter_image %}{% if og_image %}{{ og_image }}{% else %}https://celebs-africa-o3zfi.ondigitalocean.app{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block twitter_image %}{% if og_image %}{{ og_image }}{% else %}https://celebsafrica.com{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 {% block twitter_image_alt %}Photo of {{ celeb.name }} on CelebsAfrica{% endblock %}
 {% block structured_data %}
 <script type="application/ld+json">{{ person_schema_json|safe }}</script>

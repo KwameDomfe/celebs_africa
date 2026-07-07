@@ -201,6 +201,8 @@ def top_celebs(request):
 
 def robots_txt(request):
     sitemap_url = request.build_absolute_uri(reverse('sitemap_xml'))
+    site_base = getattr(settings, 'SITE_URL', 'https://celebsafrica.com').rstrip('/')
+    sitemap_url = f"{site_base}{reverse('sitemap_xml')}"
     lines = [
         'User-agent: *',
         'Disallow:',
@@ -210,14 +212,19 @@ def robots_txt(request):
 
 
 def sitemap_xml(request):
+    site_base = getattr(settings, 'SITE_URL', 'https://celebsafrica.com').rstrip('/')
+
+    def abs_url(path):
+        return f"{site_base}{path}"
+
     urls = [
-        (request.build_absolute_uri(reverse('home')), '1.0', 'weekly'),
-        (request.build_absolute_uri(reverse('top_celebs')), '0.9', 'weekly'),
-        (request.build_absolute_uri(reverse('celebs_home')), '0.9', 'weekly'),
+        (abs_url(reverse('home')), '1.0', 'weekly'),
+        (abs_url(reverse('top_celebs')), '0.9', 'weekly'),
+        (abs_url(reverse('celebs_home')), '0.9', 'weekly'),
     ]
 
     for celeb in Celeb.objects.filter(published=True).select_related('type__family__category').order_by('name'):
-        urls.append((request.build_absolute_uri(celeb.get_absolute_url()), '0.7', 'weekly'))
+        urls.append((abs_url(celeb.get_absolute_url()), '0.7', 'weekly'))
 
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for url, priority, changefreq in urls:
