@@ -5,1725 +5,1763 @@
 {% block meta_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
 {% block og_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
 {% block twitter_description %}Browse African celebrities, musicians, actors, athletes, professors and business personalities. Search by country, category, family and type on CelebsAfrica.{% endblock %}
+
 {% block content %}
-<style>
-    @media (max-width: 767px) {
-        .home-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
-        .home-main  { grid-column: 1 / -1 !important; }
-        .home-filters { display: none; }
-        .home-filters.open { display: block; }
-        .home-grid { column-gap: 0; }
-    }
-    @media (min-width: 768px) {
-        .home-filter-toggle { display: none !important; }
-        .home-filters { display: block !important; }
-    }
-    .home-filters form {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-    }
-    .home-filter-field {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .home-filter-field:last-of-type { border-bottom: none; }
-    .home-filter-field label {
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #aaa;
-        font-weight: 600;
-    }
-    .home-filter-field input,
-    .home-filter-field select {
-        width: 100%;
-        padding: 8px 10px;
-        background: #1a1a1a;
-        color: #f0f0f0;
-        border: 1px solid #444;
-        border-radius: 4px;
-        font-size: 0.95rem;
-        box-sizing: border-box;
-        appearance: none;
-        -webkit-appearance: none;
-    }
-    .home-filter-field input:focus,
-    .home-filter-field select:focus {
-        outline: none;
-        border-color: #e55;
-    }
-    .home-filter-actions {
-        display: flex;
-        gap: 8px;
-        padding-top: 12px;
-    }
-    .home-filter-actions button,
-    .home-filter-actions a {
-        flex: 1;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 0.95rem;
-        text-align: center;
-        cursor: pointer;
-        text-decoration: none;
-        border: none;
-    }
-    .home-filter-actions button {
-        background: #e00;
-        color: #fff;
-        font-weight: 600;
-    }
-    .home-filter-actions button:hover { background: #b00; }
-    .home-filter-actions a {
-        background: #444;
-        color: #ccc;
-    }
-    .home-filter-actions a:hover { background: #555; color: #fff; }
+    <style>
+        @media (max-width: 767px) {
+            .home-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
+            .home-main  { grid-column: 1 / -1 !important; }
+            .home-filters { display: none; }
+            .home-filters.open { display: block; }
+            .home-grid { column-gap: 0; }
+        }
+        @media (min-width: 768px) {
+            .home-filter-toggle { display: none !important; }
+            .home-filters { display: block !important; }
+        }
+        .home-filters form {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .home-filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .home-filter-field:last-of-type { border-bottom: none; }
+        .home-filter-field label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #aaa;
+            font-weight: 600;
+        }
+        .home-filter-field input,
+        .home-filter-field select {
+            width: 100%;
+            padding: 8px 10px;
+            background: #1a1a1a;
+            color: #f0f0f0;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .home-filter-field input:focus,
+        .home-filter-field select:focus {
+            outline: none;
+            border-color: #e55;
+        }
+        .home-filter-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 12px;
+        }
+        .home-filter-actions button,
+        .home-filter-actions a {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+        }
+        .home-filter-actions button {
+            background: #e00;
+            color: #fff;
+            font-weight: 600;
+        }
+        .home-filter-actions button:hover { background: #b00; }
+        .home-filter-actions a {
+            background: #444;
+            color: #ccc;
+        }
+        .home-filter-actions a:hover { background: #555; color: #fff; }
 
-    /* ── Aside user card ─────────────────────────────────── */
-    .aside-user {
-        padding: 12px 0 14px;
-        border-bottom: 1px solid rgba(255,255,255,0.10);
-        margin-bottom: 4px;
-    }
-    .aside-user-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 8px;
-    }
-    .aside-user-avatar {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        object-fit: cover;
-        flex-shrink: 0;
-        border: 2px solid #444;
-    }
-    .aside-user-initials {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: #333;
-        border: 2px solid #555;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #e55;
-        flex-shrink: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-    }
-    .aside-user-name {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #f0f0f0;
-        line-height: 1.2;
-    }
-    .aside-user-email {
-        font-size: 0.78rem;
-        color: #888;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 160px;
-    }
-    .aside-user-bio {
-        font-size: 0.82rem;
-        color: #aaa;
-        margin: 0 0 8px;
-        line-height: 1.4;
-    }
-    .aside-user-links {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-    .aside-user-links a {
-        font-size: 0.78rem;
-        padding: 4px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        border: 1px solid #444;
-        color: #ccc;
-        transition: background 0.15s, color 0.15s;
-    }
-    .aside-user-links a:hover { background: #444; color: #fff; }
-    .aside-user-links a.aside-user-logout {
-        border-color: #622;
-        color: #e77;
-    }
-    .aside-user-links a.aside-user-logout:hover { background: #622; color: #fff; }
-    .aside-guest-prompt {
-        padding: 10px 0 14px;
-        border-bottom: 1px solid rgba(255,255,255,0.10);
-        margin-bottom: 4px;
-    }
-    .aside-guest-prompt p {
-        font-size: 0.82rem;
-        color: #999;
-        margin: 0 0 8px;
-    }
-    .aside-guest-prompt .aside-user-links a.login-btn {
-        background: #e55;
-        border-color: #e55;
-        color: #fff;
-        font-weight: 600;
-    }
-    .aside-guest-prompt .aside-user-links a.login-btn:hover { background: #c33; border-color: #c33; }
+        /* ── Aside user card ─────────────────────────────────── */
+        .aside-user {
+            padding: 12px 0 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            margin-bottom: 4px;
+        }
+        .aside-user-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .aside-user-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid #444;
+        }
+        .aside-user-initials {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e55;
+            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .aside-user-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f0f0f0;
+            line-height: 1.2;
+        }
+        .aside-user-email {
+            font-size: 0.78rem;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+        .aside-user-bio {
+            font-size: 0.82rem;
+            color: #aaa;
+            margin: 0 0 8px;
+            line-height: 1.4;
+        }
+        .aside-user-links {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .aside-user-links a {
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 1px solid #444;
+            color: #ccc;
+            transition: background 0.15s, color 0.15s;
+        }
+        .aside-user-links a:hover { background: #444; color: #fff; }
+        .aside-user-links a.aside-user-logout {
+            border-color: #622;
+            color: #e77;
+        }
+        .aside-user-links a.aside-user-logout:hover { background: #622; color: #fff; }
+        .aside-guest-prompt {
+            padding: 10px 0 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            margin-bottom: 4px;
+        }
+        .aside-guest-prompt p {
+            color: #999;
+            margin: 0 0 8px;
+        }
+        .aside-guest-prompt .aside-user-links a.login-btn {
+            background: #e55;
+            border-color: #e55;
+            color: #fff;
+            font-weight: 600;
+        }
+        .aside-guest-prompt .aside-user-links a.login-btn:hover { background: #c33; border-color: #c33; }
 
-    /* ── Skeleton ─────────────────────────────────────────── */
-    @keyframes skel-shimmer {
-        0%   { background-position: -800px 0; }
-        100% { background-position:  800px 0; }
-    }
-    .skel {
-        background: linear-gradient(90deg, #1e1e1e 25%, #2c2c2c 50%, #1e1e1e 75%);
-        background-size: 1600px 100%;
-        animation: skel-shimmer 1.6s infinite linear;
-        border-radius: 3px;
-        display: block;
-    }
+        /* ── Skeleton ─────────────────────────────────────────── */
+        @keyframes skel-shimmer {
+            0%   { background-position: -800px 0; }
+            100% { background-position:  800px 0; }
+        }
+        .skel {
+            background: linear-gradient(90deg, #1e1e1e 25%, #2c2c2c 50%, #1e1e1e 75%);
+            background-size: 1600px 100%;
+            animation: skel-shimmer 1.6s infinite linear;
+            border-radius: 3px;
+            display: block;
+        }
 
-    .discovery-hero {
-        background: linear-gradient(135deg, #100b0b 0%, #1e1111 40%, #331414 100%);
-        border: 1px solid rgba(255, 90, 90, 0.35);
-        border-radius: 8px;
-    }
-    .hero-layout {
-        display: grid;
-        grid-template-columns: 1.5fr 1fr;
-        gap: 14px;
-        align-items: stretch;
-    }
-    .hero-media {
-        border-radius: 8px;
-        overflow: hidden;
-        min-height: 220px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: #111;
-        position: relative;
-    }
-    .hero-media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .hero-media-fallback {
-        width: 100%;
-        height: 100%;
-        min-height: 220px;
-        background: radial-gradient(circle at top right, #4a1d1d, #171717 55%);
-    }
-    .hero-media-badge {
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
-        background: rgba(0, 0, 0, 0.72);
-        padding: 7px 9px;
-        border-radius: 4px;
-        font-size: 0.82rem;
-        color: #f0f0f0;
-    }
-    .hero-kicker {
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: #ff8b8b;
-    }
-    .hero-headline {
-        color: #f8f8f8 !important;
-        line-height: 1.15;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-    }
-    .hero-copy {
-        color: #d8d8d8 !important;
-    }
-    .hero-cta-row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    .hero-cta-row a {
-        text-decoration: none;
-        padding: 9px 14px;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        font-weight: 700;
-    }
-    .hero-cta-link {
-        display: inline-block;
-        text-decoration: none;
-        padding: 9px 14px;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        font-weight: 700;
-    }
-    .hero-cta-primary {
-        background: #e11919;
-        color: #fff;
-    }
-    .hero-cta-secondary {
-        border: 1px solid #595959;
-        color: #d9d9d9;
-    }
-    .preview-grid {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 10px;
-    }
-    .preview-card {
-        background: #141414;
-        border: 1px solid rgba(255, 255, 255, 0.09);
-        border-radius: 6px;
-        padding: 10px;
-    }
-    .preview-card-title { color: #f1f1f1; }
-    .preview-card-subtitle { color: #c7c7c7; }
-    .preview-card-meta { color: #9d9d9d; }
-    .preview-photo {
-        width: 100%;
-        height: 112px;
-        border-radius: 5px;
-        object-fit: cover;
-        display: block;
-        margin-bottom: 8px;
-        background: #202020;
-    }
-    .preview-photo-placeholder {
-        background: linear-gradient(135deg, #222, #141414);
-    }
-    .preview-locked {
-        position: relative;
-        overflow: hidden;
-    }
-    .preview-locked::after {
-        content: 'Sign up to unlock rankings';
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 8px;
-        font-size: 0.76rem;
-        color: #fff;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(2px);
-        pointer-events: none;
-    }
-    .preview-locked-content {
-        position: relative;
-        z-index: 2;
-    }
-    .preview-lock-cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 8px;
-        background: #e11919;
-        color: #fff;
-        border-radius: 4px;
-        padding: 7px 10px;
-        font-size: 0.78rem;
-        font-weight: 700;
-        text-decoration: none;
-    }
-    .preview-lock-cta-icon {
-        font-size: 0.9rem;
-        line-height: 1;
-    }
-    .muted-meta {
-        color: #9e9e9e;
-    }
-    .category-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    .category-pills a {
-        border: 1px solid #444;
-        border-radius: 999px;
-        padding: 6px 10px;
-        font-size: 0.82rem;
-        color: #d8d8d8;
-        background: #151515;
-        text-decoration: none;
-        transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    .category-pills a:hover {
-        background: #202020;
-        border-color: #666;
-    }
-    .category-pills a.is-active {
-        background: #8f0f0f;
-        border-color: #c51e1e;
-        color: #fff;
-    }
-    .category-modal-overlay {
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        background: rgba(0, 0, 0, 0.72);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 16px;
-    }
-    .category-modal {
-        width: min(560px, 100%);
-        background: #141414;
-        border: 1px solid #383838;
-        border-radius: 10px;
-        padding: 16px;
-        color: #f1f1f1;
-    }
-    .category-modal h3 {
-        margin-bottom: 6px;
-    }
-    .category-modal p {
-        color: #c8c8c8;
-        margin-bottom: 12px;
-    }
-    .category-modal-gallery {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        margin-bottom: 12px;
-        max-height: 320px;
-        overflow-y: auto;
-    }
-    .category-modal-gallery img {
-        width: 100%;
-        height: 96px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: #161616;
-        display: block;
-    }
-    .category-modal-placeholder {
-        width: 100%;
-        min-height: 88px;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: linear-gradient(135deg, #2b2b2b, #171717);
-        color: #d7d7d7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 10px;
-        font-size: 0.8rem;
-        line-height: 1.2;
-    }
-    .category-modal-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-    .category-modal-actions a,
-    .category-modal-actions button {
-        border: none;
-        border-radius: 6px;
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-decoration: none;
-    }
-    .category-modal-confirm {
-        background: #d91a1a;
-        color: #fff;
-    }
-    .category-modal-cancel {
-        background: #2b2b2b;
-        color: #ddd;
-    }
-    .unlock-panel {
-        border: 1px dashed rgba(255,255,255,0.2);
-    }
-    .unlock-gate {
-        border: 1px dashed rgba(255, 100, 100, 0.4);
-        border-radius: 8px;
-        padding: 16px;
-        margin: 10px;
-        background: linear-gradient(135deg, rgba(36, 10, 10, 0.9), rgba(16, 16, 16, 0.95));
-    }
-    .unlock-copy { color: #c8c8c8; }
-    .celeb-meta { margin: 2px 0 4px 0; font-size: 0.85rem; color: #aaa; }
-    .celeb-deceased { color: #c0392b; }
-    .celeb-age-muted { color: #888; }
-    .unlock-gate-copy { color: #d5d5d5; }
-    .category-media-row {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-    }
-    .category-media-card {
-        position: relative;
-        text-align: center;
-    }
-    .category-media-row img,
-    .category-media-fallback {
-        height: 344px;
-        width: 100%;
-        border-radius: 6px;
-        object-fit: cover;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: #171717;
-        display: block;
-    }
-    .category-media-label {
-        position: absolute;
-        left: 12px;
-        bottom: 12px;
-        right: 12px;
-        padding: 8px;
-        border-radius: 6px;
-        font-size: 1.00rem;
-        color: #f3f3f3;
-        background: rgba(0, 0, 0, 0.72);
-    }
-    .unlock-layout {
-        display: grid;
-        grid-template-columns: 1.2fr 1fr;
-        gap: 12px;
-        align-items: center;
-    }
-    .unlock-collage {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-    }
-    .unlock-collage img,
-    .unlock-collage-fallback {
-        width: 100%;
-        height: 128px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: #171717;
-        display: block;
-    }
+        .discovery-hero {
+            background: linear-gradient(135deg, #100b0b 0%, #1e1111 40%, #331414 100%);
+            border: 1px solid rgba(255, 90, 90, 0.35);
+            border-radius: 8px;
+        }
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 14px;
+            align-items: stretch;
+        }
+        .hero-media {
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 220px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #111;
+            position: relative;
+        }
+        .hero-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .hero-media-fallback {
+            width: 100%;
+            height: 100%;
+            min-height: 220px;
+            background: radial-gradient(circle at top right, #4a1d1d, #171717 55%);
+        }
+        .hero-media-badge {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            background: rgba(0, 0, 0, 0.72);
+            padding: 7px 9px;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            color: #f0f0f0;
+        }
+        .hero-kicker {
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #ff8b8b;
+        }
+        .hero-headline {
+            color: #f8f8f8 !important;
+            line-height: 1.15;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+        }
+        .hero-copy {
+            color: #d8d8d8 !important;
+        }
+        .hero-cta-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .hero-cta-row a {
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .hero-cta-link {
+            display: inline-block;
+            text-decoration: none;
+            padding: 9px 14px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .hero-cta-primary {
+            background: #e11919;
+            color: #fff;
+        }
+        .hero-cta-secondary {
+            border: 1px solid #595959;
+            color: #d9d9d9;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .preview-card {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .preview-card-title { color: #f1f1f1; }
+        .preview-card-subtitle { color: #c7c7c7; }
+        .preview-card-meta { color: #9d9d9d; }
+        .preview-photo {
+            width: 100%;
+            height: 112px;
+            border-radius: 5px;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 8px;
+            background: #202020;
+        }
+        .preview-photo-placeholder {
+            background: linear-gradient(135deg, #222, #141414);
+        }
+        .preview-locked {
+            position: relative;
+            overflow: hidden;
+        }
+        .preview-locked::after {
+            content: 'Sign up to unlock rankings';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.76rem;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(2px);
+            pointer-events: none;
+        }
+        .preview-locked-content {
+            position: relative;
+            z-index: 2;
+        }
+        .preview-lock-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            background: #e11919;
+            color: #fff;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .preview-lock-cta-icon {
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+        .muted-meta {
+            color: #9e9e9e;
+        }
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .category-pills a {
+            border: 1px solid #444;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.82rem;
+            color: #d8d8d8;
+            background: #151515;
+            text-decoration: none;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+        .category-pills a:hover {
+            background: #202020;
+            border-color: #666;
+        }
+        .category-pills a.is-active {
+            background: #8f0f0f;
+            border-color: #c51e1e;
+            color: #fff;
+        }
+        .category-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.72);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .category-modal {
+            width: min(560px, 100%);
+            background: #141414;
+            border: 1px solid #383838;
+            border-radius: 10px;
+            padding: 16px;
+            color: #f1f1f1;
+        }
+        .category-modal h3 {
+            margin-bottom: 6px;
+        }
+        .category-modal p {
+            color: #c8c8c8;
+            margin-bottom: 12px;
+        }
+        .category-modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .category-modal-gallery img {
+            width: 100%;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #161616;
+            display: block;
+        }
+        .category-modal-placeholder {
+            width: 100%;
+            min-height: 88px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: linear-gradient(135deg, #2b2b2b, #171717);
+            color: #d7d7d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+        .category-modal-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .category-modal-actions a,
+        .category-modal-actions button {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .category-modal-confirm {
+            background: #d91a1a;
+            color: #fff;
+        }
+        .category-modal-cancel {
+            background: #2b2b2b;
+            color: #ddd;
+        }
+        .unlock-panel {
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+        .unlock-gate {
+            border: 1px dashed rgba(255, 100, 100, 0.4);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 10px;
+            background: linear-gradient(135deg, rgba(36, 10, 10, 0.9), rgba(16, 16, 16, 0.95));
+        }
+        .unlock-copy { color: #c8c8c8; }
+        .celeb-meta { margin: 2px 0 4px 0; font-size: 0.85rem; color: #aaa; }
+        .celeb-deceased { color: #c0392b; }
+        .celeb-age-muted { color: #888; }
+        .unlock-gate-copy { color: #d5d5d5; }
+        .category-media-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .category-media-card {
+            position: relative;
+            text-align: center;
+        }
+        .category-media-row img,
+        .category-media-fallback {
+            height: 344px;
+            width: 100%;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #171717;
+            display: block;
+        }
+        .category-media-label {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            right: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 1.00rem;
+            color: #f3f3f3;
+            background: rgba(0, 0, 0, 0.72);
+        }
+        .unlock-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+        .unlock-collage {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .unlock-collage img,
+        .unlock-collage-fallback {
+            width: 100%;
+            height: 128px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #171717;
+            display: block;
+        }
 
-    .celeb-carousel-shell {
-        background: linear-gradient(135deg, #111 0%, #1a1010 100%);
-        border: 1px solid rgba(255, 90, 90, 0.28);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .celeb-carousel-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
-    }
-    .celeb-carousel-track-wrap {
-        overflow: hidden;
-        position: relative;
-    }
-    .celeb-carousel-track {
-        display: flex;
-        gap: 10px;
-        transition: transform 0.4s ease;
-        will-change: transform;
-    }
-    .celeb-carousel-slide {
-        min-width: calc((100% - 30px) / 4);
-        background: #121212;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        text-decoration: none;
-        color: inherit;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-    }
-    .celeb-carousel-slide:hover {
-        border-color: rgba(255, 120, 120, 0.55);
-    }
-    .celeb-carousel-photo {
-        width: 100%;
-        height: 256px;
-        object-fit: cover;
-        border-radius: 6px;
-        background: #1f1f1f;
-        margin-bottom: 8px;
-    }
-    .celeb-carousel-placeholder {
-        background: linear-gradient(135deg, #2a2a2a, #191919);
-    }
-    .celeb-carousel-title {
-        color: #f2f2f2;
-        font-weight: 700;
-        margin: 0 0 4px;
-    }
-    .celeb-carousel-subtitle {
-        color: #bfbfbf;
-        margin: 0 0 4px;
-    }
-    .celeb-carousel-meta {
-        color: #999;
-        margin: 0;
-        font-size: 0.8rem;
-    }
-    .celeb-carousel-controls {
-        display: flex;
-        gap: 6px;
-    }
-    .celeb-carousel-btn {
-        border: 1px solid #4a4a4a;
-        background: #202020;
-        color: #eee;
-        border-radius: 4px;
-        padding: 6px 10px;
-        cursor: pointer;
-    }
-    .celeb-carousel-btn:hover {
-        background: #2c2c2c;
-    }
-    .celeb-carousel-dots {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
-        margin-top: 10px;
-    }
-    .celeb-carousel-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        border: 0;
-        background: #5a5a5a;
-        cursor: pointer;
-        padding: 0;
-    }
-    .celeb-carousel-dot.is-active {
-        background: #e33;
-    }
+        .celeb-carousel-shell {
+            background: linear-gradient(135deg, #111 0%, #1a1010 100%);
+            {% comment %} border: 1px solid rgba(255, 90, 90, 0.28); {% endcomment %}
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .celeb-carousel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .celeb-carousel-track-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+        .celeb-carousel-track {
+            display: flex;
+            gap: 10px;
+            transition: transform 0.4s ease;
+            will-change: transform;
+        }
+        .celeb-carousel-slide {
+            min-width: calc((100% - 30px) / 4);
+            background: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .celeb-carousel-slide:hover {
+            border-color: rgba(255, 120, 120, 0.55);
+        }
+        .celeb-carousel-photo {
+            width: 100%;
+            height: 256px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #1f1f1f;
+            margin-bottom: 8px;
+        }
+        .celeb-carousel-placeholder {
+            background: linear-gradient(135deg, #2a2a2a, #191919);
+        }
+        .celeb-carousel-title {
+            color: #f2f2f2;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+        .celeb-carousel-subtitle {
+            color: #bfbfbf;
+            margin: 0 0 4px;
+        }
+        .celeb-carousel-meta {
+            color: #999;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        .celeb-carousel-controls {
+            display: flex;
+            gap: 6px;
+        }
+        .celeb-carousel-btn {
+            border: 1px solid #4a4a4a;
+            background: #202020;
+            color: #eee;
+            border-radius: 4px;
+            padding: 6px 10px;
+            cursor: pointer;
+        }
+        .celeb-carousel-btn:hover {
+            background: #2c2c2c;
+        }
+        .celeb-carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .celeb-carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 0;
+            background: #5a5a5a;
+            cursor: pointer;
+            padding: 0;
+        }
+        .celeb-carousel-dot.is-active {
+            background: #e33;
+        }
 
-    html[data-theme="light"] .hero-kicker,
-    html[data-theme="light"] .hero-copy,
-    html[data-theme="light"] .hero-media-badge,
-    html[data-theme="light"] .preview-card-title,
-    html[data-theme="light"] .preview-card-subtitle,
-    html[data-theme="light"] .preview-card-meta {
-        color: #f0f0f0 !important;
-    }
-    html[data-theme="light"] .hero-cta-secondary {
-        color: #f0f0f0 !important;
-        border-color: #8d8d8d;
-    }
-    html[data-theme="light"] .muted-meta {
-        color: #555 !important;
-    }
-    html[data-theme="light"] .category-pills a {
-        background: #f4f4f4;
-        color: #222;
-        border-color: #bcbcbc;
-    }
-    html[data-theme="light"] .category-pills a:hover {
-        background: #e8e8e8;
-        border-color: #9c9c9c;
-    }
-    html[data-theme="light"] .category-pills a.is-active {
-        background: #cc2a2a;
-        border-color: #b32222;
-        color: #fff;
-    }
-    html[data-theme="light"] .category-modal {
-        background: #f8f8f8;
-        border-color: #d5d5d5;
-        color: #111;
-    }
-    html[data-theme="light"] .category-modal p {
-        color: #333;
-    }
-    html[data-theme="light"] .category-modal-cancel {
-        background: #dedede;
-        color: #222;
-    }
-    html[data-theme="light"] .unlock-copy {
-        color: #333 !important;
-    }
-    html[data-theme="light"] .celeb-meta { color: #555 !important; }
-    html[data-theme="light"] .celeb-deceased { color: #9e2a1f !important; }
-    html[data-theme="light"] .celeb-age-muted { color: #666 !important; }
-    html[data-theme="light"] .unlock-gate-copy { color: #444 !important; }
-    html[data-theme="light"] .unlock-panel {
-        border-color: rgba(0,0,0,0.2);
-    }
-    html[data-theme="light"] .celeb-carousel-shell {
-        background: linear-gradient(135deg, #f1f1f1 0%, #f8e6e6 100%);
-        border-color: rgba(170, 40, 40, 0.3);
-    }
-    html[data-theme="light"] .celeb-carousel-slide {
-        background: #fff;
-        border-color: rgba(0, 0, 0, 0.1);
-    }
-    html[data-theme="light"] .celeb-carousel-title {
-        color: #161616;
-    }
-    html[data-theme="light"] .celeb-carousel-subtitle {
-        color: #4a4a4a;
-    }
-    html[data-theme="light"] .celeb-carousel-meta {
-        color: #666;
-    }
-    html[data-theme="light"] .celeb-carousel-btn {
-        background: #efefef;
-        color: #222;
-        border-color: #bcbcbc;
-    }
-    html[data-theme="light"] .celeb-carousel-btn:hover {
-        background: #e5e5e5;
-    }
-    @media (max-width: 1024px) {
-        .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .hero-layout,
-        .unlock-layout { grid-template-columns: 1fr; }
-        .celeb-carousel-slide { min-width: calc((100% - 20px) / 3); }
-    }
-    @media (max-width: 767px) {
-        .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .category-modal-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .celeb-carousel-slide { min-width: calc((100% - 10px) / 2); }
-    }
-    @media (max-width: 520px) {
-        .celeb-carousel-slide { min-width: 100%; }
-    }
-    @media (min-width: 1025px) {
-        .hero-kicker { font-size: 1.56rem; }
-        .hero-headline { font-size: 3.5rem !important; }
-        .hero-copy { font-size: 2rem !important; }
-    }
-</style>
-<div>
-    {% if not is_filtered %}
-    <div class="discovery-hero white-90 pa1-00 mb1-00">
-        <div class="hero-layout">
-            <div>
-                <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
-                <h1 class="f2-25 mb0-50 hero-headline">
-                    Discover and explore celebrated celebrities from across Africa.
-                </h1>
-                <p class="mv1-00 hero-copy" style="max-width:72ch;">
-                    Explore fast-rising celebrities, musicians, actors and creators by category and country.
-                </p>
-                <p class="mt1-00 mb2-00 hero-copy" style="max-width:72ch;">
-                    Create an account to unlock full rankings, profile engagement and deeper discovery.
-                </p>
-                <div class="hero-cta-row">
-                    {% if user.is_authenticated %}
-                        <a class="hero-cta-primary js-track-click" data-track-event="hero_explore_click" href="{% url 'celebs_home' %}">Explore Full Directory</a>
+        html[data-theme="light"] .hero-kicker,
+        html[data-theme="light"] .hero-copy,
+        html[data-theme="light"] .hero-media-badge,
+        html[data-theme="light"] .preview-card-title,
+        html[data-theme="light"] .preview-card-subtitle,
+        html[data-theme="light"] .preview-card-meta {
+            color: #f0f0f0 !important;
+        }
+        html[data-theme="light"] .hero-cta-secondary {
+            color: #f0f0f0 !important;
+            border-color: #8d8d8d;
+        }
+        html[data-theme="light"] .muted-meta {
+            color: #555 !important;
+        }
+        html[data-theme="light"] .category-pills a {
+            background: #f4f4f4;
+            color: #222;
+            border-color: #bcbcbc;
+        }
+        html[data-theme="light"] .category-pills a:hover {
+            background: #e8e8e8;
+            border-color: #9c9c9c;
+        }
+        html[data-theme="light"] .category-pills a.is-active {
+            background: #cc2a2a;
+            border-color: #b32222;
+            color: #fff;
+        }
+        html[data-theme="light"] .category-modal {
+            background: #f8f8f8;
+            border-color: #d5d5d5;
+            color: #111;
+        }
+        html[data-theme="light"] .category-modal p {
+            color: #333;
+        }
+        html[data-theme="light"] .category-modal-cancel {
+            background: #dedede;
+            color: #222;
+        }
+        html[data-theme="light"] .unlock-copy {
+            color: #333 !important;
+        }
+        html[data-theme="light"] .celeb-meta { color: #555 !important; }
+        html[data-theme="light"] .celeb-deceased { color: #9e2a1f !important; }
+        html[data-theme="light"] .celeb-age-muted { color: #666 !important; }
+        html[data-theme="light"] .unlock-gate-copy { color: #444 !important; }
+        html[data-theme="light"] .unlock-panel {
+            border-color: rgba(0,0,0,0.2);
+        }
+        html[data-theme="light"] .celeb-carousel-shell {
+            background: linear-gradient(135deg, #f1f1f1 0%, #f8e6e6 100%);
+            border-color: rgba(170, 40, 40, 0.3);
+        }
+        html[data-theme="light"] .celeb-carousel-slide {
+            background: #fff;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        html[data-theme="light"] .celeb-carousel-title {
+            color: #161616;
+        }
+        html[data-theme="light"] .celeb-carousel-subtitle {
+            color: #4a4a4a;
+        }
+        html[data-theme="light"] .celeb-carousel-meta {
+            color: #666;
+        }
+        html[data-theme="light"] .celeb-carousel-btn {
+            background: #efefef;
+            color: #222;
+            border-color: #bcbcbc;
+        }
+        html[data-theme="light"] .celeb-carousel-btn:hover {
+            background: #e5e5e5;
+        }
+        @media (max-width: 1024px) {
+            .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .hero-layout,
+            .unlock-layout { grid-template-columns: 1fr; }
+            .celeb-carousel-slide { min-width: calc((100% - 20px) / 3); }
+        }
+        @media (max-width: 767px) {
+            .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .category-media-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .category-modal-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .celeb-carousel-slide { min-width: calc((100% - 10px) / 2); }
+        }
+        @media (max-width: 520px) {
+            .celeb-carousel-slide { min-width: 100%; }
+        }
+        @media (min-width: 1025px) {
+            .hero-kicker { font-size: 1.56rem; }
+            .hero-headline { font-size: 3.5rem !important; }
+            .hero-copy { font-size: 2rem !important; }
+        }
+    </style>
+
+    <section>
+        {% if not is_filtered %}
+        <div class="discovery-hero white-90 pa1-00 mb1-00">
+            <div class="hero-layout">
+                <div>
+                    <p class="hero-kicker mb0-50">Trending Now Across Africa</p>
+                    <h1 class="f2-25 mb0-50 hero-headline">
+                        Discover and explore celebrated celebrities from across Africa.
+                    </h1>
+                    <p class="mv1-00 hero-copy" style="max-width:72ch;">
+                        Explore fast-rising celebrities, musicians, actors and creators by category and country.
+                    </p>
+                    <p class="mt1-00 mb2-00 hero-copy" style="max-width:72ch;">
+                        Create an account to unlock full rankings, profile engagement and deeper discovery.
+                    </p>
+                    <div class="hero-cta-row">
+                        {% if user.is_authenticated %}
+                            <a class="hero-cta-primary js-track-click" data-track-event="hero_explore_click" href="{% url 'celebs_home' %}">Explore Full Directory</a>
+                        {% else %}
+                            <a class="hero-cta-primary js-track-click" data-track-event="hero_register_click" href="{% url 'register' %}">Unlock Trending Celebrities</a>
+                            <a class="hero-cta-secondary js-track-click" data-track-event="hero_login_click" href="{% url 'login' %}">I already have an account</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% with hero_celeb=trending_celebs|first %}
+                <div class="hero-media">
+                    {% if hero_celeb and hero_celeb.image %}
+                        <img src="{{ hero_celeb.image.url }}" alt="{{ hero_celeb.name }}">
+                        <div class="hero-media-badge">Featured: {{ hero_celeb.name }}</div>
                     {% else %}
-                        <a class="hero-cta-primary js-track-click" data-track-event="hero_register_click" href="{% url 'register' %}">Unlock Trending Celebrities</a>
-                        <a class="hero-cta-secondary js-track-click" data-track-event="hero_login_click" href="{% url 'login' %}">I already have an account</a>
+                        <div class="hero-media-fallback"></div>
+                    {% endif %}
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+
+        {% comment %} <div class="bg-black-80 white-90 pa1-00 mb1-00">
+            <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
+                <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
+                <div class="flex items-center" style="gap:8px; flex-wrap:wrap;">
+                    <p class="mb0-00 f0-85 muted-meta">Preview unlocked: 5 profiles</p>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
                     {% endif %}
                 </div>
             </div>
-            {% with hero_celeb=trending_celebs|first %}
-            <div class="hero-media">
-                {% if hero_celeb and hero_celeb.image %}
-                    <img src="{{ hero_celeb.image.url }}" alt="{{ hero_celeb.name }}">
-                    <div class="hero-media-badge">Featured: {{ hero_celeb.name }}</div>
-                {% else %}
-                    <div class="hero-media-fallback"></div>
-                {% endif %}
-            </div>
-            {% endwith %}
-        </div>
-    </div>
-
-    {% comment %} <div class="bg-black-80 white-90 pa1-00 mb1-00">
-        <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
-            <h2 class="mb0-00 f1-50">Top Featured This Week</h2>
-            <div class="flex items-center" style="gap:8px; flex-wrap:wrap;">
-                <p class="mb0-00 f0-85 muted-meta">Preview unlocked: 5 profiles</p>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'register' %}" class="preview-lock-cta js-track-click" data-track-event="unlock_register_click"><span class="preview-lock-cta-icon" aria-hidden="true">&#128274;</span>Sign up to unlock rankings</a>
-                {% endif %}
-            </div>
-        </div>
-        <div class="preview-grid mt0-75">
-            {% for celeb in trending_celebs|slice:":5" %}
-                <a href="{{ celeb.get_absolute_url }}" class="preview-card js-track-click" data-track-event="trending_preview_open" style="text-decoration:none; color:inherit;">
-                    {% if celeb.image %}
-                        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="preview-photo">
-                    {% else %}
-                        <div class="preview-photo preview-photo-placeholder"></div>
-                    {% endif %}
-                    <p class="mb0-25 b preview-card-title">{{ celeb.name }}</p>
-                    <p class="mb0-25 f0-85 preview-card-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
-                    <p class="mb0-00 f0-80 preview-card-meta">
-                        {% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}
-                    </p>
-                </a>
-            {% endfor %}
-            <div class="preview-card">
-                <div class="preview-photo preview-photo-placeholder"></div>
-                <p class="mb0-25 b preview-card-title">Top Celebs</p>
-                <p class="mb0-25 f0-85 preview-card-subtitle">See the full top list this week</p>
-                <p class="mb0-00 f0-80 preview-card-meta">Updated with top profiles across Africa</p>
-                <a href="{% url 'top_celebs' %}" class="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
-            </div>
-        </div>
-    </div> {% endcomment %}
-
-    <div id="celeb-carousel" 
-        class="celeb-carousel-shell white-90 pa1-00 mb1-00" aria-label="All published celebs carousel"
-    >
-        <div class="celeb-carousel-head mb0-75">
-            <h2 class="mb0-00 f1-50">All Published Celebs</h2>
-            <div class="celeb-carousel-controls" aria-label="Carousel controls">
-                <button type="button" class="celeb-carousel-btn" data-carousel-prev aria-label="Previous celebs">Prev</button>
-                <button type="button" class="celeb-carousel-btn" data-carousel-next aria-label="Next celebs">Next</button>
-            </div>
-        </div>
-        <div class="celeb-carousel-track-wrap">
-            <div class="celeb-carousel-track" data-carousel-track>
-                {% for celeb in carousel_celebs %}
-                    <a href="{{ celeb.get_absolute_url }}" class="celeb-carousel-slide js-track-click" data-track-event="carousel_card_open">
+            <div class="preview-grid mt0-75">
+                {% for celeb in trending_celebs|slice:":5" %}
+                    <a href="{{ celeb.get_absolute_url }}" class="preview-card js-track-click" data-track-event="trending_preview_open" style="text-decoration:none; color:inherit;">
                         {% if celeb.image %}
-                            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="celeb-carousel-photo" loading="lazy">
+                            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="preview-photo">
                         {% else %}
-                            <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
+                            <div class="preview-photo preview-photo-placeholder"></div>
                         {% endif %}
-                        <p class="celeb-carousel-title">{{ celeb.name }}</p>
-                        <p class="celeb-carousel-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
-                        <p class="celeb-carousel-meta">
-                            {% if celeb.avg_rating %}
-                                ★ {{ celeb.avg_rating|floatformat:1 }}
-                            {% else %}Unrated
-                            {% endif %} 
-                            · 
-                            {{ celeb.follower_count }} 
-                                follower
-                            {{ celeb.follower_count|pluralize }}
+                        <p class="mb0-25 b preview-card-title">{{ celeb.name }}</p>
+                        <p class="mb0-25 f0-85 preview-card-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
+                        <p class="mb0-00 f0-80 preview-card-meta">
+                            {% if celeb.avg_rating %}★ {{ celeb.avg_rating|floatformat:1 }}{% else %}Unrated{% endif %} · {{ celeb.follower_count }} follower{{ celeb.follower_count|pluralize }}
                         </p>
                     </a>
-                {% empty %}
-                    <div class="celeb-carousel-slide">
-                        <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
-                        <p class="celeb-carousel-title">No published celebs yet</p>
-                        <p class="celeb-carousel-subtitle">Check back soon for updates.</p>
-                        <p class="celeb-carousel-meta">Profiles will appear here automatically.</p>
-                    </div>
                 {% endfor %}
+                <div class="preview-card">
+                    <div class="preview-photo preview-photo-placeholder"></div>
+                    <p class="mb0-25 b preview-card-title">Top Celebs</p>
+                    <p class="mb0-25 f0-85 preview-card-subtitle">See the full top list this week</p>
+                    <p class="mb0-00 f0-80 preview-card-meta">Updated with top profiles across Africa</p>
+                    <a href="{% url 'top_celebs' %}" class="preview-lock-cta js-track-click" data-track-event="trending_preview_open">View Top Celebs</a>
+                </div>
             </div>
-        </div>
-        {% comment %} <div class="celeb-carousel-dots" data-carousel-dots></div> {% endcomment %}
-    </div>
-
-    <div id="unlock-panel" 
-        class="bg-black-80 white-90 pa1-00 mb1-00 unlock-panel"
-    >
-        <div class="unlock-layout">
-            <div>
-                <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
-                <p class="mb0-75 unlock-copy">
-                    Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
-                </p>
-                {% if not user.is_authenticated %}
-                    <a href="{% url 'register' %}" class="hero-cta-link hero-cta-primary js-track-click" data-track-event="unlock_register_click">Create Free Account</a>
-                {% endif %}
-            </div>
-            <div class="unlock-collage" aria-hidden="true">
-                {% for celeb in trending_celebs|slice:":3" %}
-                    {% if celeb.image %}
-                        <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
-                    {% else %}
-                        <div class="unlock-collage-fallback"></div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-black-80 white-90 pa1-00 mb1-00">
-        <div class="flex justify-between items-center" style="gap:8px; flex-wrap:wrap;">
-            <h2 class="mb0-00 f1-50">Browse by Celeb Category</h2>
-            <p class="mb0-00 f0-85 muted-meta">
-                {% if selected_country and country_profiles_total is not None %}
-                    {{ country_profiles_total }} profiles currently from {{ geo_scope_label }}
-                {% else %}
-                    {{ continent_profiles_total }} profiles currently from Africa
-                {% endif %}
-            </p>
-        </div>
-        {% comment %} <div class="category-pills mt0-75">
-            {% for category in spotlight_categories %}
-                <a href="{% url 'home' %}?category={{ category.pk }}"
-                data-category-modal="true"
-                        data-category-id="{{ category.pk }}"
-                data-category-name="{{ category.name }}"
-                data-category-count="{{ category.celeb_count }}"
-                class="{% if selected_category == category.pk|stringformat:'s' %}is-active{% endif %}">
-                    {{ category.name }} · {{ category.celeb_count }}
-                </a>
-            {% endfor %}
         </div> {% endcomment %}
-        <div class="category-media-row">
-            {% for item in category_media_items %}
-                {% if item.celeb %}
-                    <a href="{{ item.celeb.get_absolute_url }}" 
-                        class="w-100 category-media-card" 
-                        style="text-decoration:none;"
-                        data-category-modal="true"
-                        data-category-id="{{ item.category.pk }}"
-                        data-category-name="{{ item.category.name }}"
-                        data-category-count="{{ item.category.celeb_count }}">
-                        <img src="{{ item.celeb.image.url }}" 
-                            alt="{{ item.celeb.name }}"
-                        >
-                        <div class="category-media-label 
-                            flex 
-                            flex-column 
-                            justify-between 
-                            items-center" 
-                        >
-                            <span class="mb1-00">
-                                    {{  item.category.name  }}
-                            </span> 
-                            <span class="f1-50 b ba pa0-50 bw2 br0-50">
-                                &nbsp;{{  item.category.celeb_count  }}&nbsp;
-                            </span>   
-                        </div>
-                    </a>
-                {% else %}
-                    <div class="category-media-card">
-                        <div class="category-media-fallback"></div>
-                        <span class="category-media-label">{{ item.category.name }}</span>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
 
-
-    <div id="category-modal-overlay" class="category-modal-overlay" aria-hidden="true">
-        <div class="category-modal" role="dialog" aria-modal="true" aria-labelledby="category-modal-title">
-            <h3 id="category-modal-title">Browse Category</h3>
-            <p id="category-modal-copy">Continue to browse this category.</p>
-            <div id="category-modal-gallery" class="category-modal-gallery" hidden></div>
-            <div class="category-modal-actions">
-                <a id="category-modal-confirm" class="category-modal-confirm" href="#">View Category</a>
-                <button id="category-modal-cancel" type="button" class="category-modal-cancel">Close</button>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {# ── Skeleton overlay — shown while filter navigation is in flight ── #}
-    <div id="home-skeleton" 
-        style="display:none;" 
-        aria-hidden="true" 
-        class="grid gtc12 ggap2-0 bg-black-90 home-grid"
-    >
-        {# header #}
-        <div class="gc1s12 tc bg-black-80 ph1-00 pt2-00 pb2-00">
-            <div class="skel" style="height:2.4rem; width:260px; margin:0 auto 1rem;"></div>
-            <div class="skel" style="height:1.1rem; width:360px; margin:0 auto;"></div>
-        </div>
-
-        {# aside #}
-        <div class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
-            style="top:80px; align-self:start;"
+        <div id="celeb-carousel" 
+            class="celeb-carousel-shell white-90 pa1-00 mb1-00" 
+                aria-label="All published celebs carousel"
         >
-            {# user card skeleton #}
-            <div style="padding:12px 0 14px; border-bottom:1px solid rgba(255,255,255,0.10); margin-bottom:4px;">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-                    <div class="skel" style="width:46px; height:46px; border-radius:50%; flex-shrink:0;"></div>
-                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
-                        <div class="skel" style="height:0.9rem; width:60%;"></div>
-                        <div class="skel" style="height:0.7rem; width:80%;"></div>
-                    </div>
+            <div class="celeb-carousel-head mb0-75">
+                <h2 class="mb0-00 f1-50">All Published Celebs</h2>
+                <div class="celeb-carousel-controls" aria-label="Carousel controls"
+                >
+                    <button type="button" class="celeb-carousel-btn" 
+                        data-carousel-prev 
+                        aria-label="Previous celebs"
+                    >
+                        Prev
+                    </button>
+                    <button type="button" class="celeb-carousel-btn" 
+                        data-carousel-next 
+                        aria-label="Next celebs"
+                    >
+                        Next
+                    </button>
                 </div>
-                <div style="display:flex; gap:6px;">
-                    <div class="skel" style="height:26px; width:72px; border-radius:4px;"></div>
-                    <div class="skel" style="height:26px; width:54px; border-radius:4px;"></div>
-                    <div class="skel" style="height:26px; width:60px; border-radius:4px;"></div>
+            </div>
+            <div class="celeb-carousel-track-wrap">
+                <div class="celeb-carousel-track" data-carousel-track>
+                    {% for celeb in carousel_celebs %}
+                        <a href="{{ celeb.get_absolute_url }}" class="celeb-carousel-slide js-track-click" data-track-event="carousel_card_open">
+                            {% if celeb.image %}
+                                <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}" class="celeb-carousel-photo" loading="lazy">
+                            {% else %}
+                                <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
+                            {% endif %}
+                            <p class="celeb-carousel-title">{{ celeb.name }}</p>
+                            <p class="celeb-carousel-subtitle">{{ celeb.street_name|default:"Public Figure" }}</p>
+                            <p class="celeb-carousel-meta">
+                                {% if celeb.avg_rating %}
+                                    ★ {{ celeb.avg_rating|floatformat:1 }}
+                                {% else %}Unrated
+                                {% endif %} 
+                                · 
+                                {{ celeb.follower_count }} 
+                                    follower
+                                {{ celeb.follower_count|pluralize }}
+                            </p>
+                        </a>
+                    {% empty %}
+                        <div class="celeb-carousel-slide">
+                            <div class="celeb-carousel-photo celeb-carousel-placeholder"></div>
+                            <p class="celeb-carousel-title">No published celebs yet</p>
+                            <p class="celeb-carousel-subtitle">Check back soon for updates.</p>
+                            <p class="celeb-carousel-meta">Profiles will appear here automatically.</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="skel home-filter-toggle" style="height:2.4rem; width:100%; margin-bottom:8px; border-radius:4px;"></div>
-            <div class="home-filter-field">
-                <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-field">
-                <div class="skel" style="height:0.65rem; width:66px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-field">
-                <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-field">
-                <div class="skel" style="height:0.65rem; width:36px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-field">
-                <div class="skel" style="height:0.65rem; width:58px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-field" style="border-bottom:none;">
-                <div class="skel" style="height:0.65rem; width:52px; margin-bottom:6px;"></div>
-                <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
-            </div>
-            <div class="home-filter-actions">
-                <div class="skel" style="height:36px; flex:1; border-radius:4px;"></div>
-            </div>
+            {% comment %} <div class="celeb-carousel-dots" data-carousel-dots></div> {% endcomment %}
         </div>
 
-        {# main content #}
-        <div class="gc5s8 home-main">
-            {# stat bar #}
-            <div class="bg-black-80 pa1-00 mb1-00 tc">
-                <div class="skel" style="height:1.1rem; width:270px; margin:0 auto;"></div>
-            </div>
-            {# category heading #}
-            <div class="mb1-00 bg-black-80 pa0-50">
-                <div class="skel" style="height:1.4rem; width:150px;"></div>
-            </div>
-            {# celeb cards #}
-            <ul>
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
-                        <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
-                        <div class="flex flex-column w-100" style="gap:10px;">
-                            <div class="flex justify-between items-center">
-                                <div class="skel" style="height:1.4rem; width:55%;"></div>
-                                <div class="skel" style="height:1.4rem; width:2rem;"></div>
-                            </div>
-                            <div class="skel" style="height:1rem; width:72%;"></div>
-                            <div class="skel" style="height:0.85rem; width:48%;"></div>
-                            <div class="skel" style="height:0.85rem; width:90%;"></div>
-                            <div class="skel" style="height:0.85rem; width:68%;"></div>
-                            <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
-                        </div>
-                    </div>
-                </li>
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
-                        <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
-                        <div class="flex flex-column w-100" style="gap:10px;">
-                            <div class="flex justify-between items-center">
-                                <div class="skel" style="height:1.4rem; width:43%;"></div>
-                                <div class="skel" style="height:1.4rem; width:2rem;"></div>
-                            </div>
-                            <div class="skel" style="height:1rem; width:65%;"></div>
-                            <div class="skel" style="height:0.85rem; width:38%;"></div>
-                            <div class="skel" style="height:0.85rem; width:82%;"></div>
-                            <div class="skel" style="height:0.85rem; width:58%;"></div>
-                            <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
-                        </div>
-                    </div>
-                </li>
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
-                        <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
-                        <div class="flex flex-column w-100" style="gap:10px;">
-                            <div class="flex justify-between items-center">
-                                <div class="skel" style="height:1.4rem; width:61%;"></div>
-                                <div class="skel" style="height:1.4rem; width:2rem;"></div>
-                            </div>
-                            <div class="skel" style="height:1rem; width:78%;"></div>
-                            <div class="skel" style="height:0.85rem; width:54%;"></div>
-                            <div class="skel" style="height:0.85rem; width:95%;"></div>
-                            <div class="skel" style="height:0.85rem; width:74%;"></div>
-                            <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
-                        </div>
-                    </div>
-                </li>
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
-                        <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
-                        <div class="flex flex-column w-100" style="gap:10px;">
-                            <div class="flex justify-between items-center">
-                                <div class="skel" style="height:1.4rem; width:38%;"></div>
-                                <div class="skel" style="height:1.4rem; width:2rem;"></div>
-                            </div>
-                            <div class="skel" style="height:1rem; width:60%;"></div>
-                            <div class="skel" style="height:0.85rem; width:44%;"></div>
-                            <div class="skel" style="height:0.85rem; width:88%;"></div>
-                            <div class="skel" style="height:0.85rem; width:62%;"></div>
-                            <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
-                        </div>
-                    </div>
-                </li>
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
-                        <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
-                        <div class="flex flex-column w-100" style="gap:10px;">
-                            <div class="flex justify-between items-center">
-                                <div class="skel" style="height:1.4rem; width:50%;"></div>
-                                <div class="skel" style="height:1.4rem; width:2rem;"></div>
-                            </div>
-                            <div class="skel" style="height:1rem; width:70%;"></div>
-                            <div class="skel" style="height:0.85rem; width:42%;"></div>
-                            <div class="skel" style="height:0.85rem; width:86%;"></div>
-                            <div class="skel" style="height:0.85rem; width:64%;"></div>
-                            <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-</div>
-<script>
-(function () {
-    var skel = document.getElementById('home-skeleton');
-    var form = document.querySelector('.home-filters form');
-    if (!skel || !form) return;
-    function showSkeleton() {
-        skel.style.display = '';
-        skel.removeAttribute('aria-hidden');
-        var content = document.getElementById('home-content');
-        if (content) content.style.display = 'none';
-    }
-    form.addEventListener('submit', showSkeleton);
-    // selects fire submit via their onchange inline handler;
-    // catch the form submit event which covers all of them
-})();
-</script>
-
-<div id="home-content" class="grid gtc12 ggap2-0 bg-black-90 home-grid">
-    <header id="africa-celebrities" class="gc1s12 tc bg-black-80 white-90 ph0-50 pt2-00">
-        <h2 class="f2-75 mb2-00">Celebrities of <span class="f5-00">Africa</span></h2>
-        {% comment %} <p class="f2-50 i mb0-00">Discover and explore celebrated celebrities from across Africa.</p> {% endcomment %}
-    </header>
-
-    <aside class="gc1s4 
-        pa1-00 bg-black-80 
-        sticky home-aside" 
-        style="top:80px; 
-        align-self:start;"
-    >
-        {# ── User card ── #}
-        {% if user.is_authenticated %}
-        <div class="aside-user">
-            <div class="aside-user-row">
-                {% if user.profile.avatar %}
-                    <img src="{{ user.profile.avatar.url }}" 
-                        alt="{{ user.username }}" 
-                        class="w4-00 h4-00 br0-25">
-                {% else %}
-                    <div class="aside-user-initials">
-                        {{ user.username|slice:":1" }}
-                    </div>
-                {% endif %}
-                <div style="overflow:hidden;">
-                    <div class="aside-user-name">{{ user.username }}</div>
-                    {% if user.email %}
-                    <div class="aside-user-email" title="{{ user.email }}">{{ user.email }}</div>
+        <div id="unlock-panel" 
+            class="bg-black-80 white-90 pa1-00 mb1-00 unlock-panel"
+        >
+            <div class="unlock-layout">
+                <div>
+                    <h2 class="mb0-50 f1-50">Unlock Full Rankings and Profile Insights</h2>
+                    <p class="mb0-75 unlock-copy">
+                        Get complete trending lists, deeper profile access and engagement features built for fans, managers and talent scouts.
+                    </p>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="hero-cta-link hero-cta-primary js-track-click" data-track-event="unlock_register_click">Create Free Account</a>
                     {% endif %}
                 </div>
-            </div>
-            {% if user.profile.bio %}
-                <p class="aside-user-bio"
-                >
-                    {{ user.profile.bio|truncatewords:20 }}
-                </p>
-            {% endif %}
-            <div class="aside-user-links">
-                <a href="{% url 'profile' %}">&#128100; Profile</a>
-                <a href="{% url 'profile_edit' %}">&#9998; Edit</a>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" 
-                        class="aside-user-logout bw0-25 br0-25" 
-                        style="background:none;
-                        border:all;
-                        padding:0.25rem;
-                        color:red;
-                        cursor:pointer;"
-                    >
-                        Logout
-                    </button>
-                </form>
+                <div class="unlock-collage" aria-hidden="true">
+                    {% for celeb in trending_celebs|slice:":3" %}
+                        {% if celeb.image %}
+                            <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}">
+                        {% else %}
+                            <div class="unlock-collage-fallback"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
-        {% else %}
-        <div class="aside-guest-prompt">
-            <p>Sign in to view celeb details, follow celebs, rate, like and comment.</p>
-            <div class="aside-user-links">
-                <a href="{% url 'login' %}" class="b--none bg-red">Login</a>
-                <a href="{% url 'register' %}">Register</a>
+
+        <div id="category-panel" 
+            class="bg-black-80 white-90 pa1-00 mb1-00"
+        >
+            <div class="flex justify-between items-center" 
+                style="gap:8px; flex-wrap:wrap;"
+            >
+                <h2 class="mb0-00 f1-50">Browse by Celeb Category</h2>
+                <p class="mb0-00 f0-85 muted-meta">
+                    {% if selected_country and country_profiles_total is not None %}
+                        {{ country_profiles_total }} profiles currently from {{ geo_scope_label }}
+                    {% else %}
+                        {{ continent_profiles_total }} profiles currently from Africa
+                    {% endif %}
+                </p>
+            </div>
+            {% comment %} <div class="category-pills mt0-75">
+                {% for category in spotlight_categories %}
+                    <a href="{% url 'home' %}?category={{ category.pk }}"
+                    data-category-modal="true"
+                            data-category-id="{{ category.pk }}"
+                    data-category-name="{{ category.name }}"
+                    data-category-count="{{ category.celeb_count }}"
+                    class="{% if selected_category == category.pk|stringformat:'s' %}is-active{% endif %}">
+                        {{ category.name }} · {{ category.celeb_count }}
+                    </a>
+                {% endfor %}
+            </div> {% endcomment %}
+            <div class="category-media-row"
+            >
+                {% for item in category_media_items %}
+                    {% if item.celeb %}
+                        <a href="{{ item.celeb.get_absolute_url }}" 
+                            class="w-100 category-media-card" 
+                            style="text-decoration:none;"
+                            data-category-modal="true"
+                            data-category-id="{{ item.category.pk }}"
+                            data-category-name="{{ item.category.name }}"
+                            data-category-count="{{ item.category.celeb_count }}">
+                            <img src="{{ item.celeb.image.url }}" 
+                                alt="{{ item.celeb.name }}"
+                            >
+                            <div class="category-media-label 
+                                flex 
+                                flex-column 
+                                justify-between 
+                                items-center" 
+                            >
+                                <span class="mb1-00">
+                                        {{  item.category.name  }}
+                                </span> 
+                                <span class="f1-50 b ba pa0-50 bw2 br0-50">
+                                    &nbsp;{{  item.category.celeb_count  }}&nbsp;
+                                </span>   
+                            </div>
+                        </a>
+                    {% else %}
+                        <div class="category-media-card">
+                            <div class="category-media-fallback"></div>
+                            <span class="category-media-label">{{ item.category.name }}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="category-modal-overlay" 
+            class="category-modal-overlay" aria-hidden="true"
+        >
+            <div class="category-modal" 
+                role="dialog" 
+                aria-modal="true" 
+                aria-labelledby="category-modal-title"
+            >
+                <h3 id="category-modal-title">Browse Category</h3>
+                <p id="category-modal-copy">Continue to browse this category.</p>
+                <div id="category-modal-gallery" class="category-modal-gallery" hidden
+                >
+                </div>
+                <div class="category-modal-actions">
+                    <a id="category-modal-confirm" class="category-modal-confirm" href="#">View Category</a>
+                    <button id="category-modal-cancel" type="button" class="category-modal-cancel">Close</button>
+                </div>
             </div>
         </div>
         {% endif %}
-
-        <button class="home-filter-toggle pa0-50" 
-            style="width:100%; 
-                background:#333; 
-                color:#fff; 
-                border:none; 
-                border-radius:4px; 
-                cursor:pointer; 
-                font-size:1rem; 
-                text-align:left; 
-                margin-bottom:8px;"
-            onclick="var f=document.getElementById('home-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';"
+        {# ── Skeleton overlay — shown while filter navigation is in flight ── #}
+        <article id="home-skeleton" 
+            style="display:none;" 
+            aria-hidden="true" 
+            class="grid gtc12 ggap2-0 bg-black-90 home-grid"
         >
-            Filters ▼
-        </button>
-        <div id="home-filters" class="home-filters w-100">
-            <form method="get" class="w-100">
+            {# header #}
+            <div class="gc1s12 tc bg-black-80 ph1-00 pt2-00 pb2-00">
+                <div class="skel" style="height:2.4rem; width:260px; margin:0 auto 1rem;"></div>
+                <div class="skel" style="height:1.1rem; width:360px; margin:0 auto;"></div>
+            </div>
+
+            {# aside #}
+            <div class="gc1s4 pa1-00 bg-black-80 sticky home-aside" 
+                style="top:80px; align-self:start;"
+            >
+                {# user card skeleton #}
+                <div style="padding:12px 0 14px; border-bottom:1px solid rgba(255,255,255,0.10); margin-bottom:4px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                        <div class="skel" style="width:46px; height:46px; border-radius:50%; flex-shrink:0;"></div>
+                        <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                            <div class="skel" style="height:0.9rem; width:60%;"></div>
+                            <div class="skel" style="height:0.7rem; width:80%;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <div class="skel" style="height:26px; width:72px; border-radius:4px;"></div>
+                        <div class="skel" style="height:26px; width:54px; border-radius:4px;"></div>
+                        <div class="skel" style="height:26px; width:60px; border-radius:4px;"></div>
+                    </div>
+                </div>
+                <div class="skel home-filter-toggle" style="height:2.4rem; width:100%; margin-bottom:8px; border-radius:4px;"></div>
                 <div class="home-filter-field">
-                    <label for="home-q">Search</label>
-                    <input id="home-q" type="text" name="q" value="{{ q }}" placeholder="Name or Street Name...">
+                    <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
                 <div class="home-filter-field">
-                    <label for="home-cat">Category</label>
-                    <select id="home-cat" name="category" onchange="this.form.submit()">
-                        <option value="">All Categories</option>
-                        {% for cat in categories %}
-                        <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="skel" style="height:0.65rem; width:66px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
                 <div class="home-filter-field">
-                    <label for="home-fam">Family</label>
-                    <select id="home-fam" name="family" onchange="this.form.submit()">
-                        <option value="">All Families</option>
-                        {% for cat in categories %}
-                        <optgroup label="{{ cat.name }}">
-                            {% for fam in cat.families.all %}
-                            <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
-                            {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                    </select>
+                    <div class="skel" style="height:0.65rem; width:48px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
                 <div class="home-filter-field">
-                    <label for="home-type">Type</label>
-                    <select id="home-type" name="type" onchange="this.form.submit()">
-                        <option value="">All Types</option>
-                        {% for cat in categories %}
-                        {% for fam in cat.families.all %}
-                        <optgroup label="{{ cat.name }} / {{ fam.name }}">
-                            {% for typ in fam.types.all %}
-                            <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
-                            {% endfor %}
-                        </optgroup>
-                        {% endfor %}
-                        {% endfor %}
-                    </select>
+                    <div class="skel" style="height:0.65rem; width:36px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
                 <div class="home-filter-field">
-                    <label for="home-country">Country</label>
-                    <select id="home-country" name="country" onchange="this.form.submit()">
-                        <option value="">All Countries</option>
-                        {% for country in countries %}
-                        <option value="{{ country.pk }}" {% if selected_country == country.pk|stringformat:"s" %}selected{% endif %}>{{ country }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="skel" style="height:0.65rem; width:58px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
-                <div class="home-filter-field">
-                    <label for="home-sort">Sort By</label>
-                    <select id="home-sort" name="sort" onchange="this.form.submit()">
-                        <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default (by Category)</option>
-                        <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name (A–Z)</option>
-                        <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name (Z–A)</option>
-                        <option value="followers" {% if selected_sort == 'followers' %}selected{% endif %}>Most Followers</option>
-                        <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Highest Rated</option>
-                    </select>
+                <div class="home-filter-field" style="border-bottom:none;">
+                    <div class="skel" style="height:0.65rem; width:52px; margin-bottom:6px;"></div>
+                    <div class="skel" style="height:36px; width:100%; border-radius:4px;"></div>
                 </div>
                 <div class="home-filter-actions">
-                    <button type="submit" class="b--none bg-red">Search</button>
-                    {% if q or selected_category or selected_family or selected_type or selected_country or selected_sort != 'default' %}
-                    <a href="{% url 'home' %}">Clear</a>
-                    {% endif %}
+                    <div class="skel" style="height:36px; flex:1; border-radius:4px;"></div>
                 </div>
-            </form>
-            <script>
-            (function(){
-                var t;
-                var inp = document.querySelector('input[name="q"]');
-                if(!inp) return;
-                // Restore focus and cursor position after page reload
-                if(inp.value.length > 0){
-                inp.focus();
-                var len = inp.value.length;
-                inp.setSelectionRange(len, len);
-                }
-                inp.addEventListener('input', function(){
-                clearTimeout(t);
-                var v = inp.value;
-                if(v.length >= 2 || v.length === 0){
-                    t = setTimeout(function(){ inp.form.submit(); }, 300);
-                }
-                });
-            })();
-            </script>
-        </div>
-    </aside>
-    <div class="gc5s8 home-main">
-        <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00">
-            {% comment %} <h3>All Celebs</h3> {% endcomment %}
-            <p>
-                {% if is_filtered %}
-                    <span class="b gold1 f3-00">
-                        {{ celebs_count }}
-                    </span> result{{ celebs_count|pluralize }} of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }}
-                {% else %}
-                    Browse our updated list of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }} and counting from <span class="b gold1 f3-00">{{ country_count }}</span> African countr{{ country_count|pluralize:"y,ies" }} {% endif %}.</p>
-        </div>
-        <div>
-        {% if selected_sort == 'default' %}
-        <div id="category-modal-image-sources" hidden>
-            {% for item in category_gallery_items %}
-            <div data-category-images="{{ item.category.pk }}">
-                {% for celeb in item.celebs %}
-            <span data-gallery-item="true" data-src="{% if celeb.image %}{{ celeb.image.url }}{% endif %}" data-alt="{{ celeb.name }}" data-celeb-url="{{ celeb.get_absolute_url }}"></span>
-                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
 
-        {% regroup visible_celebs by type.family.category as category_groups %}
-        {% for group in category_groups %}
-            <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
-                <h3>
-                    {{ group.grouper|default:"Uncategorised" }}
-                </h3>
-            </div>
-            <ul>
-                {% for celeb in group.list %}
+            {# main content #}
+            <section class="gc5s8 home-main">
+                {# stat bar #}
+                <div class="bg-black-80 pa1-00 mb1-00 tc">
+                    <div class="skel" style="height:1.1rem; width:270px; margin:0 auto;"></div>
+                </div>
+                {# category heading #}
+                <div class="mb1-00 bg-black-80 pa0-50">
+                    <div class="skel" style="height:1.4rem; width:150px;"></div>
+                </div>
+                {# celeb cards #}
+                <ul>
                     <li class="mb2-00">
-                        <div class="flex flex-column flex-row-l bg-black-80 white-90 ma1-00 pa0-50">
-                            <div>
-                                {% if celeb.image %}
-                                <img src="{{ celeb.image.url }}"
-                                    alt="{{ celeb.name }}"
-                                    class="w20-00-m h16-00 br0-25 cover"
-                                    style="vertical-align:middle"
-                                >
-                                {% endif %}
-                            </div>
-                            <div class="flex flex-column w-100 h-100 ml1-00-l">
-                                <div class="flex justify-between items-center w-100">
-                                    <h2 class="mb0-00">
-                                        {{ celeb.name }}
-                                    </h2>
-                                    {% if celeb.nationality %} 
-                                    <p title="{{ celeb.nationality.name }}"
-                                        class="f2-00 mb0-00"
-                                    >
-                                        <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.4rem;"></span>
-                                    </p>
-                                    {% endif %} 
+                        <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                            <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                            <div class="flex flex-column w-100" style="gap:10px;">
+                                <div class="flex justify-between items-center">
+                                    <div class="skel" style="height:1.4rem; width:55%;"></div>
+                                    <div class="skel" style="height:1.4rem; width:2rem;"></div>
                                 </div>
-                                <p class="">
-                                    || 
-                                    <span class="gold1">
-                                        {{ celeb.street_name }}
-                                    </span> 
-                                    || 
-                                </p>
-                                <p>
-                                    ({% if celeb.avg_rating %}
-                                    <span class="b" >
-                                        <span class="gold1">★</span> 
-                                        {{ celeb.avg_rating|floatformat:1 }}
-                                    </span>,
-                                    {% endif %}
-                                    <span class="b red">
-                                        {{ celeb.follower_count }}
-                                    </span> follower{{ celeb.follower_count|pluralize }} )
-                                </p>
-                                <div class="celeb-meta">
-                                    {% if celeb.date_of_birth %}
-                                    <span title="Date of Birth"
-                                    >
-                                        &#9679; {{ celeb.date_of_birth|date:"j M Y" }}
-                                    </span>
-                                    {% endif %}
-
-                                    {% if celeb.is_deceased %}
-                                        <span class="celeb-deceased" title="Date of Death">
-                                            &#10013; {{ celeb.date_of_death|date:"j M Y" }}
-                                        </span>
-                                        {% if celeb.age %}
-                                            <span class="celeb-age-muted">(aged {{ celeb.age }})</span>
-                                        {% endif %}
-                                    {% elif celeb.age %}
-                                        <span>Age : {{ celeb.age }}</span>
-                                    {% endif %}
-                                </div>
-                                <div class="flex flex-column justify-between">
-                                    {% if celeb.bio %}
-                                        <p class="mb1-00 f1-25 tracked-tight"
-                                        >
-                                            {{ celeb.bio|truncatewords:30 }}
-                                        </p>
-                                    {% endif %} 
-                                    <div>
-                                        <a href="{{ celeb.get_absolute_url }}" 
-                                            class="ba br0-25 pa0-25 view-details-link">
-                                            View Details
-                                        </a> 
-                                    </div>
-                                </div>
+                                <div class="skel" style="height:1rem; width:72%;"></div>
+                                <div class="skel" style="height:0.85rem; width:48%;"></div>
+                                <div class="skel" style="height:0.85rem; width:90%;"></div>
+                                <div class="skel" style="height:0.85rem; width:68%;"></div>
+                                <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
                             </div>
                         </div>
                     </li>
-                {% endfor %}
-            </ul>
-        {% empty %}
-            <p>No celebs found.</p>
-        {% endfor %}
-        {% else %}
-        {# Flat sorted list — no category grouping #}
-        <ul>
-            {% for celeb in visible_celebs %}
-                <li class="mb2-00">
-                    <div class="flex flex-column flex-row-l bg-black-80 white-90 pa1-00">
-                        <div>
-                            {% if celeb.image %}
-                            <img src="{{ celeb.image.url }}"
-                                alt="{{ celeb.name }}"
-                                class="w20-00-m h16-00 br0-25 cover"
-                                style="vertical-align:middle"
-                            >
-                            {% endif %}
-                        </div>
-                        <div class="flex flex-column w-100 h-100 ml1-00-l">
-                            <div class="flex justify-between items-center w-100">
-                                <h2 class="mb0-00">{{ celeb.name }}</h2>
-                                {% if celeb.nationality %}
-                                <p title="{{ celeb.nationality.name }}" class="f2-00 mb0-00">
-                                    <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.4rem;"></span>
-                                </p>
-                                {% endif %}
-                            </div>
-                            <p class="">|| <span class="gold1">{{ celeb.street_name }}</span> || ({% if celeb.avg_rating %}
-                                <span class="b"><span class="gold1">★</span> {{ celeb.avg_rating|floatformat:1 }}</span>,
-                                {% endif %}
-                            <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
-                            <p class="celeb-meta">
-                                {% if celeb.date_of_birth %}
-                                <span title="Date of Birth">&#9679; Born {{ celeb.date_of_birth|date:"j M Y" }}</span>
-                                {% endif %}
-                                {% if celeb.is_deceased %}
-                                &nbsp;&nbsp;<span class="celeb-deceased" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
-                                {% if celeb.age %}&nbsp;<span class="celeb-age-muted">(aged {{ celeb.age }})</span>{% endif %}
-                                {% elif celeb.age %}
-                                &nbsp;&nbsp;<span>Age {{ celeb.age }}</span>
-                                {% endif %}
-                            </p>
-                            <div class="flex flex-column justify-between">
-                                {% if celeb.bio %}
-                                    <p class="mb1-00 f1-25 tracked-tight">{{ celeb.bio|truncatewords:30 }}</p>
-                                {% endif %}
-                                <div>
-                                    <a href="{{ celeb.get_absolute_url }}" class="ba br0-25 pa0-25 view-details-link">View Details</a>
+                    <li class="mb2-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                            <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                            <div class="flex flex-column w-100" style="gap:10px;">
+                                <div class="flex justify-between items-center">
+                                    <div class="skel" style="height:1.4rem; width:43%;"></div>
+                                    <div class="skel" style="height:1.4rem; width:2rem;"></div>
                                 </div>
+                                <div class="skel" style="height:1rem; width:65%;"></div>
+                                <div class="skel" style="height:0.85rem; width:38%;"></div>
+                                <div class="skel" style="height:0.85rem; width:82%;"></div>
+                                <div class="skel" style="height:0.85rem; width:58%;"></div>
+                                <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
                             </div>
                         </div>
+                    </li>
+                    <li class="mb2-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                            <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                            <div class="flex flex-column w-100" style="gap:10px;">
+                                <div class="flex justify-between items-center">
+                                    <div class="skel" style="height:1.4rem; width:61%;"></div>
+                                    <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                                </div>
+                                <div class="skel" style="height:1rem; width:78%;"></div>
+                                <div class="skel" style="height:0.85rem; width:54%;"></div>
+                                <div class="skel" style="height:0.85rem; width:95%;"></div>
+                                <div class="skel" style="height:0.85rem; width:74%;"></div>
+                                <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb2-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                            <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                            <div class="flex flex-column w-100" style="gap:10px;">
+                                <div class="flex justify-between items-center">
+                                    <div class="skel" style="height:1.4rem; width:38%;"></div>
+                                    <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                                </div>
+                                <div class="skel" style="height:1rem; width:60%;"></div>
+                                <div class="skel" style="height:0.85rem; width:44%;"></div>
+                                <div class="skel" style="height:0.85rem; width:88%;"></div>
+                                <div class="skel" style="height:0.85rem; width:62%;"></div>
+                                <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="mb2-00">
+                        <div class="flex flex-column flex-row-l bg-black-80 pa1-00" style="gap:1rem;">
+                            <div class="skel w20-00-m h16-00 br0-25" style="flex-shrink:0; min-width:80px;"></div>
+                            <div class="flex flex-column w-100" style="gap:10px;">
+                                <div class="flex justify-between items-center">
+                                    <div class="skel" style="height:1.4rem; width:50%;"></div>
+                                    <div class="skel" style="height:1.4rem; width:2rem;"></div>
+                                </div>
+                                <div class="skel" style="height:1rem; width:70%;"></div>
+                                <div class="skel" style="height:0.85rem; width:42%;"></div>
+                                <div class="skel" style="height:0.85rem; width:86%;"></div>
+                                <div class="skel" style="height:0.85rem; width:64%;"></div>
+                                <div class="skel" style="height:2rem; width:100px; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+        </article>
+    </section>
+    
+    <script>
+        (function () {
+            var skel = document.getElementById('home-skeleton');
+            var form = document.querySelector('.home-filters form');
+            if (!skel || !form) return;
+            function showSkeleton() {
+                skel.style.display = '';
+                skel.removeAttribute('aria-hidden');
+                var content = document.getElementById('home-content');
+                if (content) content.style.display = 'none';
+            }
+            form.addEventListener('submit', showSkeleton);
+            // selects fire submit via their onchange inline handler;
+            // catch the form submit event which covers all of them
+        })();
+    </script>
+
+    <section id="home-content" class="grid gtc12 ggap2-0 bg-black-90 home-grid"
+    >
+        <header id="africa-celebrities" 
+            class="gc1s12 tc bg-black-80 white-90 pv2-00">
+            <h2 class="f2-75 mb2-00">Celebrities of <span class="f5-00">Africa</span></h2>
+            <p class="f2-50 i mb0-00">Discover and explore celebrated celebrities from across Africa.</p>
+        </header>
+
+        <aside class="gc1s3 
+            pa1-00 bg-black-80 
+            sticky home-aside" 
+            style="top:80px; 
+            align-self:start;"
+        >
+            {# ── User card ── #}
+            {% if user.is_authenticated %}
+            <div class="aside-user">
+                <div class="aside-user-row">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" 
+                            alt="{{ user.username }}" 
+                            class="w4-00 h4-00 br0-25">
+                    {% else %}
+                        <div class="aside-user-initials">
+                            {{ user.username|slice:":1" }}
+                        </div>
+                    {% endif %}
+                    <div style="overflow:hidden;">
+                        <div class="aside-user-name">{{ user.username }}</div>
+                        {% if user.email %}
+                        <div class="aside-user-email" title="{{ user.email }}">{{ user.email }}</div>
+                        {% endif %}
                     </div>
-                </li>
-            {% empty %}
-                <p>No celebs found.</p>
-            {% endfor %}
-        </ul>
-        {% endif %}
+                </div>
+                {% if user.profile.bio %}
+                    <p class="aside-user-bio"
+                    >
+                        {{ user.profile.bio|truncatewords:20 }}
+                    </p>
+                {% endif %}
+                <div class="aside-user-links">
+                    <a href="{% url 'profile' %}">&#128100; Profile</a>
+                    <a href="{% url 'profile_edit' %}">&#9998; Edit</a>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" 
+                            class="aside-user-logout bw0-25 br0-25" 
+                            style="background:none;
+                            border:all;
+                            padding:0.25rem;
+                            color:red;
+                            cursor:pointer;"
+                        >
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="aside-guest-prompt">
+                <p>Sign in to view celeb details, follow celebs, rate, like and comment.</p>
+                <div class="aside-user-links">
+                    <a href="{% url 'login' %}" class="b--none bg-red">Login</a>
+                    <a href="{% url 'register' %}">Register</a>
+                </div>
+            </div>
+            {% endif %}
 
-        {% if is_soft_gated %}
-        <div class="unlock-gate white-90">
-            <h3 class="mb0-50">
-                {{ locked_profiles_count }} more {{ locked_profiles_count|pluralize }} are locked
-            </h3>
-            <p class="mb0-75 unlock-gate-copy"
+            <button class="home-filter-toggle pa0-50" 
+                style="width:100%; 
+                    background:#333; 
+                    color:#fff; 
+                    border:none; 
+                    border-radius:4px; 
+                    cursor:pointer; 
+                    font-size:1rem; 
+                    text-align:left; 
+                    margin-bottom:8px;"
+                onclick="var f=document.getElementById('home-filters'); f.classList.toggle('open'); this.textContent=f.classList.contains('open')?'Filters ▲':'Filters ▼';"
             >
-                Create a free account to view the full directory, deeper rankings and profile engagement tools.
-            </p>
-            <a href="{% url 'register' %}" 
-                class="hero-cta-link hero-cta-primary js-track-click" data-track-event="directory_gate_register_click"
+                Filters ▼
+            </button>
+            <div id="home-filters" class="home-filters w-100">
+                <form method="get" class="w-100">
+                    <div class="home-filter-field">
+                        <label for="home-q">Search</label>
+                        <input id="home-q" type="text" name="q" value="{{ q }}" placeholder="Name or Street Name...">
+                    </div>
+                    <div class="home-filter-field">
+                        <label for="home-cat">Category</label>
+                        <select id="home-cat" name="category" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.pk }}" {% if selected_category == cat.pk|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="home-filter-field">
+                        <label for="home-fam">Family</label>
+                        <select id="home-fam" name="family" onchange="this.form.submit()">
+                            <option value="">All Families</option>
+                            {% for cat in categories %}
+                            <optgroup label="{{ cat.name }}">
+                                {% for fam in cat.families.all %}
+                                <option value="{{ fam.pk }}" {% if selected_family == fam.pk|stringformat:"s" %}selected{% endif %}>{{ fam.name }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="home-filter-field">
+                        <label for="home-type">Type</label>
+                        <select id="home-type" name="type" onchange="this.form.submit()">
+                            <option value="">All Types</option>
+                            {% for cat in categories %}
+                            {% for fam in cat.families.all %}
+                            <optgroup label="{{ cat.name }} / {{ fam.name }}">
+                                {% for typ in fam.types.all %}
+                                <option value="{{ typ.pk }}" {% if selected_type == typ.pk|stringformat:"s" %}selected{% endif %}>{{ typ.name }}</option>
+                                {% endfor %}
+                            </optgroup>
+                            {% endfor %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="home-filter-field">
+                        <label for="home-country">Country</label>
+                        <select id="home-country" name="country" onchange="this.form.submit()">
+                            <option value="">All Countries</option>
+                            {% for country in countries %}
+                            <option value="{{ country.pk }}" {% if selected_country == country.pk|stringformat:"s" %}selected{% endif %}>{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="home-filter-field">
+                        <label for="home-sort">Sort By</label>
+                        <select id="home-sort" name="sort" onchange="this.form.submit()">
+                            <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default (by Category)</option>
+                            <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Name (A–Z)</option>
+                            <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Name (Z–A)</option>
+                            <option value="followers" {% if selected_sort == 'followers' %}selected{% endif %}>Most Followers</option>
+                            <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+                        </select>
+                    </div>
+                    <div class="home-filter-actions">
+                        <button type="submit" class="b--none bg-red">Search</button>
+                        {% if q or selected_category or selected_family or selected_type or selected_country or selected_sort != 'default' %}
+                        <a href="{% url 'home' %}">Clear</a>
+                        {% endif %}
+                    </div>
+                </form>
+                <script>
+                (function(){
+                    var t;
+                    var inp = document.querySelector('input[name="q"]');
+                    if(!inp) return;
+                    // Restore focus and cursor position after page reload
+                    if(inp.value.length > 0){
+                    inp.focus();
+                    var len = inp.value.length;
+                    inp.setSelectionRange(len, len);
+                    }
+                    inp.addEventListener('input', function(){
+                    clearTimeout(t);
+                    var v = inp.value;
+                    if(v.length >= 2 || v.length === 0){
+                        t = setTimeout(function(){ inp.form.submit(); }, 300);
+                    }
+                    });
+                })();
+                </script>
+            </div>
+        </aside>
+
+        <main class="gc4s6 home-main">
+            <div class="f2-00 tc bg-black-80 white-90 pa1-00 mb1-00"
             >
-                Unlock Full Directory
-            </a>
-        </div>
-        {% endif %}
-       
-    </div>
-</div>
-</div>{# /home-content #}
-<script>
-(function () {
-    var tracked = document.querySelectorAll('.js-track-click');
-    if (!tracked.length) return;
+                {% comment %} <h3>All Celebs</h3> {% endcomment %}
+                <p>
+                    {% if is_filtered %}
+                        <span class="b gold1 f3-00">
+                            {{ celebs_count }}
+                        </span> result{{ celebs_count|pluralize }} of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }}
+                    {% else %}
+                        Browse our updated list of <span class="b gold1 f3-00">{{ total_celebs }}</span> celeb{{ total_celebs|pluralize }} and counting from <span class="b gold1 f3-00">{{ country_count }}</span> African countr{{ country_count|pluralize:"y,ies" }} {% endif %}.
+                </p>
+            </div>
+            <div>
+                {% if selected_sort == 'default' %}
+                    <div id="category-modal-image-sources" hidden>
+                        {% for item in category_gallery_items %}
+                        <div data-category-images="{{ item.category.pk }}">
+                            {% for celeb in item.celebs %}
+                        <span data-gallery-item="true" data-src="{% if celeb.image %}{{ celeb.image.url }}{% endif %}" data-alt="{{ celeb.name }}" data-celeb-url="{{ celeb.get_absolute_url }}"></span>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
 
-    function sendInternal(eventName) {
-        var payload = JSON.stringify({
-            event: eventName,
-            path: window.location.pathname,
-            meta: { ua: navigator.userAgent.slice(0, 120) }
-        });
-        if (navigator.sendBeacon) {
-            var blob = new Blob([payload], { type: 'application/json' });
-            navigator.sendBeacon('{% url "track_event" %}', blob);
-            return;
-        }
-        fetch('{% url "track_event" %}', {
-            method: 'POST',
-            body: payload,
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'same-origin',
-            keepalive: true
-        }).catch(function () {});
-    }
+                    {% regroup visible_celebs by type.family.category as category_groups %}
+                    {% for group in category_groups %}
+                        <div class="mb1-00 bg-black-80 red pa0-50 mh1-00 f1-75">
+                            <h3>
+                                {{ group.grouper|default:"Uncategorised" }}
+                            </h3>
+                        </div>
+                        <ul>
+                            {% for celeb in group.list %}
+                                <li class="mb2-00">
+                                    <div class="flex flex-column flex-row-l bg-black-80 white-90 ma1-00 pa0-50">
+                                        <div>
+                                            {% if celeb.image %}
+                                            <img src="{{ celeb.image.url }}"
+                                                alt="{{ celeb.name }}"
+                                                class="w20-00-m h16-00 br0-25 cover"
+                                                style="vertical-align:middle"
+                                            >
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex flex-column w-100 h-100 ml1-00-l">
+                                            <div class="flex justify-between items-center w-100">
+                                                <h2 class="mb0-00">
+                                                    {{ celeb.name }}
+                                                </h2>
+                                                {% if celeb.nationality %} 
+                                                <p title="{{ celeb.nationality.name }}"
+                                                    class="f2-00 mb0-00"
+                                                >
+                                                    <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.4rem;"></span>
+                                                </p>
+                                                {% endif %} 
+                                            </div>
+                                            <p class="">
+                                                || 
+                                                <span class="gold1">
+                                                    {{ celeb.street_name }}
+                                                </span> 
+                                                || 
+                                            </p>
+                                            <p>
+                                                ({% if celeb.avg_rating %}
+                                                <span class="b" >
+                                                    <span class="gold1">★</span> 
+                                                    {{ celeb.avg_rating|floatformat:1 }}
+                                                </span>,
+                                                {% endif %}
+                                                <span class="b red">
+                                                    {{ celeb.follower_count }}
+                                                </span> follower{{ celeb.follower_count|pluralize }} )
+                                            </p>
+                                            <div class="celeb-meta">
+                                                {% if celeb.date_of_birth %}
+                                                <span title="Date of Birth"
+                                                >
+                                                    &#9679; {{ celeb.date_of_birth|date:"j M Y" }}
+                                                </span>
+                                                {% endif %}
 
-    function sendTrack(eventName) {
-        if (typeof window.gtag === 'function') {
-            window.gtag('event', eventName, {
-                event_category: 'conversion',
-                event_label: 'homepage'
-            });
-        }
-        sendInternal(eventName);
-    }
+                                                {% if celeb.is_deceased %}
+                                                    <span class="celeb-deceased" title="Date of Death">
+                                                        &#10013; {{ celeb.date_of_death|date:"j M Y" }}
+                                                    </span>
+                                                    {% if celeb.age %}
+                                                        <span class="celeb-age-muted">(aged {{ celeb.age }})</span>
+                                                    {% endif %}
+                                                {% elif celeb.age %}
+                                                    <span>Age : {{ celeb.age }}</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex flex-column justify-between">
+                                                {% if celeb.bio %}
+                                                    <p class="mb1-00 f1-25 tracked-tight"
+                                                    >
+                                                        {{ celeb.bio|truncatewords:30 }}
+                                                    </p>
+                                                {% endif %} 
+                                                <div>
+                                                    <a href="{{ celeb.get_absolute_url }}" 
+                                                        class="ba br0-25 pa0-25 view-details-link">
+                                                        View Details
+                                                    </a> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% empty %}
+                        <p>No celebs found.</p>
+                    {% endfor %}
+                {% else %}
+                    {# Flat sorted list — no category grouping #}
+                    <ul>
+                        {% for celeb in visible_celebs %}
+                            <li class="mb2-00">
+                                <div class="flex flex-column flex-row-l bg-black-80 white-90 pa1-00">
+                                    <div>
+                                        {% if celeb.image %}
+                                        <img src="{{ celeb.image.url }}"
+                                            alt="{{ celeb.name }}"
+                                            class="w20-00-m h16-00 br0-25 cover"
+                                            style="vertical-align:middle"
+                                        >
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex flex-column w-100 h-100 ml1-00-l">
+                                        <div class="flex justify-between items-center w-100">
+                                            <h2 class="mb0-00">{{ celeb.name }}</h2>
+                                            {% if celeb.nationality %}
+                                            <p title="{{ celeb.nationality.name }}" class="f2-00 mb0-00">
+                                                <span class="fi fi-{{ celeb.nationality.code|lower }}" style="font-size:1.4rem;"></span>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        <p class="">|| <span class="gold1">{{ celeb.street_name }}</span> || ({% if celeb.avg_rating %}
+                                            <span class="b"><span class="gold1">★</span> {{ celeb.avg_rating|floatformat:1 }}</span>,
+                                            {% endif %}
+                                        <span class="b red">{{ celeb.follower_count }}</span> follower{{ celeb.follower_count|pluralize }} )</p>
+                                        <p class="celeb-meta">
+                                            {% if celeb.date_of_birth %}
+                                            <span title="Date of Birth">&#9679; Born {{ celeb.date_of_birth|date:"j M Y" }}</span>
+                                            {% endif %}
+                                            {% if celeb.is_deceased %}
+                                            &nbsp;&nbsp;<span class="celeb-deceased" title="Date of Death">&#10013; {{ celeb.date_of_death|date:"j M Y" }}</span>
+                                            {% if celeb.age %}&nbsp;<span class="celeb-age-muted">(aged {{ celeb.age }})</span>{% endif %}
+                                            {% elif celeb.age %}
+                                            &nbsp;&nbsp;<span>Age {{ celeb.age }}</span>
+                                            {% endif %}
+                                        </p>
+                                        <div class="flex flex-column justify-between">
+                                            {% if celeb.bio %}
+                                                <p class="mb1-00 f1-25 tracked-tight">{{ celeb.bio|truncatewords:30 }}</p>
+                                            {% endif %}
+                                            <div>
+                                                <a href="{{ celeb.get_absolute_url }}" class="ba br0-25 pa0-25 view-details-link">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% empty %}
+                            <p>No celebs found.</p>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
 
-    tracked.forEach(function (node) {
-        node.addEventListener('click', function () {
-            var eventName = node.getAttribute('data-track-event');
-            if (eventName) sendTrack(eventName);
-        });
-    });
-})();
-</script>
-<script>
-(function () {
-    var overlay = document.getElementById('category-modal-overlay');
-    var confirmLink = document.getElementById('category-modal-confirm');
-    var cancelBtn = document.getElementById('category-modal-cancel');
-    var title = document.getElementById('category-modal-title');
-    var copy = document.getElementById('category-modal-copy');
-    var gallery = document.getElementById('category-modal-gallery');
-    var imageSources = document.getElementById('category-modal-image-sources');
-    var links = document.querySelectorAll('[data-category-modal="true"]');
+                {% if is_soft_gated %}
+                <div class="unlock-gate white-90">
+                    <h3 class="mb0-50">
+                        {{ locked_profiles_count }} more {{ locked_profiles_count|pluralize }} are locked
+                    </h3>
+                    <p class="mb0-75 unlock-gate-copy"
+                    >
+                        Create a free account to view the full directory, deeper rankings and profile engagement tools.
+                    </p>
+                    <a href="{% url 'register' %}" 
+                        class="hero-cta-link hero-cta-primary js-track-click" data-track-event="directory_gate_register_click"
+                    >
+                        Unlock Full Directory
+                    </a>
+                </div>
+                {% endif %}
+        
+            </div>
+        
+        </main>
+        
+        <aside class="gc10s3 ba br0-25 b--white-90 pa1-00" 
+        >
+        </aside>
 
-    if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !gallery || !imageSources || !links.length) return;
+        <script>
+            (function () {
+                var tracked = document.querySelectorAll('.js-track-click');
+                if (!tracked.length) return;
 
-    function collectCategoryImages(activeLink, categoryName, categoryId) {
-        var images = [];
-        var seen = {};
+                function sendInternal(eventName) {
+                    var payload = JSON.stringify({
+                        event: eventName,
+                        path: window.location.pathname,
+                        meta: { ua: navigator.userAgent.slice(0, 120) }
+                    });
+                    if (navigator.sendBeacon) {
+                        var blob = new Blob([payload], { type: 'application/json' });
+                        navigator.sendBeacon('{% url "track_event" %}', blob);
+                        return;
+                    }
+                    fetch('{% url "track_event" %}', {
+                        method: 'POST',
+                        body: payload,
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        keepalive: true
+                    }).catch(function () {});
+                }
 
-        function addImage(node) {
-            if (!node) return;
-            var src = node.getAttribute('data-src') || node.getAttribute('src') || '';
-            var url = node.getAttribute('data-celeb-url') || '';
-            var alt = node.getAttribute('data-alt') || node.getAttribute('alt') || (categoryName + ' profile');
-            var key = (url || alt) + '|' + src;
-            if (seen[key]) return;
-            seen[key] = true;
-            images.push({
-                src: src,
-                alt: alt,
-                url: url
-            });
-        }
+                function sendTrack(eventName) {
+                    if (typeof window.gtag === 'function') {
+                        window.gtag('event', eventName, {
+                            event_category: 'conversion',
+                            event_label: 'homepage'
+                        });
+                    }
+                    sendInternal(eventName);
+                }
 
-        var sourceGroup = imageSources.querySelector('[data-category-images="' + categoryId + '"]');
-        if (sourceGroup) {
-            sourceGroup.querySelectorAll('[data-gallery-item="true"]').forEach(addImage);
-        }
+                tracked.forEach(function (node) {
+                    node.addEventListener('click', function () {
+                        var eventName = node.getAttribute('data-track-event');
+                        if (eventName) sendTrack(eventName);
+                    });
+                });
+            })();
+        </script>
 
-        // Fallback when source group is empty.
-        if (!images.length) {
-            addImage(activeLink.querySelector('img'));
-        }
+        <script>
+            (function () {
+                var overlay = document.getElementById('category-modal-overlay');
+                var confirmLink = document.getElementById('category-modal-confirm');
+                var cancelBtn = document.getElementById('category-modal-cancel');
+                var title = document.getElementById('category-modal-title');
+                var copy = document.getElementById('category-modal-copy');
+                var gallery = document.getElementById('category-modal-gallery');
+                var imageSources = document.getElementById('category-modal-image-sources');
+                var links = document.querySelectorAll('[data-category-modal="true"]');
 
-        return images;
-    }
+                if (!overlay || !confirmLink || !cancelBtn || !title || !copy || !gallery || !imageSources || !links.length) return;
 
-    function renderGallery(images) {
-        gallery.innerHTML = '';
-        if (!images.length) {
-            gallery.hidden = true;
-            return;
-        }
+                function collectCategoryImages(activeLink, categoryName, categoryId) {
+                    var images = [];
+                    var seen = {};
 
-        images.forEach(function (item) {
-            var link = document.createElement('a');
-            link.href = item.url || '#';
-            link.style.textDecoration = 'none';
+                    function addImage(node) {
+                        if (!node) return;
+                        var src = node.getAttribute('data-src') || node.getAttribute('src') || '';
+                        var url = node.getAttribute('data-celeb-url') || '';
+                        var alt = node.getAttribute('data-alt') || node.getAttribute('alt') || (categoryName + ' profile');
+                        var key = (url || alt) + '|' + src;
+                        if (seen[key]) return;
+                        seen[key] = true;
+                        images.push({
+                            src: src,
+                            alt: alt,
+                            url: url
+                        });
+                    }
 
-            if (item.src) {
-                var img = document.createElement('img');
-                img.src = item.src;
-                img.alt = item.alt;
-                link.appendChild(img);
-            } else {
-                var placeholder = document.createElement('div');
-                placeholder.className = 'category-modal-placeholder';
-                placeholder.textContent = item.alt || 'Profile';
-                link.appendChild(placeholder);
-            }
+                    var sourceGroup = imageSources.querySelector('[data-category-images="' + categoryId + '"]');
+                    if (sourceGroup) {
+                        sourceGroup.querySelectorAll('[data-gallery-item="true"]').forEach(addImage);
+                    }
 
-            gallery.appendChild(link);
-        });
-        gallery.hidden = false;
-    }
+                    // Fallback when source group is empty.
+                    if (!images.length) {
+                        addImage(activeLink.querySelector('img'));
+                    }
 
-    function closeModal() {
-        overlay.style.display = 'none';
-        overlay.setAttribute('aria-hidden', 'true');
-    }
+                    return images;
+                }
 
-    links.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            var name = link.getAttribute('data-category-name') || 'Category';
-            var count = link.getAttribute('data-category-count') || '0';
-            var categoryId = link.getAttribute('data-category-id') || '';
-            var categoryUrl = new URL(window.location.href);
-            if (categoryId) {
-                categoryUrl.searchParams.set('category', categoryId);
-            }
-            title.textContent = name;
-            copy.textContent = count + ' profiles found. Open this category view?';
-            confirmLink.textContent = 'View ' + name;
-            renderGallery(
-                collectCategoryImages(link, name, categoryId));
-                confirmLink.setAttribute('href', categoryUrl.pathname + '?' + categoryUrl.searchParams.toString() + '#africa-celebrities');
-            overlay.style.display = 'flex';
-            overlay.setAttribute('aria-hidden', 'false');
-        });
-    });
+                function renderGallery(images) {
+                    gallery.innerHTML = '';
+                    if (!images.length) {
+                        gallery.hidden = true;
+                        return;
+                    }
 
-    cancelBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', function (event) {
-        if (event.target === overlay) closeModal();
-    });
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') closeModal();
-    });
-})();
-</script>
-<script>
-(function () {
-    var root = document.getElementById('celeb-carousel');
-    if (!root) return;
+                    images.forEach(function (item) {
+                        var link = document.createElement('a');
+                        link.href = item.url || '#';
+                        link.style.textDecoration = 'none';
 
-    var track = root.querySelector('[data-carousel-track]');
-    var prevBtn = root.querySelector('[data-carousel-prev]');
-    var nextBtn = root.querySelector('[data-carousel-next]');
-    var dotsWrap = root.querySelector('[data-carousel-dots]');
-    if (!track || !prevBtn || !nextBtn) return;
+                        if (item.src) {
+                            var img = document.createElement('img');
+                            img.src = item.src;
+                            img.alt = item.alt;
+                            link.appendChild(img);
+                        } else {
+                            var placeholder = document.createElement('div');
+                            placeholder.className = 'category-modal-placeholder';
+                            placeholder.textContent = item.alt || 'Profile';
+                            link.appendChild(placeholder);
+                        }
 
-    var slides = Array.prototype.slice.call(track.children);
-    if (!slides.length) return;
+                        gallery.appendChild(link);
+                    });
+                    gallery.hidden = false;
+                }
 
-    var index = 0;
-    var pageCount = 1;
-    var autoplayTimer = null;
+                function closeModal() {
+                    overlay.style.display = 'none';
+                    overlay.setAttribute('aria-hidden', 'true');
+                }
 
-    function getVisibleCount() {
-        if (window.innerWidth <= 520) return 1;
-        if (window.innerWidth <= 767) return 2;
-        if (window.innerWidth <= 1024) return 3;
-        return 4;
-    }
+                links.forEach(function (link) {
+                    link.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        var name = link.getAttribute('data-category-name') || 'Category';
+                        var count = link.getAttribute('data-category-count') || '0';
+                        var categoryId = link.getAttribute('data-category-id') || '';
+                        var categoryUrl = new URL(window.location.href);
+                        if (categoryId) {
+                            categoryUrl.searchParams.set('category', categoryId);
+                        }
+                        title.textContent = name;
+                        copy.textContent = count + ' profiles found. Open this category view?';
+                        confirmLink.textContent = 'View ' + name;
+                        renderGallery(
+                            collectCategoryImages(link, name, categoryId));
+                            confirmLink.setAttribute('href', categoryUrl.pathname + '?' + categoryUrl.searchParams.toString() + '#africa-celebrities');
+                        overlay.style.display = 'flex';
+                        overlay.setAttribute('aria-hidden', 'false');
+                    });
+                });
 
-    function getGap() {
-        var styles = window.getComputedStyle(track);
-        var gap = parseFloat(styles.columnGap || styles.gap || '10');
-        return Number.isFinite(gap) ? gap : 10;
-    }
+                cancelBtn.addEventListener('click', closeModal);
+                overlay.addEventListener('click', function (event) {
+                    if (event.target === overlay) closeModal();
+                });
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') closeModal();
+                });
+            })();
+        </script>
+    
+        <script>
+            (function () {
+                var root = document.getElementById('celeb-carousel');
+                if (!root) return;
 
-    function maxIndex() {
-        return Math.max(0, slides.length - getVisibleCount());
-    }
+                var track = root.querySelector('[data-carousel-track]');
+                var prevBtn = root.querySelector('[data-carousel-prev]');
+                var nextBtn = root.querySelector('[data-carousel-next]');
+                var dotsWrap = root.querySelector('[data-carousel-dots]');
+                if (!track || !prevBtn || !nextBtn) return;
 
-    function renderDots(activeIndex) {
-        if (!dotsWrap) return;
-        dotsWrap.innerHTML = '';
-        var visible = getVisibleCount();
-        pageCount = Math.max(1, slides.length - visible + 1);
+                var slides = Array.prototype.slice.call(track.children);
+                if (!slides.length) return;
 
-        for (var i = 0; i < pageCount; i++) {
-            var dot = document.createElement('button');
-            dot.type = 'button';
-            dot.className = 'celeb-carousel-dot' + (i === activeIndex ? ' is-active' : '');
-            dot.setAttribute('aria-label', 'Go to carousel position ' + (i + 1));
-            (function (target) {
-                dot.addEventListener('click', function () {
-                    index = target;
+                var index = 0;
+                var pageCount = 1;
+                var autoplayTimer = null;
+
+                function getVisibleCount() {
+                    if (window.innerWidth <= 520) return 1;
+                    if (window.innerWidth <= 767) return 2;
+                    if (window.innerWidth <= 1024) return 3;
+                    return 4;
+                }
+
+                function getGap() {
+                    var styles = window.getComputedStyle(track);
+                    var gap = parseFloat(styles.columnGap || styles.gap || '10');
+                    return Number.isFinite(gap) ? gap : 10;
+                }
+
+                function maxIndex() {
+                    return Math.max(0, slides.length - getVisibleCount());
+                }
+
+                function renderDots(activeIndex) {
+                    if (!dotsWrap) return;
+                    dotsWrap.innerHTML = '';
+                    var visible = getVisibleCount();
+                    pageCount = Math.max(1, slides.length - visible + 1);
+
+                    for (var i = 0; i < pageCount; i++) {
+                        var dot = document.createElement('button');
+                        dot.type = 'button';
+                        dot.className = 'celeb-carousel-dot' + (i === activeIndex ? ' is-active' : '');
+                        dot.setAttribute('aria-label', 'Go to carousel position ' + (i + 1));
+                        (function (target) {
+                            dot.addEventListener('click', function () {
+                                index = target;
+                                update();
+                                resetAutoplay();
+                            });
+                        })(i);
+                        dotsWrap.appendChild(dot);
+                    }
+                }
+
+                function update() {
+                    index = Math.max(0, Math.min(index, maxIndex()));
+                    var slideWidth = slides[0].getBoundingClientRect().width;
+                    var x = index * (slideWidth + getGap());
+                    track.style.transform = 'translateX(' + (-x) + 'px)';
+                    renderDots(index);
+                }
+
+                function next() {
+                    if (index >= maxIndex()) {
+                        index = 0;
+                    } else {
+                        index += 1;
+                    }
                     update();
+                }
+
+                function prev() {
+                    if (index <= 0) {
+                        index = maxIndex();
+                    } else {
+                        index -= 1;
+                    }
+                    update();
+                }
+
+                function stopAutoplay() {
+                    if (autoplayTimer) {
+                        clearInterval(autoplayTimer);
+                        autoplayTimer = null;
+                    }
+                }
+
+                function startAutoplay() {
+                    stopAutoplay();
+                    autoplayTimer = setInterval(next, 4500);
+                }
+
+                function resetAutoplay() {
+                    startAutoplay();
+                }
+
+                prevBtn.addEventListener('click', function () {
+                    prev();
                     resetAutoplay();
                 });
-            })(i);
-            dotsWrap.appendChild(dot);
-        }
-    }
+                nextBtn.addEventListener('click', function () {
+                    next();
+                    resetAutoplay();
+                });
 
-    function update() {
-        index = Math.max(0, Math.min(index, maxIndex()));
-        var slideWidth = slides[0].getBoundingClientRect().width;
-        var x = index * (slideWidth + getGap());
-        track.style.transform = 'translateX(' + (-x) + 'px)';
-        renderDots(index);
-    }
+                root.addEventListener('mouseenter', stopAutoplay);
+                root.addEventListener('mouseleave', startAutoplay);
+                window.addEventListener('resize', update);
 
-    function next() {
-        if (index >= maxIndex()) {
-            index = 0;
-        } else {
-            index += 1;
-        }
-        update();
-    }
-
-    function prev() {
-        if (index <= 0) {
-            index = maxIndex();
-        } else {
-            index -= 1;
-        }
-        update();
-    }
-
-    function stopAutoplay() {
-        if (autoplayTimer) {
-            clearInterval(autoplayTimer);
-            autoplayTimer = null;
-        }
-    }
-
-    function startAutoplay() {
-        stopAutoplay();
-        autoplayTimer = setInterval(next, 4500);
-    }
-
-    function resetAutoplay() {
-        startAutoplay();
-    }
-
-    prevBtn.addEventListener('click', function () {
-        prev();
-        resetAutoplay();
-    });
-    nextBtn.addEventListener('click', function () {
-        next();
-        resetAutoplay();
-    });
-
-    root.addEventListener('mouseenter', stopAutoplay);
-    root.addEventListener('mouseleave', startAutoplay);
-    window.addEventListener('resize', update);
-
-    update();
-    startAutoplay();
-})();
-</script>
+                update();
+                startAutoplay();
+            })();
+        </script>
+    </section>
 {% endblock %}

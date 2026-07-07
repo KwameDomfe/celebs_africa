@@ -121,7 +121,9 @@
         {% block structured_data %}{% endblock %}
 </head>
 <body class="vh-100 flex flex-column justify-between">
-    <header class="bg-black text-white db w-100 fixed top-0 left-0 z-999">
+    <header id="mainHeader" 
+        class="bg-black text-white db w-100 fixed top-0 left-0 z-999"
+    >
         <nav class="flex justify-between items-center 
             container container90 text-white pv1-00 h-100">
             <div class="flex items-center justify-center">
@@ -303,13 +305,18 @@
                 style="font-size:1.1rem;">☀️ Toggle Theme</button>
         </div>
     </div>
-    <main class="flex-auto w-100 bg-black" 
+
+    <main id="pageContent" class="flex-auto w-100 bg-black" 
         style="height:calc(100vh - 128px); 
             margin-top:64px; 
             margin-bottom:64px; 
             overflow-y:auto;
-            overflow-x:hidden;">
-        <div class="container container90 bg-black-90" style="overflow:visible; min-height:100%;">
+            overflow-x:hidden;"
+    >
+        <div id="pageContainer" 
+            class="container container90 bg-black-90" 
+            style="overflow:visible; min-height:100%;"
+        >
             {% if messages %}
             <div style="margin-bottom:16px;">
                 {% for message in messages %}
@@ -321,6 +328,7 @@
                 {% endfor %}
             </div>
             {% endif %}
+
             {% block content %}
             {% endblock %}
         </div>
