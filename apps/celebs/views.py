@@ -80,14 +80,9 @@ def _person_schema(celeb, page_url, image_url, avg_rating, review_count, follow_
 		]
 	if celeb.bio:
 		schema['description'] = celeb.bio[:500]
-	if avg_rating is not None and review_count > 0:
-		schema['aggregateRating'] = {
-			'@type': 'AggregateRating',
-			'ratingValue': round(float(avg_rating), 2),
-			'ratingCount': review_count,
-			'bestRating': 5,
-			'worstRating': 1,
-		}
+	# Do not attach aggregateRating to Person.
+	# Google review snippets support aggregateRating only for specific item types
+	# (for example Product, LocalBusiness), and flags Person as invalid.
 	if follow_count > 0:
 		schema['interactionStatistic'] = [{
 			'@type': 'InteractionCounter',
