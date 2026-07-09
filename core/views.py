@@ -1,4 +1,5 @@
 from apps.celebs.models import Celeb, Category, Country
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -188,7 +189,7 @@ def top_celebs(request):
     if type_id:
         celebs = celebs.filter(type_id=type_id)
     if q:
-        celebs = celebs.filter(name__icontains=q) | celebs.filter(street_name__icontains=q)
+        celebs = celebs.filter(Q(name__icontains=q) | Q(street_name__icontains=q))
     return render(request, 'top_celebs.html', {
         'celebs': celebs,
         'categories': categories,
@@ -200,7 +201,6 @@ def top_celebs(request):
 
 
 def robots_txt(request):
-    sitemap_url = request.build_absolute_uri(reverse('sitemap_xml'))
     site_base = getattr(settings, 'SITE_URL', 'https://celebsafrica.com').rstrip('/')
     sitemap_url = f"{site_base}{reverse('sitemap_xml')}"
     lines = [
