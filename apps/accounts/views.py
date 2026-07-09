@@ -75,7 +75,10 @@ class CustomLoginView(auth_views.LoginView):
 
 
 def account_home(request):
-    return render(request, 'accounts/account_home.html')
+    # Keep /accounts/ useful and deterministic for crawlers.
+    if request.user.is_authenticated:
+        return redirect('profile')
+    return redirect('login')
 
 
 def register(request):

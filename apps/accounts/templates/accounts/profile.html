@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Profile | Celebs Africa{% endblock %}
+{% block meta_robots %}noindex,follow{% endblock %}
 {% block content %}
 <div class="flex flex-column white-90 pa1-00 h-100">
     <h1>{{ user.get_full_name|default:user.username }}</h1>
