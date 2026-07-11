@@ -8,9 +8,9 @@ from .views import home, robots_txt, top_celebs, sitemap_xml
 handler404 = 'core.views.custom_404'
 urlpatterns = [
     path("", home, name="home"),
-    path('robots.txt', robots_txt, name='robots_txt'),
+    path('robots.txt/', robots_txt, name='robots_txt'),
     path('top-celebs/', top_celebs, name='top_celebs'),
-    path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
+    path('sitemap.xml/', sitemap_xml, name='sitemap_xml'),
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('celebs/', include('apps.celebs.urls')),
