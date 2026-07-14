@@ -34,7 +34,9 @@ ALLOWED_HOSTS = (
     'localhost',
     'celebs-africa-o3zfi.ondigitalocean.app',
     'celebsafrica.com',
-    'www.celebsafrica.com'
+    'test.celebsafrica.com',
+    'www.celebsafrica.com',
+    '142.93.103.138'
 )
 # Static files (CSS, JavaScript, Images)
 # Redirect to accounts home after login

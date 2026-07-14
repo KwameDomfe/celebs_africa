@@ -136,12 +136,10 @@ def celebs_home(request):
 		),
 	})
 
-@login_required
 def celeb_detail_by_pk(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
 	return redirect(celeb.get_absolute_url(), permanent=True)
 
-@login_required
 def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	qs = Celeb.objects.select_related('type__family__category')
 	celeb = get_object_or_404(qs, slug=slug)

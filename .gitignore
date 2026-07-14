@@ -9,5 +9,7 @@ staticfiles/
 .vscode/
 .idea/
 *.txt
-
+venv/
+.env.save
+systemctl
 
