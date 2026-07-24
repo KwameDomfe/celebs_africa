@@ -13,3 +13,4 @@ venv/
 .env.save
 systemctl
 
+db.sqlite3
