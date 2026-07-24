@@ -277,7 +277,8 @@
                     >
                         {{ celeb.name }}
                     </h1>
-                    <p style="margin:4px 0; color:gray;">
+                    <p class="gray"
+                    >
                         {{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
                     <p style="margin:4px 0;">
                         <strong>Street Name:</strong> {{ celeb.street_name }}
@@ -332,237 +333,82 @@
                     
                 </div>
             </div>
+            <div id="reviews" class="mv1-00"
+            >   
+                <p class="mv1-00 tc">
+                    {% if avg_rating %}
+                        <span class="gold1 f1-25"
+                        >
+                            &#9733; {{ avg_rating|floatformat:1 }}
+                        </span>
+                        <small style="color:gray;"
+                        >
+                            / 5 &nbsp;({{ review_count }} review{{ review_count|pluralize }})
+                        </small>
+                    {% else %}
+                        <em style="color:gray;">No reviews yet</em>
+                    {% endif %}
+                </p>
 
-            <div class="">
-                {% if celeb.bio %}
-                    <div style="margin-bottom:24px;">
-                        <h3 style="margin-bottom:8px;">Bio</h3>
-                        <p class="f1-25 tracked lh-copy tj">{{ celeb.bio }}</p>
-                    </div>
-                {% endif %}
-
-                {% if celeb.awards %}
-                <div style="margin-bottom:24px;">
-                    <h3 style="margin-bottom:8px;">Career &amp; Achievements</h3>
-                    <p style="margin:4px 0; white-space:pre-line;">{{ celeb.awards }}</p>
-                </div>
-                {% endif %}
-
-                {% with links=celeb.social_links.all %}
-                {% if celeb.website or celeb.instagram or celeb.twitter or celeb.facebook or celeb.youtube or links %}
-                <div style="margin-bottom:24px;">
-                    <h3 style="margin-bottom:8px;">Online Presence</h3>
-                    <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-                        {# ---- new flexible links ---- #}
-                        {% for link in links %}
-                        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:{{ link.get_color }}; text-decoration:none;">
-                            {{ link.get_icon }} {{ link.get_platform_display }}
-                        </a>
-                        {% endfor %}
-                        {# ---- legacy fields (shown only if no new link for that platform exists) ---- #}
-                        {% if celeb.website and not links %}
-                        <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-.918 0-1.846-.15-2.75-.45C8.124 16.548 7 14.38 7 12s1.124-4.548 2.25-7.55A9.956 9.956 0 0112 4c.956 0 1.887.133 2.75.45C15.876 7.452 17 9.62 17 12s-1.124 4.548-2.25 7.55A9.956 9.956 0 0112 20zm-7.95-6H2.05a9.956 9.956 0 000-4h2c-.033.66-.05 1.325-.05 2s.017 1.34.05 2zm1.544 2H3.17a9.978 9.978 0 005.38 3.95C7.673 18.36 6.946 17.11 6.3 16 6.1 15.68 5.9 15.35 5.72 15zm12.56 0c-.18.35-.38.68-.58 1-.646 1.11-1.373 2.36-2.25 3.95A9.978 9.978 0 0020.83 16h-2.55zM19.95 14H22a9.956 9.956 0 000-4h-2.05c.033.66.05 1.325.05 2s-.017 1.34-.05 2zm-.78-6h2.46a9.978 9.978 0 00-5.38-3.95C17.027 5.64 17.754 6.89 18.4 8c.2.32.4.65.58 1H19.17zM5.72 9c.18-.35.38-.68.58-1C6.946 6.89 7.673 5.64 8.55 4.05A9.978 9.978 0 003.17 8H5.72z"/></svg>
-                            Website
-                        </a>
-                        {% endif %}
-                        {% if celeb.instagram and not links %}
-                        <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-                            @{{ celeb.instagram }}
-                        </a>
-                        {% endif %}
-                        {% if celeb.twitter and not links %}
-                        <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#aaa; text-decoration:none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.26 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            @{{ celeb.twitter }}
-                        </a>
-                        {% endif %}
-                        {% if celeb.facebook and not links %}
-                        <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-                            Facebook
-                        </a>
-                        {% endif %}
-                        {% if celeb.youtube and not links %}
-                        <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
-                            style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                            YouTube
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %}
-                {% endwith %}
-
-                {% if celeb.featured_video_embed_url %}
-                <div style="margin-bottom:24px;" id="featured-video">
-                    <h3 style="margin-bottom:8px;">Featured Video</h3>
-                    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:640px; border-radius:8px;">
-                        <iframe
-                            src="{{ celeb.featured_video_embed_url }}"
-                            style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; border-radius:8px;"
-                            allowfullscreen
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="{{ celeb.name }} featured video">
-                        </iframe>
-                    </div>
-                </div>
-                {% endif %}
-
-                {% with photos=celeb.photos.all %}
-                {% if photos or can_manage %}
-                <div style="margin-bottom:24px;" id="gallery">
-                    <h3 style="margin-bottom:12px;">Gallery</h3>
-                    {% if photos %}
-                    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
-                        {% for photo in photos %}
-                        <div style="position:relative;">
-                            <a href="{{ photo.image.url }}"
-                                data-gallery-item
-                                data-src="{{ photo.image.url }}"
-                                data-caption="{{ photo.caption|default:celeb.name }}"
-                                onclick="openImgModal(this); return false;"
-                                style="cursor:pointer; display:block;">
-                                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
-                                    style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;">
-                            </a>
-                            {% if photo.caption %}
-                            <p style="font-size:0.75rem; color:#aaa; margin:4px 0 0 0; text-align:center;">{{ photo.caption }}</p>
-                            {% endif %}
-                            {% if can_manage %}
-                            <form method="post" action="{% url 'celeb_photo_delete' photo.pk %}"
-                                onsubmit="return confirm('Delete this photo?')"
-                                style="position:absolute; top:4px; right:4px;">
-                                {% csrf_token %}
+                <div class="share-wrap w-100"
+                >
+                    
+                    {% if user.is_authenticated %}
+                        <div class="flex justify-around items-center gap-1-00 w-100">
+                            <form method="post" 
+                                action="{% url 'celeb_follow' celeb.pk %}"
+                            >{% csrf_token %}
                                 <button type="submit"
-                                    style="background:rgba(0,0,0,0.65); border:none; color:#f55; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:0.85rem; line-height:1; padding:0;">
-                                    ×
+                                    class="ba br0-25 pa0-25 mb1-00"
+                                >
+                                    {% if user_following %}
+                                        Unfollow
+                                    {% else %}
+                                        Follow
+                                    {% endif %} ({{ follow_count }})
                                 </button>
                             </form>
-                            {% endif %}
+                        
+                            <form method="post" 
+                                action="{% url 'celeb_like' celeb.pk %}"
+                            >{% csrf_token %}
+                                <button type="submit"
+                                    class="ba br0-25 pa0-25 mb1-00"
+                                >
+                                    {% if user_liked %}
+                                        Unlike
+                                    {% else %}
+                                        Like
+                                    {% endif %} ({{ like_count }})
+                                </button>
+                            </form>
                         </div>
-                        {% endfor %}
-                    </div>
+                        
                     {% else %}
-                    <p style="color:#666;">No photos yet.</p>
-                    {% endif %}
-                    {% if can_manage %}
-                    <form method="post" action="{% url 'celeb_photo_upload' celeb.pk %}" enctype="multipart/form-data"
-                        style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
-                        {% csrf_token %}
-                        <div>
-                            <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Add Photos</label>
-                            <input type="file" name="photos" multiple accept="image/*">
-                        </div>
-                        <div>
-                            <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Caption (optional)</label>
-                            <input type="text" name="caption" placeholder="Caption for all uploaded photos" class="cd-caption-input"
-                                style="padding:6px 10px; background:#1a1a1a; border:1px solid #444; border-radius:4px; color:#f0f0f0;">
-                        </div>
-                        <button type="submit" class="ba br0-25 pa0-25">Upload</button>
-                    </form>
-                    {% endif %}
-                </div>
-                {% endif %}
-                {% endwith %}
-
-                <!-- Review Modal -->
-                {% if user.is_authenticated %}
-                <div class="review-modal-overlay" id="reviewModal">
-                    <div class="review-modal">
-                        <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
-                        <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
-                        <form method="post" action="{% url 'celeb_review' celeb.pk %}">
-                            {% csrf_token %}
-                            <div class="star-rating">
-                                {% for i in "54321" %}
-                                <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
-                                    {% if user_review.rating == i|add:0 %}checked{% endif %} required>
-                                <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
-                                {% endfor %}
+                        <div class="flex justify-around items-center gap-1-00 w-100"
+                        >
+                            <div class="mv1-00">
+                                <span class="gold1 f1-25">
+                                    {{ follow_count }}
+                                </span> Follower{{ follow_count|pluralize }}
                             </div>
-                            <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
-                            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                                <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+                            <div class="mv1-00">
+                                <span class="gold1 f1-25">
+                                    {{ like_count }}
+                                </span> Like{{ like_count|pluralize }}
                             </div>
-                        </form>
-                        {% if user_review %}
-                        <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
-                            {% csrf_token %}
-                            <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
-                        </form>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %}
-
-                <div id="reviews" style="margin-top:24px;">
-                    
-                    <p style="margin:8px 0;">
-                        {% if avg_rating %}
-                            <span style="color:#f5a623; font-size:1.2rem;".
-                            >
-                                &#9733; {{ avg_rating|floatformat:1 }}
-                            </span>
-                            <small style="color:gray;"
-                            >
-                                / 5 &nbsp;({{ review_count }} review{{ review_count|pluralize }})
-                            </small>
-                        {% else %}
-                            <em style="color:gray;">No reviews yet</em>
-                        {% endif %}
-                    </p>
-                    <div class="action-bar">
-                        {% if user.is_authenticated %}
-                        <form method="post" 
-                            action="{% url 'celeb_like' celeb.pk %}"
-                        >{% csrf_token %}
-                            <button type="submit"
-                                class="ba br0-25 pa0-25"
-                            >
-                                {% if user_liked %}
-                                    Unlike
-                                {% else %}
-                                    Like
-                                {% endif %} ({{ like_count }})
-                            </button>
-                        </form>
-                        <form method="post" 
-                            action="{% url 'celeb_follow' celeb.pk %}"
-                        >{% csrf_token %}
-                            <button type="submit"
-                                class="ba br0-25 pa0-25"
-                            >
-                                {% if user_following %}
-                                    Unfollow
-                                {% else %}
-                                    Follow
-                                {% endif %} ({{ follow_count }})
-                            </button>
-                        </form>
-                        {% else %}
-                        <span>
-                            {{ like_count }} Like{{ like_count|pluralize }}
-                        </span>
-                        <span>
-                            {{ follow_count }} Follower{{ follow_count|pluralize }}
-                        </span>
-                        {% endif %}
-                        <div class="share-wrap">
+                        </div>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        <div class="flex mv1-00">
                             <button onclick="toggleShareMenu(this)" 
                                 class="ba br0-25 pa0-25"
                             >
                                 Share &#9660;
                             </button>
-                            <div class="share-menu"
+                            
+                            <div class="share-menu flex flex-colum justify-center items-center" 
+                                style="min-width:256px;"
                             >
                                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" 
                                     target="_blank" 
@@ -659,142 +505,372 @@
                                     Copy link
                                 </button>
                             </div>
-                        </div>
-                        {% if can_manage %}
-                        <a href="{% url 'celeb_update' celeb.slug %}"
-                            class="blue0 ba br0-25 pa0-25"
-                        >Edit</a>
-                        <a href="{% url 'celeb_delete' celeb.pk %}"
-                            class="red ba br0-25 pa0-25"
-                        >Delete</a>
-                        {% endif %}
+                        
+                        </div> 
+                    {% endif %}
+                </div>
+                
+                {% if not user.is_authenticated %}
+                    <div>
+                        <p class="mv1-00 tracked lh-copy">
+                            <a href="{% url 'login' %}"
+                                class="bg-red white-90 br0-25 pa0-25 b"
+                            >Login</a> to
+                            <span class="gold1">Rate</span>, 
+                            <span class="gold1">Review</span>, 
+                            <span class="gold1">Follow</span>,
+                            <span class="gold1">Like</span> and 
+                            <span class="gold1">Share</span> {{ celeb.name }}'s page.
+                        </p>
                     </div>
-                    
-                    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
-                        <h3 style="margin:0;">Reviews ({{ review_count }})</h3>
-                        {% if user.is_authenticated %}
-                        <button id="openReviewModal" style="padding:6px 16px;">
-                            {% if user_review %}Update your review{% else %}Write a review{% endif %}
-                        </button>
-                        {% else %}
-                        <a href="{% url 'login' %}">Log in</a> to leave a review.
-                        {% endif %}
-                    </div>
-                    <ul style="list-style:none; padding:0; max-width:600px;">
-                    {% for review in reviews %}
-                        <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
-                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                <strong>{{ review.user.username }}</strong>
-                                <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
-                                <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
+                {% endif %}
+
+                <div class="">
+                    {% if celeb.bio %}
+                        <div style="margin-bottom:24px;">
+                            <div class="flex justify-between items-center">
+                                <h3 style="margin-bottom:8px;">Bio</h3>
+                                <div class="action-bar"
+                                >
+                                    {% if can_manage %}
+                                        <a href="{% url 'celeb_update' celeb.slug %}"
+                                            class="blue0 ba br0-25 pa0-25"
+                                        >
+                                            Edit
+                                        </a>
+                                        <a href="{% url 'celeb_delete' celeb.pk %}"
+                                            class="red ba br0-25 pa0-25"
+                                        >
+                                            Delete
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
-                            {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
-                        </li>
-                    {% empty %}
-                        <li style="color:gray;">No reviews yet. Be the first!</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-
-                <div style="margin-top:24px;">
-                    <h3>Followers ({{ follow_count }})</h3>
-                    {% if followers %}
-                    <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
-                        {% for follow in followers %}
-                        <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
-                            {% if follow.user.profile.avatar %}
-                            <img src="{{ follow.user.profile.avatar.url }}" alt="{{ follow.user.username|default:'Follower avatar' }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+                            {% if user.is_authenticated %}
+                            <p class="tracked lh-copy tj">{{ celeb.bio }}</p>
+                            {% else %}
+                            <p class="tracked lh-copy tj">
+                                {{ celeb.bio|truncatewords:30 }} 
+                                
+                            </p>
+                            <p>
+                                <a href="{% url 'login' %}" class="gold1">Login</a> to discover more about {{ celeb.name }}.
+                            </p>
                             {% endif %}
-                            {{ follow.user.username }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p style="color:gray; font-size:smaller;">No followers yet.</p>
+                        </div>
                     {% endif %}
-                </div>
 
-                <div id="comments" style="margin-top:24px;">
-                    <h3>Comments ({{ comments|length }})</h3>
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
-                        {% csrf_token %}
-                        <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
-                        <button type="submit" style="margin-top:6px;">Post Comment</button>
-                    </form>
-                    {% else %}
-                    <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
+                    {% if celeb.awards %}
+                        <div style="margin-bottom:24px;">
+                            <h3>Career &amp; Achievements</h3>
+                            {% if user.is_authenticated %}
+                                <p style="white-space:pre-line;">{{ celeb.awards }}</p>
+                            {% else %}
+                                <p style="margin:4px 0;">
+                                    {{ celeb.awards|truncatewords:0 }}
+                                    <a href="{% url 'login' %}" class="gold1">Login</a> for more about {{ celeb.name }}'s achievements.
+                                </p>
+                            {% endif %}
+                        </div>
                     {% endif %}
-                    <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
-                    {% for comment in comments %}
-                        <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
-                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                <strong>{{ comment.user.username }}</strong>
-                                <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
-                                {% if user.is_authenticated %}
-                                <span class="comment-actions">
-                                    {% if comment.user == user %}
-                                    <button class="btn-link" style="color:#0070f3;"
-                                        onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
-                                        data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
+
+                    {% with links=celeb.social_links.all %}
+                        {% if celeb.website or celeb.instagram or celeb.twitter or celeb.facebook or celeb.youtube or links %}
+                            <div style="margin-bottom:24px;">
+                                <h3 style="margin-bottom:8px;">Online Presence</h3>
+                                <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                                    {# ---- new flexible links ---- #}
+                                    {% for link in links %}
+                                    <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:{{ link.get_color }}; text-decoration:none;">
+                                        {{ link.get_icon }} {{ link.get_platform_display }}
+                                    </a>
+                                    {% endfor %}
+                                    {# ---- legacy fields (shown only if no new link for that platform exists) ---- #}
+                                    {% if celeb.website and not links %}
+                                    <a href="{{ celeb.website }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#8af; text-decoration:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-.918 0-1.846-.15-2.75-.45C8.124 16.548 7 14.38 7 12s1.124-4.548 2.25-7.55A9.956 9.956 0 0112 4c.956 0 1.887.133 2.75.45C15.876 7.452 17 9.62 17 12s-1.124 4.548-2.25 7.55A9.956 9.956 0 0112 20zm-7.95-6H2.05a9.956 9.956 0 000-4h2c-.033.66-.05 1.325-.05 2s.017 1.34.05 2zm1.544 2H3.17a9.978 9.978 0 005.38 3.95C7.673 18.36 6.946 17.11 6.3 16 6.1 15.68 5.9 15.35 5.72 15zm12.56 0c-.18.35-.38.68-.58 1-.646 1.11-1.373 2.36-2.25 3.95A9.978 9.978 0 0020.83 16h-2.55zM19.95 14H22a9.956 9.956 0 000-4h-2.05c.033.66.05 1.325.05 2s-.017 1.34-.05 2zm-.78-6h2.46a9.978 9.978 0 00-5.38-3.95C17.027 5.64 17.754 6.89 18.4 8c.2.32.4.65.58 1H19.17zM5.72 9c.18-.35.38-.68.58-1C6.946 6.89 7.673 5.64 8.55 4.05A9.978 9.978 0 003.17 8H5.72z"/></svg>
+                                        Website
+                                    </a>
                                     {% endif %}
-                                    {% if comment.user == user or can_manage %}
-                                    <button class="btn-link" style="color:#c00;"
-                                        onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
+                                    {% if celeb.instagram and not links %}
+                                    <a href="https://instagram.com/{{ celeb.instagram }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#e1a; text-decoration:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                                        @{{ celeb.instagram }}
+                                    </a>
                                     {% endif %}
-                                </span>
+                                    {% if celeb.twitter and not links %}
+                                    <a href="https://x.com/{{ celeb.twitter }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#aaa; text-decoration:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.26 5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                        @{{ celeb.twitter }}
+                                    </a>
+                                    {% endif %}
+                                    {% if celeb.facebook and not links %}
+                                    <a href="https://facebook.com/{{ celeb.facebook }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#4267B2; text-decoration:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                                        Facebook
+                                    </a>
+                                    {% endif %}
+                                    {% if celeb.youtube and not links %}
+                                    <a href="https://youtube.com/@{{ celeb.youtube }}" target="_blank" rel="noopener noreferrer" class="celeb-social-link"
+                                        style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; background:#1a1a2e; border:1px solid #444; border-radius:4px; color:#ff0000; text-decoration:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                        YouTube
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    {% if celeb.featured_video_embed_url %}
+                        <div style="margin-bottom:24px;" id="featured-video">
+                            <h3 style="margin-bottom:8px;">Featured Video</h3>
+                            <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:640px; border-radius:8px;">
+                                <iframe
+                                    src="{{ celeb.featured_video_embed_url }}"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none; border-radius:8px;"
+                                    allowfullscreen
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    title="{{ celeb.name }} featured video">
+                                </iframe>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% with photos=celeb.photos.all %}
+                        {% if photos or can_manage %}
+                            <div style="margin-bottom:24px;" id="gallery">
+                                <h3 style="margin-bottom:12px;">Gallery</h3>
+                                {% if photos %}
+                                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
+                                    {% for photo in photos %}
+                                    <div style="position:relative;">
+                                        {% if user.is_authenticated %}
+                                            <a href="{{ photo.image.url }}"
+                                                data-gallery-item
+                                                data-src="{{ photo.image.url }}"
+                                                data-caption="{{ photo.caption|default:celeb.name }}"
+                                                onclick="openImgModal(this); return false;"
+                                                style="cursor:pointer; display:block;">
+                                                <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
+                                                    style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;">
+                                            </a>
+                                        {% else %}
+                                            <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:celeb.name }}"
+                                                style="width:100%; height:160px; object-fit:cover; border-radius:6px; display:block;"
+                                            >
+                                        {% endif %}
+                                        {% if photo.caption %}
+                                        <p style="font-size:0.75rem; color:#aaa; margin:4px 0 0 0; text-align:center;">{{ photo.caption }}</p>
+                                        {% endif %}
+                                        {% if can_manage %}
+                                        <form method="post" action="{% url 'celeb_photo_delete' photo.pk %}"
+                                            onsubmit="return confirm('Delete this photo?')"
+                                            style="position:absolute; top:4px; right:4px;">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                style="background:rgba(0,0,0,0.65); border:none; color:#f55; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:0.85rem; line-height:1; padding:0;">
+                                                ×
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p style="color:#666;">No photos yet.</p>
+                                {% endif %}
+                                {% if can_manage %}
+                                <form method="post" action="{% url 'celeb_photo_upload' celeb.pk %}" enctype="multipart/form-data"
+                                    style="margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+                                    {% csrf_token %}
+                                    <div>
+                                        <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Add Photos</label>
+                                        <input type="file" name="photos" multiple accept="image/*">
+                                    </div>
+                                    <div>
+                                        <label style="font-size:0.85rem; color:#aaa; display:block; margin-bottom:4px;">Caption (optional)</label>
+                                        <input type="text" name="caption" placeholder="Caption for all uploaded photos" class="cd-caption-input"
+                                            style="padding:6px 10px; background:#1a1a1a; border:1px solid #444; border-radius:4px; color:#f0f0f0;">
+                                    </div>
+                                    <button type="submit" class="ba br0-25 pa0-25">Upload</button>
+                                </form>
                                 {% endif %}
                             </div>
-                            <p style="margin:4px 0;">{{ comment.text }}</p>
-                        </li>
-                    {% empty %}
-                        <li style="color:gray;">No comments yet.</li>
-                    {% endfor %}
-                    </ul>
-                </div>
+                        {% endif %}
+                    {% endwith %}
 
-                <!-- Comment Delete Modal -->
-                {% if user.is_authenticated %}
-                <div class="review-modal-overlay" id="commentDeleteModal">
-                    <div class="review-modal" style="max-width:380px;">
-                        <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
-                        <h3 style="margin-top:0;">Delete comment?</h3>
-                        <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
-                        <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
-                            {% csrf_token %}
-                            <div style="display:flex; gap:10px;">
-                                <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
-                                <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
+                    <!-- Review Modal -->
+                    {% if user.is_authenticated %}
+                    <div class="review-modal-overlay" id="reviewModal">
+                        <div class="review-modal">
+                            <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
+                            <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
+                            <form method="post" action="{% url 'celeb_review' celeb.pk %}">
+                                {% csrf_token %}
+                                <div class="star-rating">
+                                    {% for i in "54321" %}
+                                    <input type="radio" name="rating" value="{{ i }}" id="mstar{{ i }}_{{ celeb.pk }}"
+                                        {% if user_review.rating == i|add:0 %}checked{% endif %} required>
+                                    <label for="mstar{{ i }}_{{ celeb.pk }}">&#9733;</label>
+                                    {% endfor %}
+                                </div>
+                                <textarea name="text" rows="3" placeholder="Optional comment..." style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;">{{ user_review.text }}</textarea>
+                                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                    <button type="submit">{% if user_review %}Update Review{% else %}Submit Review{% endif %}</button>
+                                </div>
+                            </form>
+                            {% if user_review %}
+                            <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
+                                {% csrf_token %}
+                                <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    
+                    <div id="" style="margin-top:24px;"
+                    >                      
+                        <div style=" 
+                            margin-bottom:12px;"
+                        >
+                            <h3 class="mb1-00"
+                            >
+                                Reviews ({{ review_count }})
+                            </h3>
+                            {% if user.is_authenticated %}
+                            <button id="openReviewModal" style="padding:6px 16px;">
+                                {% if user_review %}Update your review{% else %}Write a review{% endif %}
+                            </button>
+                            {% else %}
+                            <div>
+                                <a href="{% url 'login' %}" class="gold1">Login</a> to leave a review for {{ celeb.name }}.
                             </div>
-                        </form>
+                            {% endif %}
+                        </div>
+                        <ul style="list-style:none; padding:0; max-width:600px;">
+                        {% for review in reviews %}
+                            <li style="margin-bottom:12px; padding:8px; border-bottom:1px solid #eee;">
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                    <strong>{{ review.user.username }}</strong>
+                                    <span style="color:#f5a623;">{% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+                                    <small style="color:gray;">{{ review.updated_at|date:"N j, Y" }}</small>
+                                </div>
+                                {% if review.text %}<p style="margin:4px 0;">{{ review.text }}</p>{% endif %}
+                            </li>
+                        {% empty %}
+                            <li style="color:gray;">No reviews yet. Be the first!</li>
+                        {% endfor %}
+                        </ul>
                     </div>
-                </div>
-                {% endif %}
 
-                <!-- Comment Edit Modal -->
-                {% if user.is_authenticated %}
-                <div class="review-modal-overlay" id="commentEditModal">
-                    <div class="review-modal">
-                        <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
-                        <h3>Edit comment</h3>
-                        <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
+                    <div style="margin-top:24px;">
+                        <h3>Followers ({{ follow_count }})</h3>
+                        {% if followers %}
+                        <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; gap:8px;">
+                            {% for follow in followers %}
+                            <li class="ba" style="display:flex; align-items:center; gap:6px; padding:4px; background:transparent; border-radius:16px; font-size:smaller;">
+                                {% if follow.user.profile.avatar %}
+                                <img src="{{ follow.user.profile.avatar.url }}" alt="{{ follow.user.username|default:'Follower avatar' }}" style="width:20px; height:20px; border-radius:50%; object-fit:cover;">
+                                {% endif %}
+                                {{ follow.user.username }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p style="color:gray; font-size:smaller;">No followers yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <div id="comments" style="margin-top:24px;">
+                        <h3>Comments ({{ comments|length }})</h3>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'celeb_comment' celeb.pk %}">
                             {% csrf_token %}
-                            <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
-                            <button type="submit">Save changes</button>
+                            <textarea name="text" rows="3" placeholder="Add a comment..." style="width:100%; max-width:480px;"></textarea><br>
+                            <button type="submit" style="margin-top:6px;">Post Comment</button>
                         </form>
+                        {% else %}
+                        <p><a href="{% url 'login' %}">Log in</a> to like and comment.</p>
+                        {% endif %}
+                        <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
+                        {% for comment in comments %}
+                            <li style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #eee;">
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                    <strong>{{ comment.user.username }}</strong>
+                                    <small style="color:gray;">{{ comment.created_at|date:"N j, Y" }}{% if comment.updated_at != comment.created_at %} <em>(edited)</em>{% endif %}</small>
+                                    {% if user.is_authenticated %}
+                                    <span class="comment-actions">
+                                        {% if comment.user == user %}
+                                        <button class="btn-link" style="color:#0070f3;"
+                                            onclick="openCommentEditModal({{ comment.pk }}, this.dataset.text)"
+                                            data-pk="{{ comment.pk }}" data-text="{{ comment.text|escapejs }}">Edit</button>
+                                        {% endif %}
+                                        {% if comment.user == user or can_manage %}
+                                        <button class="btn-link" style="color:#c00;"
+                                            onclick="openCommentDeleteModal({{ comment.pk }})">Delete</button>
+                                        {% endif %}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <p style="margin:4px 0;">{{ comment.text }}</p>
+                            </li>
+                        {% empty %}
+                            <li style="color:gray;">No comments yet.</li>
+                        {% endfor %}
+                        </ul>
                     </div>
-                </div>
-                {% endif %}
 
-                <div style="margin-top:24px;">
-                    <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
+                    <!-- Comment Delete Modal -->
+                    {% if user.is_authenticated %}
+                    <div class="review-modal-overlay" id="commentDeleteModal">
+                        <div class="review-modal" style="max-width:380px;">
+                            <button class="review-modal-close" id="commentDeleteModalClose" aria-label="Close">&times;</button>
+                            <h3 style="margin-top:0;">Delete comment?</h3>
+                            <p style="color:#555; margin:0 0 20px;">This action cannot be undone.</p>
+                            <form method="post" id="commentDeleteForm" action="" data-url-template="{% url 'comment_delete' 0 %}">
+                                {% csrf_token %}
+                                <div style="display:flex; gap:10px;">
+                                    <button type="submit" style="background:#c00; color:#fff; border:none; padding:8px 18px; border-radius:4px; cursor:pointer;">Yes, delete</button>
+                                    <button type="button" id="commentDeleteCancelBtn" style="padding:8px 18px; border-radius:4px; cursor:pointer;">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Comment Edit Modal -->
+                    {% if user.is_authenticated %}
+                    <div class="review-modal-overlay" id="commentEditModal">
+                        <div class="review-modal">
+                            <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
+                            <h3>Edit comment</h3>
+                            <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
+                                {% csrf_token %}
+                                <textarea name="text" id="commentEditText" rows="4" style="width:100%; box-sizing:border-box; display:block; margin-bottom:12px; padding:8px; border:1px solid #ccc; border-radius:4px;"></textarea>
+                                <button type="submit">Save changes</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div style="margin-top:24px;">
+                        <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="gc1s12 gc10s3-m 
             flex flex-column items-center justify-between-m 
-            vh-80 
-            pa1-00 
+            vh-80
             white 
             cd-left"
         >
