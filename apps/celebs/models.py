@@ -83,7 +83,15 @@ class Celeb(models.Model):
 	type = models.ForeignKey(Type, on_delete=models.PROTECT, related_name='celebs', null=True, blank=True)
 	street_name = models.CharField(max_length=50)
 	bio = models.TextField(blank=True)
+	influence = models.TextField(blank=True, null=True, help_text='Notable influence, impact, or legacy')
+	net_worth = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True, 
+			help_text='Estimated net worth in USD')
 	nationality = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='celebs')
+	spouse = models.CharField(max_length=100, 
+		blank=True, 
+		null=True, 
+		help_text='Name of spouse or partner',
+	)
 	rating = models.FloatField(default=0.0, help_text="Legacy field; rating now computed from reviews")
 	discovered = models.DateField(null=True, blank=True)
 	date_of_birth = models.DateField(null=True, blank=True)
