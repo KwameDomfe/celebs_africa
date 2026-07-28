@@ -437,6 +437,9 @@ def celeb_update(request, slug):
 		celeb.discovered = request.POST.get('discovered') or None
 		celeb.date_of_birth = request.POST.get('date_of_birth') or None
 		celeb.date_of_death = request.POST.get('date_of_death') or None
+		celeb.spouse = request.POST.get('spouse', '')
+		celeb.influence = request.POST.get('influence', '')
+		celeb.net_worth = request.POST.get('net_worth', '')
 		celeb.awards = request.POST.get('awards', '')
 		celeb.featured_video = request.POST.get('featured_video', '')
 		celeb.published = request.POST.get('published') == 'on'

@@ -95,59 +95,136 @@
 .link-add-btn:hover { border-color:#aaa; color:rgba(255,255,255,0.9); }
 </style>
 
-<div class="pa1-00 white-90">
-    <h2 style="margin:0 0 24px; font-size:1.4rem;">
-        {% if celeb %}Edit Celeb{% else %}Add Celeb{% endif %}
+<div class="pa1-00 white-90"
+>
+    <h2 style="
+        margin:0 0 24px; 
+        font-size:1.4rem;"
+    >
+        {% if celeb %}
+            Edit Celeb
+        {% else %}
+            Add Celeb
+        {% endif %}
     </h2>
 
-    <form method="post" enctype="multipart/form-data" autocomplete="off" class="celeb-form">
-        {% csrf_token %}
-
-        <div class="form-field">
-            <label for="id_name">Name</label>
-            <input type="text" id="id_name" name="name" value="{{ celeb.name|default:'' }}">
+    <form method="post" 
+        enctype="multipart/form-data" 
+        autocomplete="off" 
+        class="celeb-form"
+    >{% csrf_token %}
+        <div class="form-field"
+        >
+            <label for="id_name">
+                Name
+            </label>
+            <input id="id_name" 
+                type="text" 
+                name="name" 
+                value="{{ celeb.name|default:'' }}"
+            >
         </div>
 
-        <div class="form-field">
-            <label for="id_type">Category / Family / Type</label>
-            <select id="id_type" name="type" required>
-                <option value="">-- Select type --</option>
+        <div class="form-field"
+        >
+            <label for="id_type">
+                Category / Family / Type
+            </label>
+            <select id="id_type" 
+                name="type" 
+                required
+            >
+                <option value="">
+                    -- Select type --
+                </option>
                 {% for typ in types %}
-                <option value="{{ typ.pk }}" {% if celeb.type_id == typ.pk %}selected{% endif %}>{{ typ }}</option>
+                    <option value="{{ typ.pk }}" 
+                        {% if celeb.type_id == typ.pk %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ typ }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
 
-        <div class="form-field">
-            <label for="id_street_name">Street Name</label>
-            <input type="text" id="id_street_name" name="street_name" value="{{ celeb.street_name|default:'' }}">
+        <div class="form-field"
+        >
+            <label for="id_street_name"
+            >
+                Street Name
+            </label>
+            <input id="id_street_name" 
+                type="text" 
+                name="street_name" 
+                value="{{ celeb.street_name|default:'' }}"
+            >
         </div>
 
-        <div class="form-field">
-            <label for="id_nationality">Nationality</label>
-            <select id="id_nationality" name="nationality">
-                <option value="">-- Select country --</option>
+        <div class="form-field"
+        >
+            <label for="id_nationality">
+                Nationality
+            </label>
+            <select id="id_nationality"
+                name="nationality"
+            >
+                <option value="">
+                    -- Select country --
+                </option>
                 {% for country in countries %}
-                <option value="{{ country.pk }}" {% if celeb.nationality_id == country.pk %}selected{% endif %}>{{ country }}</option>
+                    <option value="{{ country.pk }}" 
+                        {% if celeb.nationality_id == country.pk %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ country }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
 
-        <div class="form-field">
-            <label for="id_bio">Bio</label>
-            <textarea id="id_bio" name="bio" rows="5">{{ celeb.bio|default:'' }}</textarea>
+        <div class="form-field"
+        >
+            <label for="id_bio">
+                Bio
+            </label>
+            <textarea id="id_bio" 
+                name="bio" 
+                rows="5"
+            >
+                {{ celeb.bio|default:'' }}
+            </textarea>
         </div>
 
-        <div class="form-field">
-            <label for="id_influence">Influence</label>
-            <textarea id="id_influence" name="influence" rows="5">{{ celeb.influence|default:'' }}</textarea>
+        <div class="form-field"
+        >
+            <label for="id_influence">
+                Influence
+            </label>
+            <textarea id="id_influence" 
+                name="influence" 
+                rows="5"
+            >
+                {{ celeb.influence|default:'' }}
+            </textarea>
         </div>
 
-        <div class="form-field">
-            <label for="id_net_worth">Net Worth</label>
-            <textarea id="id_net_worth" name="net_worth" rows="5">{{ celeb.net_worth|default:'' }}</textarea>
+        <div class="form-field"
+        >
+            <label for="id_net_worth">
+                Net Worth
+            </label>
+            <textarea id="id_net_worth" 
+                name="net_worth" 
+                rows="5"
+            >
+                {{ celeb.net_worth|default:'' }}
+            </textarea>
         </div>
-        <div class="form-field">
+        <div class="form-field"
+        >
             <label for="id_spouse"
             >
                 Spouse / Partner
@@ -161,23 +238,46 @@
         </div>
 
         <div class="form-field">
-            <label for="id_dob">Date of Birth</label>
-            <input type="date" id="id_dob" name="date_of_birth" value="{{ celeb.date_of_birth|date:'Y-m-d' }}">
+            <label for="id_dob">
+                Date of Birth
+            </label>
+            <input id="id_dob" 
+                type="date" 
+                name="date_of_birth" 
+                value="{{ celeb.date_of_birth|date:'Y-m-d' }}"
+            >
+        </div>
+
+        <div class="form-field"
+        >
+            <label for="id_dod">
+                Date of Death
+            </label>
+            <input id="id_dod" 
+                type="date" 
+                name="date_of_death" 
+                value="{{ celeb.date_of_death|date:'Y-m-d' }}"
+            >
         </div>
 
         <div class="form-field">
-            <label for="id_dod">Date of Death</label>
-            <input type="date" id="id_dod" name="date_of_death" value="{{ celeb.date_of_death|date:'Y-m-d' }}">
-        </div>
-
-        <div class="form-field">
-            <label for="id_discovered">Discovered</label>
-            <input type="date" id="id_discovered" name="discovered" value="{{ celeb.discovered|date:'Y-m-d' }}">
+            <label for="id_discovered">
+                Discovered
+            </label>
+            <input id="id_discovered" 
+                type="date" 
+                name="discovered" 
+                value="{{ celeb.discovered|date:'Y-m-d' }}"
+            >
         </div>
 
         <div class="form-field">
             <label for="id_image">Image</label>
-            <input type="file" id="id_image" name="image" accept="image/*">
+            <input id="id_image" 
+                type="file" 
+                name="image" 
+                accept="image/*"
+            >
             {% if celeb and celeb.image %}
             <div class="current-image">
                 <img src="{{ celeb.image.url }}" alt="Current image">
@@ -187,10 +287,22 @@
         </div>
 
         <div class="form-section">
-            <p class="form-section-title">Career &amp; Achievements</p>
-            <div class="form-field">
-                <label for="id_awards">Awards &amp; Achievements</label>
-                <textarea id="id_awards" name="awards" rows="5" placeholder="List notable awards, one per line">{{ celeb.awards|default:'' }}</textarea>
+            <p class="form-section-title"
+            >
+                Career &amp; Achievements
+            </p>
+            <div class="form-field"
+            >
+                <label for="id_awards">
+                    Awards &amp; Achievements
+                </label>
+                <textarea id="id_awards" 
+                    name="awards" 
+                    rows="5"
+                    placeholder="List notable awards, one per line"
+                >
+                    {{ celeb.awards|default:'' }}
+                </textarea>
             </div>
         </div>
 
