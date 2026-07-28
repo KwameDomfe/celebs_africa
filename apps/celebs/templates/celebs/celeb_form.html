@@ -211,17 +211,17 @@
             </textarea>
         </div>
 
-        <div class="form-field"
-        >
+        <div class="form-field">
             <label for="id_net_worth">
                 Net Worth
             </label>
-            <textarea id="id_net_worth" 
-                name="net_worth" 
-                rows="5"
+            <input
+                type="number"
+                id="id_net_worth"
+                name="net_worth"
+                step="0.01"
+                value="{{ celeb.net_worth|default:'' }}"
             >
-                {{ celeb.net_worth|default:'' }}
-            </textarea>
         </div>
         <div class="form-field"
         >
