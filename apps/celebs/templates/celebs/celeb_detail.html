@@ -558,6 +558,46 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                    {% if celeb.influence%}
+                        <div style="margin-bottom:24px;">
+                            <h3>Influence</h3>
+                            {% if user.is_authenticated %}
+                                <p style="white-space:pre-line;">{{ celeb.influence }}</p>
+                            {% else %}
+                                <p style="margin:4px 0;">
+                                    {{ celeb.influence|truncatewords:0 }}
+                                    <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s influence.
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if celeb.net_worth %}
+                        <div style="margin-bottom:24px;">
+                            <h3>Net Worth</h3>
+                            {% if user.is_authenticated %}
+                                <p style="white-space:pre-line;">{{ celeb.net_worth }}</p>
+                            {% else %}
+                                <p style="margin:4px 0;">
+                                    {{ celeb.net_worth|truncatewords:0 }}
+                                    <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s net worth.
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if celeb.spouse %}
+                        <div style="margin-bottom:24px;">
+                            <h3>Spouse / Partner</h3>
+                            {% if user.is_authenticated %}
+                                <p style="white-space:pre-line;">{{ celeb.spouse }}</p>
+                            {% else %}
+                                <p style="margin:4px 0;">
+                                    {{ celeb.spouse|truncatewords:0 }}
+                                    <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s spouse or partner.
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
 
                     {% if celeb.awards %}
                         <div style="margin-bottom:24px;">

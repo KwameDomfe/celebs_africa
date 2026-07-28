@@ -309,6 +309,9 @@ def celeb_create(request):
 		type_id = (request.POST.get('type') or '').strip()
 		nationality_id = request.POST.get('nationality') or None
 		image = request.FILES.get('image')
+		spouse = (request.POST.get('spouse') or '').strip()
+		influence = (request.POST.get('influence') or '').strip()
+		net_worth = (request.POST.get('net_worth') or '').strip()
 
 		# Avoid production 500s on malformed/empty required fields.
 		errors = []
@@ -340,9 +343,13 @@ def celeb_create(request):
 					date_of_birth=date_of_birth or None,
 					date_of_death=date_of_death or None,
 					image=image,
+					spouse=spouse,
 					awards=request.POST.get('awards', ''),
 					featured_video=request.POST.get('featured_video', ''),
 					published=request.POST.get('published') == 'on',
+					influence=influence,
+					net_worth=net_worth,
+
 				)
 				_save_social_links(request, new_celeb)
 				# Auto-add non-staff creators as managers so they can edit their own celeb

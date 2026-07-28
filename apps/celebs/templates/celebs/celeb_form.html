@@ -139,6 +139,28 @@
         </div>
 
         <div class="form-field">
+            <label for="id_influence">Influence</label>
+            <textarea id="id_influence" name="influence" rows="5">{{ celeb.influence|default:'' }}</textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="id_net_worth">Net Worth</label>
+            <textarea id="id_net_worth" name="net_worth" rows="5">{{ celeb.net_worth|default:'' }}</textarea>
+        </div>
+        <div class="form-field">
+            <label for="id_spouse"
+            >
+                Spouse / Partner
+            </label>
+            <input id="id_spouse" 
+                type="text" 
+                name="spouse" 
+                value="{{ celeb.spouse|default:'' }}"
+                placeholder="Name of spouse or partner"
+            >
+        </div>
+
+        <div class="form-field">
             <label for="id_dob">Date of Birth</label>
             <input type="date" id="id_dob" name="date_of_birth" value="{{ celeb.date_of_birth|date:'Y-m-d' }}">
         </div>
