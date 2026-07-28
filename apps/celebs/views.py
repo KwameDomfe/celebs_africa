@@ -416,10 +416,12 @@ def celeb_create(request):
 
 		messages.success(request, 'Celeb created successfully.')
 		return HttpResponseRedirect(new_celeb.get_absolute_url())
-	return render(request, 'celebs/celeb_form.html', {
-		'types': types, 'countries': countries,
+	context = {	
+		'types': types,
+		'countries': countries,
 		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-	})
+	}
+	return render(request, 'celebs/celeb_form.html', context)
 
 @login_required
 def celeb_update(request, slug):
@@ -431,16 +433,16 @@ def celeb_update(request, slug):
 	if request.method == 'POST':
 		celeb.name = request.POST.get('name')
 		celeb.street_name = request.POST.get('street_name')
-		celeb.bio = request.POST.get('bio', '')
+		celeb.bio = request.POST.get('bio', '').strip()
 		celeb.type_id = request.POST.get('type')
 		celeb.nationality_id = request.POST.get('nationality') or None
 		celeb.discovered = request.POST.get('discovered') or None
 		celeb.date_of_birth = request.POST.get('date_of_birth') or None
 		celeb.date_of_death = request.POST.get('date_of_death') or None
-		celeb.spouse = request.POST.get('spouse', '')
-		celeb.influence = request.POST.get('influence', '')
+		celeb.spouse = request.POST.get('spouse', '').strip()
+		celeb.influence = request.POST.get('influence', '').strip()
 		celeb.net_worth = request.POST.get('net_worth', '').replace(',', '').strip()
-		celeb.awards = request.POST.get('awards', '')
+		celeb.awards = request.POST.get('awards', '').strip()
 		celeb.featured_video = request.POST.get('featured_video', '')
 		celeb.published = request.POST.get('published') == 'on'
 		if request.FILES.get('image'):
