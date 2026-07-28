@@ -262,14 +262,15 @@
             <div class="w-100 mb2-00"
             >
                 {% if celeb.image %}
-                <img src="{{ celeb.image.url }}" alt="{{ celeb.name }}"
-                    class="cover h24-00 mb2-00"
-                    data-gallery-item
-                    data-src="{{ celeb.image.url }}"
-                    data-caption="{{ celeb.name }}"
-                    onclick="openImgModal(this)"
-                    style="cursor:pointer;"
-                >
+                    <img src="{{ celeb.image.url }}" 
+                        alt="{{ celeb.name }}"
+                        class="cover h24-00 mb2-00"
+                        data-gallery-item
+                        data-src="{{ celeb.image.url }}"
+                        data-caption="{{ celeb.name }}"
+                        onclick="openImgModal(this)"
+                        style="cursor:pointer;"
+                    >
                 {% endif %}
                 <div class="celeb-header-info"
                 >
@@ -277,9 +278,10 @@
                     >
                         {{ celeb.name }}
                     </h1>
-                    <p class="gray"
+                    <p class="gold1"
                     >
-                        {{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}</p>
+                        {{ celeb.type.family.category }} / {{ celeb.type.family.name }} / {{ celeb.type.name }}
+                    </p>
                     <p style="margin:4px 0;">
                         <strong>Street Name:</strong> {{ celeb.street_name }}
                     </p>
@@ -357,30 +359,39 @@
                         <div class="flex justify-around items-center gap-1-00 w-100">
                             <form method="post" 
                                 action="{% url 'celeb_follow' celeb.pk %}"
+                                class="flex flex-column justify-center items-center"
                             >{% csrf_token %}
+                                <div class="mb1-00">
+                                    <span class="b gold1 f1-50">{{ follow_count }}</span> Follower{{ follow_count|pluralize }}
+                                </div>
                                 <button type="submit"
-                                    class="ba br0-25 pa0-25 mb1-00"
+                                    class="ba br0-25 pa0-50"
                                 >
                                     {% if user_following %}
                                         Unfollow
                                     {% else %}
                                         Follow
-                                    {% endif %} ({{ follow_count }})
+                                    {% endif %} 
                                 </button>
                             </form>
                         
                             <form method="post" 
                                 action="{% url 'celeb_like' celeb.pk %}"
                             >{% csrf_token %}
+                                <div class="mb1-00">
+                                    <span class="b gold1 f1-50">{{ like_count }}</span> Like{{ like_count|pluralize }}
+                                </div>
+                                
                                 <button type="submit"
-                                    class="ba br0-25 pa0-25 mb1-00"
+                                    class="ba br0-25 pa0-50"
                                 >
                                     {% if user_liked %}
                                         Unlike
                                     {% else %}
                                         Like
-                                    {% endif %} ({{ like_count }})
+                                    {% endif %} 
                                 </button>
+                                
                             </form>
                         </div>
                         
@@ -507,22 +518,27 @@
                             </div>
                         
                         </div> 
+                    {% else %}
+                        <p class="tracked lh-copy"
+                        >
+                            <a href="{% url 'login' %}"
+                                class="bg-red white-90 br0-25 pa0-25 b"
+                            >Login</a> to share this page.
+                        </p>
                     {% endif %}
                 </div>
                 
                 {% if not user.is_authenticated %}
-                    <div>
-                        <p class="mv1-00 tracked lh-copy">
-                            <a href="{% url 'login' %}"
-                                class="bg-red white-90 br0-25 pa0-25 b"
-                            >Login</a> to
-                            <span class="gold1">Rate</span>, 
-                            <span class="gold1">Review</span>, 
-                            <span class="gold1">Follow</span>,
-                            <span class="gold1">Like</span> and 
-                            <span class="gold1">Share</span> {{ celeb.name }}'s page.
-                        </p>
-                    </div>
+                    <p class="mv1-00 tracked lh-copy">
+                        <a href="{% url 'login' %}"
+                            class="bg-red white-90 br0-25 pa0-25 b"
+                        >Login</a> to
+                        <span class="gold1">Rate</span>, 
+                        <span class="gold1">Review</span>, 
+                        <span class="gold1">Follow</span>,
+                        <span class="gold1">Like</span> and 
+                        <span class="gold1">Share</span> {{ celeb.name }}'s page.
+                    </p>  
                 {% endif %}
 
                 <div class="">
@@ -547,37 +563,41 @@
                                 </div>
                             </div>
                             {% if user.is_authenticated %}
-                            <p class="tracked lh-copy tj">{{ celeb.bio }}</p>
+                            <p class="tracked lh-copy tj">
+                                {{ celeb.bio }}
+                            </p>
                             {% else %}
                             <p class="tracked lh-copy tj">
                                 {{ celeb.bio|truncatewords:30 }} 
                             </p>
-                            <p>
+                            <p class="mv1-00 tracked lh-copy">
                                 <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> to discover more about {{ celeb.name }}.
                             </p>
                             {% endif %}
                         </div>
                     {% endif %}
+
                     {% if celeb.influence%}
                         <div style="margin-bottom:24px;">
                             <h3>Influence</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;">{{ celeb.influence }}</p>
+                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.influence }}</p>
                             {% else %}
-                                <p style="margin:4px 0;">
+                                <p style="margin:4px 0;" class="tracked lh-copy">
                                     {{ celeb.influence|truncatewords:0 }}
                                     <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s influence.
                                 </p>
                             {% endif %}
                         </div>
                     {% endif %}
+
                     {% if celeb.net_worth %}
                         <div style="margin-bottom:24px;">
                             <h3>Net Worth</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;">{{ celeb.net_worth }}</p>
+                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.net_worth }}</p>
                             {% else %}
-                                <p style="margin:4px 0;">
+                                <p style="margin:4px 0;" class="tracked lh-copy">
                                     {{ celeb.net_worth|truncatewords:0 }}
                                     <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s net worth.
                                 </p>
@@ -589,7 +609,7 @@
                         <div style="margin-bottom:24px;">
                             <h3>Spouse / Partner</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;">{{ celeb.spouse }}</p>
+                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.spouse }}</p>
                             {% else %}
                                 <p style="margin:4px 0;">
                                     {{ celeb.spouse|truncatewords:0 }}
@@ -603,9 +623,9 @@
                         <div style="margin-bottom:24px;">
                             <h3>Career &amp; Achievements</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;">{{ celeb.awards }}</p>
+                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.awards }}</p>
                             {% else %}
-                                <p style="margin:4px 0;">
+                                <p style="margin:4px 0;" class="tracked lh-copy">
                                     {{ celeb.awards|truncatewords:0 }}
                                     <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s achievements.
                                 </p>
@@ -766,8 +786,12 @@
                                 </div>
                             </form>
                             {% if user_review %}
-                            <form method="post" action="{% url 'celeb_review_delete' celeb.pk %}" style="margin-top:8px;" onsubmit="return confirm('Delete your review?')">
-                                {% csrf_token %}
+                            <form method="post" 
+                                action="{% url 'celeb_review_delete' celeb.pk %}" 
+                                style="margin-top:8px;" 
+                                onsubmit="return 
+                                confirm('Delete your review?')"
+                            >{% csrf_token %}
                                 <button type="submit" style="color:#c00; background:none; border:1px solid #c00; cursor:pointer; padding:4px 10px; border-radius:4px;">Delete my review</button>
                             </form>
                             {% endif %}
@@ -790,9 +814,11 @@
                                 {% if user_review %}Update your review{% else %}Write a review{% endif %}
                             </button>
                             {% else %}
-                            <div>
-                                <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> to leave a review for {{ celeb.name }}.
-                            </div>
+                            <p class="tracked lh-copy">
+                                <a href="{% url 'login' %}" 
+                                    class="bg-red white-90 br0-25 pa0-25 b"
+                                >Login</a> to leave a review for <span class="b gold1">{{ celeb.name }}</span>.
+                            </p>
                             {% endif %}
                         </div>
                         <ul style="list-style:none; padding:0; max-width:600px;">
@@ -838,7 +864,10 @@
                             <button type="submit" style="margin-top:6px;">Post Comment</button>
                         </form>
                         {% else %}
-                        <p><a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> to like and comment.</p>
+                        <p class="tracked lh-copy">
+                            <a href="{% url 'login' %}" 
+                                class="bg-red white-90 br0-25 pa0-25 b"
+                            >Login</a> to like and comment.</p>
                         {% endif %}
                         <ul style="margin-top:16px; list-style:none; padding:0; max-width:600px;">
                         {% for comment in comments %}
@@ -890,7 +919,10 @@
                     {% if user.is_authenticated %}
                     <div class="review-modal-overlay" id="commentEditModal">
                         <div class="review-modal">
-                            <button class="review-modal-close" id="commentEditModalClose" aria-label="Close">&times;</button>
+                            <button id="commentEditModalClose" 
+                                class="review-modal-close" 
+                                aria-label="Close"
+                            >&times;</button>
                             <h3>Edit comment</h3>
                             <form method="post" id="commentEditForm" action="" data-url-template="{% url 'comment_edit' 0 %}">
                                 {% csrf_token %}
@@ -901,8 +933,12 @@
                     </div>
                     {% endif %}
 
-                    <div style="margin-top:24px;">
-                        <a href="{% url 'celebs_home' %}">&#8592; Back to List</a>
+                    <div class="mv2-00">
+                        <a href="{% url 'home' %}"
+                            class="br0-25 pa0-50 white-00 b bg-red" style="margin-top:24px;"
+                        >
+                            &#8592; Back to Homepage
+                        </a>
                     </div>
                 </div>
             </div>
