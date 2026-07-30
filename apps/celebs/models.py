@@ -84,8 +84,12 @@ class Celeb(models.Model):
 	street_name = models.CharField(max_length=50)
 	bio = models.TextField(blank=True)
 	influence = models.TextField(blank=True, null=True, help_text='Notable influence, impact, or legacy')
-	net_worth = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True, 
-			help_text='Estimated net worth in USD')
+	net_worth = models.DecimalField(
+		max_digits=15, 
+		decimal_places=2, 
+		null=True, 
+		blank=True, 
+		help_text='Estimated net worth in USD')
 	nationality = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='celebs')
 	spouse = models.CharField(max_length=100, 
 		blank=True, 
