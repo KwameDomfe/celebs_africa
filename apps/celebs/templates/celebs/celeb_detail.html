@@ -595,10 +595,11 @@
                         <div style="margin-bottom:24px;">
                             <h3>Net Worth</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.net_worth }}</p>
+                                <p style="white-space:pre-line;" class="tracked lh-copy">
+                                    US$ {{ celeb.net_worth }} Million
+                                </p>
                             {% else %}
                                 <p style="margin:4px 0;" class="tracked lh-copy">
-                                    {{ celeb.net_worth|truncatewords:0 }}
                                     <a href="{% url 'login' %}" class="bg-red white-90 br0-25 pa0-25 b">Login</a> for more about {{ celeb.name }}'s net worth.
                                 </p>
                             {% endif %}
@@ -623,7 +624,11 @@
                         <div style="margin-bottom:24px;">
                             <h3>Career &amp; Achievements</h3>
                             {% if user.is_authenticated %}
-                                <p style="white-space:pre-line;" class="tracked lh-copy">{{ celeb.awards }}</p>
+                           
+                                <p class="tracked lh-copy"
+                                >
+                                    {{ celeb.awards }}
+                                </p>
                             {% else %}
                                 <p style="margin:4px 0;" class="tracked lh-copy">
                                     {{ celeb.awards|truncatewords:0 }}
