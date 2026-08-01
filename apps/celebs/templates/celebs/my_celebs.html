@@ -114,7 +114,9 @@
     <div class="mc-header">
         <h1 style="margin: 0; font-size: 1.5rem;">My Celebs</h1>
         {% if can_create %}
-        <a href="{% url 'celeb_create' %}" class="btn-save black" style="text-decoration:none;">+ Add New Celeb</a>
+        <a href="{% url 'celeb_create' %}" 
+            class="btn-save red" style="text-decoration:none;"
+        >+ Add New Celeb</a>
         {% endif %}
     </div>
 

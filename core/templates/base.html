@@ -156,9 +156,27 @@
                 {% if user.is_authenticated %}
                     <div style="display:flex;align-items:center;">
                         <button id="userDropdownBtn" aria-haspopup="true" aria-expanded="false" type="button"
-                            style="background:none;border:none;cursor:pointer;color:inherit;font:inherit;padding:4px 8px;display:flex;align-items:center;gap:4px;border-radius:4px;">
+                            style="background:none;
+                                border:none;
+                                cursor:pointer;
+                                color:red;
+                                font:inherit;
+                                padding:4px 8px;
+                                display:flex;
+                                align-items:center;
+                                gap:4px;
+                                border-radius:4px;"
+                        >
                             {% if user.profile.avatar %}
-                                <img src="{{ user.profile.avatar.url }}" alt="avatar" style="width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:4px;">
+                                <img src="{{ user.profile.avatar.url }}" 
+                                    alt="avatar" 
+                                    style="width:28px;
+                                        height:28px;
+                                        border-radius:50%;
+                                        object-fit:cover;
+                                        vertical-align:middle;
+                                        margin-right:4px;"
+                                >
                             {% endif %}
                             {{ user.username }} ▾
                         </button>
