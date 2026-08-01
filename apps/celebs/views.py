@@ -145,7 +145,7 @@ def celeb_detail_by_pk(request, pk):
 def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 	qs = Celeb.objects.select_related('type__family__category')
 	celeb = get_object_or_404(qs, slug=slug)
-	if not celeb.published and not request.user.has_perm('celebs.change_celeb', celeb):
+	if not celeb.published and not request.user.has_perm(CHANGE_CELEB_PERM):
 		from django.http import Http404
 		raise Http404
 	comments = celeb.comments.select_related('user').order_by('-created_at')
@@ -184,7 +184,7 @@ def celeb_detail(request, cat_slug, family_slug, type_slug, slug):
 		'user_following': user_following,
 		'user_review': user_review,
 		'user_followed_celebs': user_followed_celebs,
-		'can_manage': request.user.has_perm('celebs.change_celeb', celeb),
+		'can_manage': request.user.has_perm(CHANGE_CELEB_PERM),
 		'prev_celeb': prev_celeb,
 		'next_celeb': next_celeb,
 	}
@@ -289,7 +289,7 @@ def comment_edit(request, pk):
 @login_required
 def comment_delete(request, pk):
 	comment = get_object_or_404(Comment.objects.select_related('celeb__type__family__category'), pk=pk)
-	if comment.user != request.user and not request.user.has_perm('celebs.change_celeb', comment.celeb):
+	if comment.user != request.user and not request.user.has_perm(CHANGE_CELEB_PERM):
 		raise PermissionDenied
 	celeb_url = comment.celeb.get_absolute_url()
 	if request.method == 'POST':
