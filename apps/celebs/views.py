@@ -1,5 +1,3 @@
-
-from email import errors
 import json
 import logging
 from decimal import Decimal, InvalidOperation
@@ -13,6 +11,9 @@ from django.db import transaction
 from django.db.models import Count, Avg
 from .models import Celeb, Like, Comment, Family, Type, Category, Follow, Review, Country, CelebPhoto, CelebSocialLink
 
+ADD_CELEB_PERM = f"{Celeb._meta.app_label}.add_{Celeb._meta.model_name}"
+CHANGE_CELEB_PERM = f"{Celeb._meta.app_label}.change_{Celeb._meta.model_name}"
+DELETE_CELEB_PERM = f"{Celeb._meta.app_label}.delete_{Celeb._meta.model_name}"
 
 logger = logging.getLogger(__name__)
 
@@ -296,7 +297,7 @@ def comment_delete(request, pk):
 		messages.success(request, 'Comment deleted.')
 	return HttpResponseRedirect(celeb_url + '#comments')
 
-@permission_required('celebs.add_celeb', raise_exception=True)
+@permission_required(ADD_CELEB_PERM, raise_exception=True)
 def celeb_create(request):
 	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
 	countries = Country.objects.all()
@@ -434,7 +435,7 @@ def celeb_create(request):
 @login_required
 def celeb_update(request, slug):
     celeb = get_object_or_404(Celeb, slug=slug)
-    if not request.user.has_perm('celebs.change_celeb', celeb):
+    if not request.user.has_perm(CHANGE_CELEB_PERM):
         raise PermissionDenied
 
     types = Type.objects.select_related('family__category').order_by(
@@ -516,7 +517,7 @@ def celeb_update(request, slug):
 @login_required
 def celeb_delete(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
-	if not request.user.has_perm('celebs.delete_celeb', celeb):
+	if not request.user.has_perm(DELETE_CELEB_PERM):
 		raise PermissionDenied
 	if request.method == 'POST':
 		celeb.delete()
@@ -526,7 +527,7 @@ def celeb_delete(request, pk):
 @login_required
 def celeb_photo_upload(request, pk):
     celeb = get_object_or_404(Celeb, pk=pk)
-    if not request.user.has_perm('celebs.change_celeb', celeb):
+    if not request.user.has_perm(CHANGE_CELEB_PERM):
         raise PermissionDenied
 
     if request.method != 'POST':
@@ -561,7 +562,7 @@ def celeb_photo_upload(request, pk):
 def celeb_photo_delete(request, pk):
 	photo = get_object_or_404(CelebPhoto, pk=pk)
 	celeb = photo.celeb
-	if not request.user.has_perm('celebs.change_celeb', celeb):
+	if not request.user.has_perm(CHANGE_CELEB_PERM):
 		raise PermissionDenied
 	if request.method == 'POST':
 		photo.image.delete(save=False)
