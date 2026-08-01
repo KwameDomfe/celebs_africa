@@ -299,138 +299,93 @@ def comment_delete(request, pk):
 
 @permission_required(ADD_CELEB_PERM, raise_exception=True)
 def celeb_create(request):
-	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
-	countries = Country.objects.all()
-	if request.method == 'POST':
-		name = (request.POST.get('name') or '').strip()
-		street_name = (request.POST.get('street_name') or '').strip()
-		bio = request.POST.get('bio', '')
-		discovered = request.POST.get('discovered')
-		date_of_birth = request.POST.get('date_of_birth')
-		date_of_death = request.POST.get('date_of_death')
-		type_id = (request.POST.get('type') or '').strip()
-		nationality_id = (request.POST.get('nationality') or '').strip()
-		image = request.FILES.get('image')
-		spouse = (request.POST.get('spouse') or '').strip()
-		influence = (request.POST.get('influence') or '').strip()
-		net_worth_raw = (request.POST.get('net_worth') or '').replace(',', '').strip()
+    types = Type.objects.select_related('family__category').order_by(
+        'family__category__name', 'family__name', 'name'
+    )
+    countries = Country.objects.all()
 
-		# Avoid production 500s on malformed/empty required fields.
-		errors = []
-		if not name:
-			errors.append('Name is required.')
-		# if not street_name:
-		# 	errors.append('Street name is required.')
-		if not type_id:
-			errors.append('Category / Family / Type is required.')
-		if not nationality_id:  # added
-			errors.append('Nationality is required.')
-		if net_worth_raw:
-				try:
-						net_worth_value = Decimal(net_worth_raw)
-				except (InvalidOperation, ValueError):
-						errors.append('Net Worth must be a valid number.')
+    if request.method == 'POST':
+        name = (request.POST.get('name') or '').strip()
+        street_name = (request.POST.get('street_name') or '').strip()  # optional
+        bio = request.POST.get('bio', '')
+        discovered = request.POST.get('discovered')
+        date_of_birth = request.POST.get('date_of_birth')
+        date_of_death = request.POST.get('date_of_death')
+        type_id = (request.POST.get('type') or '').strip()
+        nationality_id = (request.POST.get('nationality') or '').strip()
+        image = request.FILES.get('image')
+        spouse = (request.POST.get('spouse') or '').strip()
+        influence = (request.POST.get('influence') or '').strip()
+        net_worth_raw = (request.POST.get('net_worth') or '').replace(',', '').strip()
+        net_worth_value = None
 
-		if errors:
-			for err in errors:
-				messages.error(request, err)
-			return render(request, 'celebs/celeb_form.html', {
-				'types': types,
-				'countries': countries,
-				'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-			})
+        errors = []
+        if not name:
+            errors.append('Name is required.')
+        if not type_id:
+            errors.append('Category / Family / Type is required.')
+        if not nationality_id:
+            errors.append('Nationality is required.')
+        if not image:
+            errors.append('Image is required.')
 
-		try:
-			with transaction.atomic():
-				new_celeb = Celeb.objects.create(
-					name=name,
-					street_name=street_name,
-					bio=bio,
-					type_id=type_id,
-					nationality_id=nationality_id,
-					discovered=discovered or None,
-					date_of_birth=date_of_birth or None,
-					date_of_death=date_of_death or None,
-					image=image,
-					spouse=spouse,
-					awards=request.POST.get('awards', ''),
-					featured_video=request.POST.get('featured_video', ''),
-					published=request.POST.get('published') == 'on',
-					influence=influence,
-					net_worth=net_worth_value if net_worth_raw else None,
-				)
-				_save_social_links(request, new_celeb)
-				# Auto-add non-staff creators as managers so they can edit their own celeb
-				if not request.user.is_staff:
-					try:
-						new_celeb.managers.add(request.user)
-					except Exception:
-						logger.exception('Could not attach creator as manager for celeb=%s user=%s', new_celeb.pk, request.user.pk)
-						messages.warning(request, 'Celeb created, but manager link could not be saved.')
-		except Exception:
-			logger.exception('Celeb create failed for user=%s', request.user.pk)
-			# Production fallback: if image upload/storage fails, create the celeb without image.
-			if image:
-				try:
-					with transaction.atomic():
-						new_celeb = Celeb.objects.create(
-							name=name,
-							street_name=street_name,
-							bio=bio,
-							type_id=type_id,
-							nationality_id=nationality_id,
-							discovered=discovered or None,
-							date_of_birth=date_of_birth or None,
-							date_of_death=date_of_death or None,
-							image=None,
-							awards=request.POST.get('awards', ''),
-							featured_video=request.POST.get('featured_video', ''),
-							published=request.POST.get('published') == 'on',
-						)
-						_save_social_links(request, new_celeb)
-						if not request.user.is_staff:
-							try:
-								new_celeb.managers.add(request.user)
-							except Exception:
-								logger.exception('Could not attach creator as manager during fallback for celeb=%s user=%s', new_celeb.pk, request.user.pk)
-								messages.warning(request, 'Celeb created, but manager link could not be saved.')
-				except Exception:
-					logger.exception('Celeb create fallback-without-image failed for user=%s', request.user.pk)
-					messages.error(
-						request,
-						'Could not create celeb right now. Please try again later.',
-					)
-					return render(request, 'celebs/celeb_form.html', {
-						'types': types,
-						'countries': countries,
-						'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-					})
+        if net_worth_raw:
+            try:
+                net_worth_value = Decimal(net_worth_raw)
+            except (InvalidOperation, ValueError):
+                errors.append('Net Worth must be a valid number.')
 
-				messages.warning(
-					request,
-					'Celeb was created, but the image upload failed. You can upload the image later from Edit.',
-				)
-				return HttpResponseRedirect(new_celeb.get_absolute_url())
+        if errors:
+            for err in errors:
+                messages.error(request, err)
+            return render(request, 'celebs/celeb_form.html', {
+                'types': types,
+                'countries': countries,
+                'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+            })
 
-			messages.error(
-				request,
-				'Could not create celeb right now. Please try again later.',
-			)
-			return render(request, 'celebs/celeb_form.html', {
-				'types': types,
-				'countries': countries,
-				'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-			})
+        try:
+            with transaction.atomic():
+                new_celeb = Celeb.objects.create(
+                    name=name,
+                    street_name=street_name,
+                    bio=bio,
+                    type_id=type_id,
+                    nationality_id=nationality_id,
+                    discovered=discovered or None,
+                    date_of_birth=date_of_birth or None,
+                    date_of_death=date_of_death or None,
+                    image=image,
+                    spouse=spouse,
+                    awards=request.POST.get('awards', ''),
+                    featured_video=request.POST.get('featured_video', ''),
+                    published=request.POST.get('published') == 'on',
+                    influence=influence,
+                    net_worth=net_worth_value,
+                )
+                _save_social_links(request, new_celeb)
 
-		messages.success(request, 'Celeb created successfully.')
-		return HttpResponseRedirect(new_celeb.get_absolute_url())
-	context = {	
-		'types': types,
-		'countries': countries,
-		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-	}
-	return render(request, 'celebs/celeb_form.html', context)
+                # Optional: auto-link creator if model has managers M2M
+                if not request.user.is_staff and hasattr(new_celeb, 'managers'):
+                    new_celeb.managers.add(request.user)
 
+        except Exception:
+            logger.exception('Celeb create failed for user=%s', request.user.pk)
+            messages.error(request, 'Could not create celeb right now. Please try again later.')
+            return render(request, 'celebs/celeb_form.html', {
+                'types': types,
+                'countries': countries,
+                'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+            })
+
+        messages.success(request, 'Celeb created successfully.')
+        return HttpResponseRedirect(new_celeb.get_absolute_url())
+
+    return render(request, 'celebs/celeb_form.html', {
+        'types': types,
+        'countries': countries,
+        'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+    })
 # ...existing code...
 @login_required
 def celeb_update(request, slug):
