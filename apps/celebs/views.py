@@ -1,7 +1,8 @@
 
+from email import errors
 import json
 import logging
-
+from decimal import Decimal, InvalidOperation
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -307,20 +308,27 @@ def celeb_create(request):
 		date_of_birth = request.POST.get('date_of_birth')
 		date_of_death = request.POST.get('date_of_death')
 		type_id = (request.POST.get('type') or '').strip()
-		nationality_id = request.POST.get('nationality') or None
+		nationality_id = (request.POST.get('nationality') or '').strip()
 		image = request.FILES.get('image')
 		spouse = (request.POST.get('spouse') or '').strip()
 		influence = (request.POST.get('influence') or '').strip()
-		net_worth = (request.POST.get('net_worth') or '').strip()
+		net_worth_raw = (request.POST.get('net_worth') or '').replace(',', '').strip()
 
 		# Avoid production 500s on malformed/empty required fields.
 		errors = []
 		if not name:
 			errors.append('Name is required.')
-		if not street_name:
-			errors.append('Street name is required.')
+		# if not street_name:
+		# 	errors.append('Street name is required.')
 		if not type_id:
 			errors.append('Category / Family / Type is required.')
+		if not nationality_id:  # added
+			errors.append('Nationality is required.')
+		if net_worth_raw:
+				try:
+						net_worth_value = Decimal(net_worth_raw)
+				except (InvalidOperation, ValueError):
+						errors.append('Net Worth must be a valid number.')
 
 		if errors:
 			for err in errors:
@@ -348,8 +356,7 @@ def celeb_create(request):
 					featured_video=request.POST.get('featured_video', ''),
 					published=request.POST.get('published') == 'on',
 					influence=influence,
-					net_worth=net_worth,
-
+					net_worth=net_worth_value if net_worth_raw else None,
 				)
 				_save_social_links(request, new_celeb)
 				# Auto-add non-staff creators as managers so they can edit their own celeb
@@ -423,39 +430,89 @@ def celeb_create(request):
 	}
 	return render(request, 'celebs/celeb_form.html', context)
 
+# ...existing code...
 @login_required
 def celeb_update(request, slug):
-	celeb = get_object_or_404(Celeb, slug=slug)
-	if not request.user.has_perm('celebs.change_celeb', celeb):
-		raise PermissionDenied
-	types = Type.objects.select_related('family__category').order_by('family__category__name', 'family__name', 'name')
-	countries = Country.objects.all()
-	if request.method == 'POST':
-		celeb.name = request.POST.get('name')
-		celeb.street_name = request.POST.get('street_name')
-		celeb.bio = request.POST.get('bio', '').strip()
-		celeb.type_id = request.POST.get('type')
-		celeb.nationality_id = request.POST.get('nationality') or None
-		celeb.discovered = request.POST.get('discovered') or None
-		celeb.date_of_birth = request.POST.get('date_of_birth') or None
-		celeb.date_of_death = request.POST.get('date_of_death') or None
-		celeb.spouse = request.POST.get('spouse', '').strip()
-		celeb.influence = request.POST.get('influence', '').strip()
-		net_worth_raw = request.POST.get('net_worth', '').replace(',', '').strip()
-		celeb.net_worth = net_worth_raw if net_worth_raw else None
-		celeb.awards = request.POST.get('awards', '').strip()
-		celeb.featured_video = request.POST.get('featured_video', '')
-		celeb.published = request.POST.get('published') == 'on'
-		if request.FILES.get('image'):
-			celeb.image = request.FILES.get('image')
-		celeb.save()
-		_save_social_links(request, celeb)
-		return HttpResponseRedirect(celeb.get_absolute_url())
-	return render(request, 'celebs/celeb_form.html', {
-		'celeb': celeb, 'types': types, 'countries': countries,
-		'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
-	})
+    celeb = get_object_or_404(Celeb, slug=slug)
+    if not request.user.has_perm('celebs.change_celeb', celeb):
+        raise PermissionDenied
 
+    types = Type.objects.select_related('family__category').order_by(
+        'family__category__name', 'family__name', 'name'
+    )
+    countries = Country.objects.all()
+
+    if request.method == 'POST':
+        name = (request.POST.get('name') or '').strip()
+        street_name = (request.POST.get('street_name') or '').strip()  # optional
+        type_id = (request.POST.get('type') or '').strip()
+        nationality_id = (request.POST.get('nationality') or '').strip()
+        uploaded_image = request.FILES.get('image')
+
+        net_worth_raw = (request.POST.get('net_worth') or '').replace(',', '').strip()
+        net_worth_value = None
+        if net_worth_raw:
+            try:
+                net_worth_value = Decimal(net_worth_raw)
+            except (InvalidOperation, ValueError):
+                messages.error(request, 'Net Worth must be a valid number.')
+                return render(request, 'celebs/celeb_form.html', {
+                    'celeb': celeb,
+                    'types': types,
+                    'countries': countries,
+                    'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+                })
+
+        errors = []
+        if not name:
+            errors.append('Name is required.')
+        if not type_id:
+            errors.append('Category / Family / Type is required.')
+        if not nationality_id:
+            errors.append('Nationality is required.')
+        if not celeb.image and not uploaded_image:
+            errors.append('Image is required.')
+
+        # Refill form values (not saved yet) for better UX on validation error
+        celeb.name = name
+        celeb.street_name = street_name
+        celeb.bio = request.POST.get('bio', '').strip()
+        celeb.type_id = type_id or None
+        celeb.nationality_id = nationality_id or None
+        celeb.discovered = request.POST.get('discovered') or None
+        celeb.date_of_birth = request.POST.get('date_of_birth') or None
+        celeb.date_of_death = request.POST.get('date_of_death') or None
+        celeb.spouse = request.POST.get('spouse', '').strip()
+        celeb.influence = request.POST.get('influence', '').strip()
+        celeb.net_worth = net_worth_value
+        celeb.awards = request.POST.get('awards', '').strip()
+        celeb.featured_video = request.POST.get('featured_video', '').strip()
+        celeb.published = request.POST.get('published') == 'on'
+
+        if errors:
+            for err in errors:
+                messages.error(request, err)
+            return render(request, 'celebs/celeb_form.html', {
+                'celeb': celeb,
+                'types': types,
+                'countries': countries,
+                'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+            })
+
+        if uploaded_image:
+            celeb.image = uploaded_image
+
+        celeb.save()
+        _save_social_links(request, celeb)
+        return HttpResponseRedirect(celeb.get_absolute_url())
+
+    return render(request, 'celebs/celeb_form.html', {
+        'celeb': celeb,
+        'types': types,
+        'countries': countries,
+        'platform_choices': CelebSocialLink.PLATFORM_CHOICES,
+    })
+# ...existing code...
 @login_required
 def celeb_delete(request, pk):
 	celeb = get_object_or_404(Celeb, pk=pk)
@@ -468,18 +525,38 @@ def celeb_delete(request, pk):
 
 @login_required
 def celeb_photo_upload(request, pk):
-	celeb = get_object_or_404(Celeb, pk=pk)
-	if not request.user.has_perm('celebs.change_celeb', celeb):
-		raise PermissionDenied
-	if request.method == 'POST':
-		for f in request.FILES.getlist('photos'):
-			CelebPhoto.objects.create(
-				celeb=celeb,
-				image=f,
-				caption=request.POST.get('caption', ''),
-			)
-	return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
+    celeb = get_object_or_404(Celeb, pk=pk)
+    if not request.user.has_perm('celebs.change_celeb', celeb):
+        raise PermissionDenied
 
+    if request.method != 'POST':
+        return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
+
+    photos = request.FILES.getlist('photos')
+    caption = (request.POST.get('caption') or '').strip()
+
+    if not photos:
+        messages.error(request, 'Please choose at least one photo to upload.')
+        return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
+
+    uploaded = 0
+    for f in photos:
+        content_type = (getattr(f, 'content_type', '') or '').lower()
+        if not content_type.startswith('image/'):
+            continue
+        CelebPhoto.objects.create(
+            celeb=celeb,
+            image=f,
+            caption=caption,
+        )
+        uploaded += 1
+
+    if uploaded == 0:
+        messages.error(request, 'Only image files are allowed.')
+    else:
+        messages.success(request, f'{uploaded} photo(s) uploaded.')
+
+    return HttpResponseRedirect(celeb.get_absolute_url() + '#gallery')
 @login_required
 def celeb_photo_delete(request, pk):
 	photo = get_object_or_404(CelebPhoto, pk=pk)

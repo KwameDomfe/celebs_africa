@@ -14,6 +14,15 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
+.required::after { content: " *"; color: #ff5c5c; }
+.required-note {
+    display: block;
+    margin: -8px 0 14px;
+    font-size: 0.78rem;
+    color: #9a9a9a;
+}
+
 .celeb-form input[type="text"],
 .celeb-form input[type="url"],
 .celeb-form input[type="date"],
@@ -113,26 +122,30 @@
         autocomplete="off" 
         class="celeb-form"
     >{% csrf_token %}
+        <span class="required-note">Fields marked * are required.</span>
         <div class="form-field"
         >
-            <label for="id_name">
+            <label for="id_name" class="required">
                 Name
             </label>
             <input id="id_name" 
                 type="text" 
                 name="name" 
                 value="{{ celeb.name|default:'' }}"
+                required
+                aria-required="true"
             >
         </div>
 
         <div class="form-field"
         >
-            <label for="id_type">
+            <label for="id_type" class="required">
                 Category / Family / Type
             </label>
             <select id="id_type" 
                 name="type" 
                 required
+                aria-required="true"
             >
                 <option value="">
                     -- Select type --
@@ -164,11 +177,15 @@
 
         <div class="form-field"
         >
-            <label for="id_nationality">
+            <label for="id_nationality"
+                class="required"
+            >
                 Nationality
             </label>
             <select id="id_nationality"
                 name="nationality"
+                required
+                aria-required="true"
             >
                 <option value="">
                     -- Select country --
@@ -272,11 +289,14 @@
         </div>
 
         <div class="form-field">
-            <label for="id_image">Image</label>
-            <input id="id_image" 
-                type="file" 
-                name="image" 
+            <label for="id_image" class="{% if not celeb or not celeb.image %}required{% endif %}">
+                Image
+            </label>
+            <input id="id_image"
+                type="file"
+                name="image"
                 accept="image/*"
+                {% if not celeb or not celeb.image %}required aria-required="true"{% endif %}
             >
             {% if celeb and celeb.image %}
             <div class="current-image">

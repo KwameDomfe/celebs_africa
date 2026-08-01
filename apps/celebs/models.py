@@ -81,7 +81,11 @@ class Celeb(models.Model):
 	name = models.CharField(max_length=100)
 	slug = models.SlugField(max_length=120, unique=True, blank=True)
 	type = models.ForeignKey(Type, on_delete=models.PROTECT, related_name='celebs', null=True, blank=True)
-	street_name = models.CharField(max_length=50)
+	street_name = models.CharField(
+		max_length=50, 
+		blank=True, 
+		null=True,
+		help_text='Optional street name or nickname for disambiguation')
 	bio = models.TextField(blank=True)
 	influence = models.TextField(blank=True, null=True, help_text='Notable influence, impact, or legacy')
 	net_worth = models.DecimalField(
