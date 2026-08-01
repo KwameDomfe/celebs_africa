@@ -2,412 +2,496 @@
 {% block title %}Posts | CelebsAfrica{% endblock %}
 
 {% block content %}
-<style>
-@media (max-width: 767px) {
-    .posts-grid { gap: 0 !important; }
-    .posts-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
-    .posts-main { grid-column: 1 / -1 !important; }
-}
+    <style>
+        @media (max-width: 767px) {
+            .posts-grid { gap: 0 !important; }
+            .posts-aside { grid-column: 1 / -1 !important; position: static !important; height: auto !important; }
+            .posts-main { grid-column: 1 / -1 !important; }
+        }
 
-.posts-wrap { color: rgba(255,255,255,0.9); }
-.post-create,
-.post-card {
-    background: #111;
-    border: 1px solid #2f2f2f;
-    border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 14px;
-}
-.post-create textarea,
-.post-comment-input {
-    width: 100%;
-    box-sizing: border-box;
-    background: #0a0a0a;
-    color: rgba(255,255,255,0.9);
-    border: 1px solid #2f2f2f;
-    border-radius: 6px;
-    padding: 10px;
-}
-.post-create textarea:focus,
-.post-comment-input:focus { outline: none; border-color: #b00; }
-.post-submit,
-.post-btn {
-    background: #b00;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-.post-btn-secondary {
-    background: transparent;
-    color: rgba(255,255,255,0.85);
-    border: 1px solid #555;
-}
-.post-btn-secondary:hover {
-    background: #1d1d1d;
-    border-color: #777;
-}
-.post-btn-danger {
-    background: transparent;
-    color: #ff8a8a;
-    border: 1px solid #7a3030;
-}
-.post-btn-danger:hover {
-    background: #2a1111;
-    border-color: #b44;
-}
-.post-submit:hover,
-.post-btn:hover { background: #d10000; }
-.post-meta { color: #888; font-size: 0.85rem; margin-bottom: 10px; }
-.post-text { white-space: pre-wrap; margin-bottom: 12px; }
-.post-media {
-    margin-bottom: 12px;
-}
-.post-media img {
-    width: 100%;
-    max-height: 460px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #2f2f2f;
-}
-.post-upload-preview {
-    margin-top: 8px;
-}
-.post-upload-preview img {
-    width: 100%;
-    max-height: 260px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #2f2f2f;
-}
-.post-upload-hint {
-    display: block;
-    margin-top: 4px;
-    color: #777;
-    font-size: 0.8rem;
-}
-.post-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
-.post-actions a { text-decoration: none; }
-.comment-item { border-top: 1px solid #242424; padding-top: 8px; margin-top: 8px; }
-.comment-item p { margin: 4px 0; }
-.share-links { display: flex; gap: 8px; flex-wrap: wrap; }
-.share-link {
-    font-size: 0.82rem;
-    border: 1px solid #444;
-    border-radius: 12px;
-    padding: 4px 8px;
-    color: rgba(255,255,255,0.8);
-}
-.share-link:hover { border-color: #999; color: #fff; }
+        .posts-wrap { color: rgba(255,255,255,0.9); }
+        .post-create,
+        .post-card {
+            background: #111;
+            border: 1px solid #2f2f2f;
+            border-radius: 6px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .post-create textarea,
+        .post-comment-input {
+            width: 100%;
+            box-sizing: border-box;
+            background: #0a0a0a;
+            color: rgba(255,255,255,0.9);
+            border: 1px solid #2f2f2f;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .post-create textarea:focus,
+        .post-comment-input:focus { outline: none; border-color: #b00; }
+        .post-submit,
+        .post-btn {
+            background: #b00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .post-btn-secondary {
+            background: transparent;
+            color: rgba(255,255,255,0.85);
+            border: 1px solid #555;
+        }
+        .post-btn-secondary:hover {
+            background: #1d1d1d;
+            border-color: #777;
+        }
+        .post-btn-danger {
+            background: transparent;
+            color: #ff8a8a;
+            border: 1px solid #7a3030;
+        }
+        .post-btn-danger:hover {
+            background: #2a1111;
+            border-color: #b44;
+        }
+        .post-submit:hover,
+        .post-btn:hover { background: #d10000; }
+        .post-meta { color: #888; font-size: 0.85rem; margin-bottom: 10px; }
+        .post-text { white-space: pre-wrap; margin-bottom: 12px; }
+        .post-media {
+            margin-bottom: 12px;
+        }
+        .post-media img {
+            width: 100%;
+            max-height: 460px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #2f2f2f;
+        }
+        .post-upload-preview {
+            margin-top: 8px;
+        }
+        .post-upload-preview img {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #2f2f2f;
+        }
+        .post-upload-hint {
+            display: block;
+            margin-top: 4px;
+            color: #777;
+            font-size: 0.8rem;
+        }
+        .post-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+        .post-actions a { text-decoration: none; }
+        .comment-item { border-top: 1px solid #242424; padding-top: 8px; margin-top: 8px; }
+        .comment-item p { margin: 4px 0; }
+        .share-links { display: flex; gap: 8px; flex-wrap: wrap; }
+        .share-link {
+            font-size: 0.82rem;
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 4px 8px;
+            color: rgba(255,255,255,0.8);
+        }
+        .share-link:hover { border-color: #999; color: #fff; }
 
-.posts-aside-box {
-    background: #111;
-    border: 1px solid #2f2f2f;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 12px;
-}
-.posts-aside-title {
-    margin: 0 0 8px;
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #999;
-}
-.posts-aside-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    border-bottom: 1px solid #242424;
-    padding: 8px 0;
-    font-size: 0.92rem;
-}
-.posts-aside-stat:last-child { border-bottom: none; }
-.posts-aside-stat strong { color: #f0f0f0; }
-.posts-aside-links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.posts-aside-link {
-    display: inline-block;
-    text-decoration: none;
-    color: #ddd;
-    border: 1px solid #444;
-    border-radius: 4px;
-    padding: 8px 10px;
-    font-size: 0.9rem;
-}
-.posts-aside-link:hover {
-    border-color: #777;
-    color: #fff;
-}
-</style>
+        .posts-aside-box {
+            background: #111;
+            border: 1px solid #2f2f2f;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .posts-aside-title {
+            margin: 0 0 8px;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #999;
+        }
+        .posts-aside-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #242424;
+            padding: 8px 0;
+            font-size: 0.92rem;
+        }
+        .posts-aside-stat:last-child { border-bottom: none; }
+        .posts-aside-stat strong { color: #f0f0f0; }
+        .posts-aside-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .posts-aside-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #ddd;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+        .posts-aside-link:hover {
+            border-color: #777;
+            color: #fff;
+        }
 
-<div class="grid gtc12 ggap2-00 bg-black-90 posts-grid">
-    <aside class="gc1s4 pa1-00 bg-black-80 sticky posts-aside" style="top:0px; align-self:start;">
-        <div style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
-            <h1 class="gray" style="margin:0;">Posts</h1>
-            <p style="margin:4px 0 0; color:#777;">Manage your posts and interactions</p>
-        </div>
-        <div class="posts-aside-box">
-            <p class="posts-aside-title">Posts Hub</p>
-            <p style="margin:0; color:#aaa; line-height:1.4;">Write updates, join conversations, and manage your content from one place.</p>
-        </div>
+        .post-media img { cursor: zoom-in; }
+    </style>
 
-        <div class="posts-aside-box">
-            <p class="posts-aside-title">Your Activity</p>
-            <div class="posts-aside-stat gray"><span>Live posts</span><strong>{{ posts|length }}</strong></div>
-            <div class="posts-aside-stat gray"><span>Liked posts</span><strong>{{ liked_post_ids|length }}</strong></div>
-            <div class="posts-aside-stat gray"><span>Deleted posts</span><strong>{{ deleted_posts|length }}</strong></div>
-            <div class="posts-aside-stat gray"><span>Deleted comments</span><strong>{{ deleted_comments|length }}</strong></div>
-        </div>
-
-        <div class="posts-aside-box">
-            <p class="posts-aside-title">Quick Actions</p>
-            <div class="posts-aside-links">
-                <a href="#id_post_text" class="posts-aside-link">Create a new post</a>
-                <a href="#trash" class="posts-aside-link">Open trash</a>
+    <div class="grid gtc12 ggap2-00 bg-black-90 posts-grid">
+        <aside class="gc1s4 pa1-00 bg-black-80 sticky posts-aside" style="top:0px; align-self:start;">
+            <div style="margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
+                <h1 class="gray" style="margin:0;">Posts</h1>
+                <p style="margin:4px 0 0; color:#777;">Manage your posts and interactions</p>
             </div>
-        </div>
-    </aside>
+            <div class="posts-aside-box">
+                <p class="posts-aside-title">Posts Hub</p>
+                <p style="margin:0; color:#aaa; line-height:1.4;">
+                    Write updates, join conversations, and manage your content from one place.
+                </p>
+            </div>
 
-    <div class="gc5s8 posts-main ph1-00"
-    >
-        <div class="posts-wrap pa1-00"
-        >            
-            <h2 class="gray"style="margin:0 0 16px;"
+            <div class="posts-aside-box"
             >
-                Posts Hub
-            </h2>
+                <p class="posts-aside-title">Your Activity</p>
+                <div class="posts-aside-stat gray"><span>Live posts</span><strong>{{ posts|length }}</strong></div>
+                <div class="posts-aside-stat gray"><span>Liked posts</span><strong>{{ liked_post_ids|length }}</strong></div>
+                <div class="posts-aside-stat gray"><span>Deleted posts</span><strong>{{ deleted_posts|length }}</strong></div>
+                <div class="posts-aside-stat gray"><span>Deleted comments</span><strong>{{ deleted_comments|length }}</strong></div>
+            </div>
 
-            <form method="post" 
-                action="{% url 'post_create' %}" 
-                class="post-create" 
-                enctype="multipart/form-data"
-            >
-                {% csrf_token %}
-                <label for="id_post_text" 
-                    style="display:block; 
-                    margin-bottom:8px; 
-                    color:#bbb; 
-                    font-weight:600;"
-                >
-                    Create a post
-                </label>
-                <textarea id="id_post_text" 
-                    name="text" 
-                    rows="4" 
-                    maxlength="1200" 
-                    placeholder="Share an update with everyone..."
-                ></textarea>
-                <label for="id_post_image" style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Add image (optional)</label>
-                <input id="id_post_image" type="file" name="image" accept="image/*" style="display:block; color:#aaa;">
-                <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
-                <div id="id_post_create_preview" class="post-upload-preview" style="display:none;"></div>
-                <div style="margin-top:10px;">
-                    <button type="submit" class="post-submit">Post</button>
+            <div class="posts-aside-box">
+                <p class="posts-aside-title">Quick Actions</p>
+                <div class="posts-aside-links">
+                    <a href="#id_post_text" class="posts-aside-link">Create a new post</a>
+                    <a href="#trash" class="posts-aside-link">Open trash</a>
                 </div>
-            </form>
+            </div>
+        </aside>
 
-            {% for post in posts %}
-                <article id="post-{{ post.pk }}" class="post-card">
-                    <div class="post-meta">
-                        <strong>{{ post.user.get_full_name|default:post.user.username }}</strong>
-                        · {{ post.created_at|date:"d M Y, H:i" }}
-                        {% if post.updated_at != post.created_at %}
-                        · edited {{ post.updated_at|timesince }} ago
-                        {% endif %}
+        <div class="gc5s8 posts-main ph1-00"
+        >
+            <div class="posts-wrap pa1-00"
+            >            
+                <h2 class="gray"style="margin:0 0 16px;"
+                >
+                    Posts Hub
+                </h2>
+
+                <form method="post" 
+                    action="{% url 'post_create' %}" 
+                    class="post-create" 
+                    enctype="multipart/form-data"
+                >
+                    {% csrf_token %}
+                    <label for="id_post_text" 
+                        style="display:block; 
+                        margin-bottom:8px; 
+                        color:#bbb; 
+                        font-weight:600;"
+                    >
+                        Create a post
+                    </label>
+                    <textarea id="id_post_text" 
+                        name="text" 
+                        rows="4" 
+                        maxlength="1200" 
+                        placeholder="Share an update with everyone..."
+                    ></textarea>
+                    <label for="id_post_image" style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Add image (optional)</label>
+                    <input id="id_post_image" type="file" name="image" accept="image/*" style="display:block; color:#aaa;">
+                    <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
+                    <div id="id_post_create_preview" class="post-upload-preview" style="display:none;"></div>
+                    <div style="margin-top:10px;">
+                        <button type="submit" class="post-submit">Post</button>
                     </div>
+                </form>
 
-                    <p class="post-text">{{ post.text }}</p>
-                    {% if post.image %}
-                        <div class="post-media">
-                            <img src="{{ post.image.url }}" alt="Post image by {{ post.user.username }}">
-                        </div>
-                    {% endif %}
-
-                    {% if request.user == post.user %}
-                    <details style="margin:0 0 12px;">
-                        <div>
-                            <summary class="ba br0-25" style="cursor:pointer; color:#bbb;">
-                                Edit post
-                            </summary>
-                        </div>
-                        <form method="post" action="{% url 'post_edit' post.pk %}" style="margin-top:8px;" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <textarea class="post-comment-input" name="text" rows="3" maxlength="1200">{{ post.text }}</textarea>
-                            <label style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Replace image (optional)</label>
-                            <input type="file" name="image" accept="image/*" style="display:block; color:#aaa;" id="id_post_image_edit_{{ post.pk }}">
-                            <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
-                            <div id="id_post_edit_preview_{{ post.pk }}" class="post-upload-preview" style="display:none;"></div>
-                            {% if post.image %}
-                            <label style="display:flex; align-items:center; gap:8px; margin-top:8px; color:#aaa; font-size:0.88rem;">
-                                <input type="checkbox" name="remove_image"> Remove current image
-                            </label>
+                {% for post in posts %}
+                    <article id="post-{{ post.pk }}" class="post-card">
+                        <div class="post-meta">
+                            <strong>{{ post.user.get_full_name|default:post.user.username }}</strong>
+                            · {{ post.created_at|date:"d M Y, H:i" }}
+                            {% if post.updated_at != post.created_at %}
+                            · edited {{ post.updated_at|timesince }} ago
                             {% endif %}
-                            <div style="margin-top:8px;">
-                                <button type="submit" class="post-btn post-btn-secondary">Save post</button>
-                            </div>
-                        </form>
-                    </details>
-                    <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Delete this post?');" style="margin:0 0 12px;">
-                        {% csrf_token %}
-                        <button type="submit" class="post-btn post-btn-danger">Move post to trash</button>
-                    </form>
-                    {% endif %}
-
-                    <div class="post-actions">
-                        <form method="post" action="{% url 'post_like' post.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="post-btn">
-                                {% if post.pk in liked_post_ids %}Unlike{% else %}Like{% endif %}
-                                ({{ post.like_count }})
-                            </button>
-                        </form>
-
-                        <span style="color:#888;">Comments: {{ post.comment_count }}</span>
-                        <span style="color:#888;">Shares: {{ post.share_count }}</span>
-                    </div>
-
-                    <div class="share-links" style="margin-bottom:10px;">
-                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'facebook' %}">Share to Facebook</a>
-                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'twitter' %}">Share to Twitter/X</a>
-                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'whatsapp' %}">Share to WhatsApp</a>
-                        <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'telegram' %}">Share to Telegram</a>
-                    </div>
-
-                    <form method="post" action="{% url 'post_comment' post.pk %}">
-                        {% csrf_token %}
-                        <label for="id_comment_{{ post.pk }}" style="display:block; margin-bottom:6px; color:#bbb;">Add comment</label>
-                        <textarea id="id_comment_{{ post.pk }}" class="post-comment-input" name="text" rows="2" maxlength="600" placeholder="Write a comment..."></textarea>
-                        <div style="margin-top:8px;">
-                            <button type="submit" class="post-btn">Comment</button>
                         </div>
-                    </form>
 
-                    {% for comment in post.comments.all %}
-                    <div class="comment-item">
-                        <p style="margin:0; font-size:0.88rem;"><strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong> <span style="color:#777;">{{ comment.created_at|date:"d M Y, H:i" }}</span>{% if comment.updated_at != comment.created_at %} <span style="color:#666;">· edited {{ comment.updated_at|timesince }} ago</span>{% endif %}</p>
-                        <p>{{ comment.text }}</p>
-                        {% if request.user == comment.user %}
-                        <details style="margin-top:6px;">
-                            <summary style="cursor:pointer; color:#888; font-size:0.85rem;">Edit comment</summary>
-                            <form method="post" action="{% url 'post_comment_edit' comment.pk %}" style="margin-top:6px;">
+                        <p class="post-text">{{ post.text }}</p>
+                        {% if post.image %}
+                            <div class="post-media">
+                                <img src="{{ post.image.url }}" 
+                                    alt="Post image by {{ post.user.username }}"
+                                    data-media-modal="image"
+                                    tabindex="0"
+                                    role="button"
+                                >
+                            </div>
+                        {% endif %}
+
+                        {% if request.user == post.user %}
+                        <details style="margin:0 0 12px;">
+                            <div>
+                                <summary class="ba br0-25" style="cursor:pointer; color:#bbb;">
+                                    Edit post
+                                </summary>
+                            </div>
+                            <form method="post" action="{% url 'post_edit' post.pk %}" style="margin-top:8px;" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <textarea class="post-comment-input" name="text" rows="2" maxlength="600">{{ comment.text }}</textarea>
+                                <textarea class="post-comment-input" name="text" rows="3" maxlength="1200">{{ post.text }}</textarea>
+                                <label style="display:block; margin:8px 0 4px; color:#999; font-size:0.88rem;">Replace image (optional)</label>
+                                <input type="file" name="image" accept="image/*" style="display:block; color:#aaa;" id="id_post_image_edit_{{ post.pk }}">
+                                <span class="post-upload-hint">Max 5MB, up to 4096x4096</span>
+                                <div id="id_post_edit_preview_{{ post.pk }}" class="post-upload-preview" style="display:none;"></div>
+                                {% if post.image %}
+                                <label style="display:flex; align-items:center; gap:8px; margin-top:8px; color:#aaa; font-size:0.88rem;">
+                                    <input type="checkbox" name="remove_image"> Remove current image
+                                </label>
+                                {% endif %}
                                 <div style="margin-top:8px;">
-                                    <button type="submit" class="post-btn post-btn-secondary">Save comment</button>
+                                    <button type="submit" class="post-btn post-btn-secondary">Save post</button>
                                 </div>
                             </form>
                         </details>
-                        <form method="post" action="{% url 'post_comment_delete' comment.pk %}" onsubmit="return confirm('Delete this comment?');" style="margin-top:8px;">
+                        <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Delete this post?');" style="margin:0 0 12px;">
                             {% csrf_token %}
-                            <button type="submit" class="post-btn post-btn-danger">Move comment to trash</button>
+                            <button type="submit" class="post-btn post-btn-danger">Move post to trash</button>
                         </form>
                         {% endif %}
-                    </div>
-                    {% empty %}
-                    <p style="color:#777; margin-top:10px;">No comments yet.</p>
-                    {% endfor %}
-                </article>
-            {% empty %}
-                <div class="post-card">
-                    <p style="margin:0; color:#aaa;">No posts yet. Be the first to post something.</p>
-                </div>
-            {% endfor %}
 
-            {% if deleted_posts or deleted_comments %}
-                <div id="trash" class="post-card" style="margin-top:20px;"
-                >
-                    <h3 style="margin:0 0 8px; color:#ddd;">Trash</h3>
-                    <p style="margin:0 0 12px; color:#888;">
-                        Items here are hidden from the feed until restored.
-                    </p>
+                        <div class="post-actions">
+                            <form method="post" action="{% url 'post_like' post.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="post-btn">
+                                    {% if post.pk in liked_post_ids %}Unlike{% else %}Like{% endif %}
+                                    ({{ post.like_count }})
+                                </button>
+                            </form>
 
-                    {% if deleted_posts %}
-                        <h4 style="margin:8px 0; color:#bbb;">Deleted posts</h4>
-                        {% for post in deleted_posts %}
-                            <div class="comment-item" style="border-top:1px solid #333;">
-                                <p style="margin:0 0 6px; color:#888;">Deleted {{ post.deleted_at|timesince }} ago</p>
-                                <p style="margin:0 0 8px;">{{ post.text|truncatechars:180 }}</p>
-                                {% if post.image %}
-                                <div class="post-media">
-                                    <img src="{{ post.image.url }}" alt="Deleted post image">
-                                </div>
-                                {% endif %}
-                                <form method="post" action="{% url 'post_restore' post.pk %}">
+                            <span style="color:#888;">Comments: {{ post.comment_count }}</span>
+                            <span style="color:#888;">Shares: {{ post.share_count }}</span>
+                        </div>
+
+                        <div class="share-links" style="margin-bottom:10px;">
+                            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'facebook' %}">Share to Facebook</a>
+                            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'twitter' %}">Share to Twitter/X</a>
+                            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'whatsapp' %}">Share to WhatsApp</a>
+                            <a class="share-link" target="_blank" rel="noopener" href="{% url 'post_share' post.pk 'telegram' %}">Share to Telegram</a>
+                        </div>
+
+                        <form method="post" action="{% url 'post_comment' post.pk %}">
+                            {% csrf_token %}
+                            <label for="id_comment_{{ post.pk }}" style="display:block; margin-bottom:6px; color:#bbb;">Add comment</label>
+                            <textarea id="id_comment_{{ post.pk }}" class="post-comment-input" name="text" rows="2" maxlength="600" placeholder="Write a comment..."></textarea>
+                            <div style="margin-top:8px;">
+                                <button type="submit" class="post-btn">Comment</button>
+                            </div>
+                        </form>
+
+                        {% for comment in post.comments.all %}
+                        <div class="comment-item">
+                            <p style="margin:0; font-size:0.88rem;"><strong>{{ comment.user.get_full_name|default:comment.user.username }}</strong> <span style="color:#777;">{{ comment.created_at|date:"d M Y, H:i" }}</span>{% if comment.updated_at != comment.created_at %} <span style="color:#666;">· edited {{ comment.updated_at|timesince }} ago</span>{% endif %}</p>
+                            <p>{{ comment.text }}</p>
+                            {% if request.user == comment.user %}
+                            <details style="margin-top:6px;">
+                                <summary style="cursor:pointer; color:#888; font-size:0.85rem;">Edit comment</summary>
+                                <form method="post" action="{% url 'post_comment_edit' comment.pk %}" style="margin-top:6px;">
                                     {% csrf_token %}
-                                    <button type="submit" class="post-btn post-btn-secondary">Restore post</button>
+                                    <textarea class="post-comment-input" name="text" rows="2" maxlength="600">{{ comment.text }}</textarea>
+                                    <div style="margin-top:8px;">
+                                        <button type="submit" class="post-btn post-btn-secondary">Save comment</button>
+                                    </div>
+                                </form>
+                            </details>
+                            <form method="post" action="{% url 'post_comment_delete' comment.pk %}" onsubmit="return confirm('Delete this comment?');" style="margin-top:8px;">
+                                {% csrf_token %}
+                                <button type="submit" class="post-btn post-btn-danger">Move comment to trash</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <p style="color:#777; margin-top:10px;">No comments yet.</p>
+                        {% endfor %}
+                    </article>
+                {% empty %}
+                    <div class="post-card">
+                        <p style="margin:0; color:#aaa;">No posts yet. Be the first to post something.</p>
+                    </div>
+                {% endfor %}
+
+                {% if deleted_posts or deleted_comments %}
+                    <div id="trash" class="post-card" style="margin-top:20px;"
+                    >
+                        <h3 style="margin:0 0 8px; color:#ddd;">Trash</h3>
+                        <p style="margin:0 0 12px; color:#888;">
+                            Items here are hidden from the feed until restored.
+                        </p>
+
+                        {% if deleted_posts %}
+                            <h4 style="margin:8px 0; color:#bbb;">Deleted posts</h4>
+                            {% for post in deleted_posts %}
+                                <div class="comment-item" style="border-top:1px solid #333;">
+                                    <p style="margin:0 0 6px; color:#888;">Deleted {{ post.deleted_at|timesince }} ago</p>
+                                    <p style="margin:0 0 8px;">{{ post.text|truncatechars:180 }}</p>
+                                    {% if post.image %}
+                                    <div class="post-media">
+                                        <img src="{{ post.image.url }}" 
+                                            alt="Deleted post image" 
+                                            data-media-modal="image"
+                                            tabindex="0" 
+                                            role="button"
+                                        >
+                                    </div>
+                                    {% endif %}
+                                    <form method="post" action="{% url 'post_restore' post.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="post-btn post-btn-secondary">Restore post</button>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if deleted_comments %}
+                            <h4 style="margin:14px 0 8px; color:#bbb;">Deleted comments</h4>
+                            {% for comment in deleted_comments %}
+                            <div class="comment-item" style="border-top:1px solid #333;">
+                                <p style="margin:0 0 6px; color:#888;">On {{ comment.post.user.get_full_name|default:comment.post.user.username }}'s post · deleted {{ comment.deleted_at|timesince }} ago</p>
+                                <p style="margin:0 0 8px;">{{ comment.text|truncatechars:160 }}</p>
+                                <form method="post" action="{% url 'post_comment_restore' comment.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="post-btn post-btn-secondary">Restore comment</button>
                                 </form>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if deleted_comments %}
-                        <h4 style="margin:14px 0 8px; color:#bbb;">Deleted comments</h4>
-                        {% for comment in deleted_comments %}
-                        <div class="comment-item" style="border-top:1px solid #333;">
-                            <p style="margin:0 0 6px; color:#888;">On {{ comment.post.user.get_full_name|default:comment.post.user.username }}'s post · deleted {{ comment.deleted_at|timesince }} ago</p>
-                            <p style="margin:0 0 8px;">{{ comment.text|truncatechars:160 }}</p>
-                            <form method="post" action="{% url 'post_comment_restore' comment.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="post-btn post-btn-secondary">Restore comment</button>
-                            </form>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-(function () {
-    var MAX_BYTES = 5 * 1024 * 1024;
+    <script>
+        (function () {
+            var MAX_BYTES = 5 * 1024 * 1024;
 
-    function attachPreview(inputId, previewId) {
-        var input = document.getElementById(inputId);
-        var preview = document.getElementById(previewId);
-        if (!input || !preview) return;
+            function attachPreview(inputId, previewId) {
+                var input = document.getElementById(inputId);
+                var preview = document.getElementById(previewId);
+                if (!input || !preview) return;
 
-        input.addEventListener('change', function () {
-            preview.innerHTML = '';
-            preview.style.display = 'none';
+                input.addEventListener('change', function () {
+                    preview.innerHTML = '';
+                    preview.style.display = 'none';
 
-            var file = input.files && input.files[0];
-            if (!file) return;
+                    var file = input.files && input.files[0];
+                    if (!file) return;
 
-            if (!file.type || file.type.indexOf('image/') !== 0) {
-                alert('Please choose a valid image file.');
-                input.value = '';
-                return;
+                    if (!file.type || file.type.indexOf('image/') !== 0) {
+                        alert('Please choose a valid image file.');
+                        input.value = '';
+                        return;
+                    }
+                    if (file.size > MAX_BYTES) {
+                        alert('Image is too large. Maximum size is 5MB.');
+                        input.value = '';
+                        return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Selected image preview';
+                        preview.appendChild(img);
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                });
             }
-            if (file.size > MAX_BYTES) {
-                alert('Image is too large. Maximum size is 5MB.');
-                input.value = '';
-                return;
+
+            attachPreview('id_post_image', 'id_post_create_preview');
+            {% for post in posts %}
+            attachPreview('id_post_image_edit_{{ post.pk }}', 'id_post_edit_preview_{{ post.pk }}');
+            {% endfor %}
+
+            var modal = document.getElementById('postsMediaModal');
+            var modalBody = document.getElementById('postsMediaModalBody');
+            var closeBtn = document.getElementById('postsMediaClose');
+
+            if (modal && modalBody && closeBtn) {
+                var lastTrigger = null;
+
+                function openModal(kind, src, alt, trigger) {
+                    if (!src) return;
+                    if (modal.open) return;
+                    lastTrigger = trigger || null;
+                    modalBody.innerHTML = '';
+
+                    if (kind === 'video') {
+                        var video = document.createElement('video');
+                        video.src = src;
+                        video.controls = true;
+                        video.autoplay = true;
+                        modalBody.appendChild(video);
+                    } else {
+                        var img = document.createElement('img');
+                        img.src = src;
+                        img.alt = alt || 'Preview';
+                        modalBody.appendChild(img);
+                    }
+
+                    modal.showModal();
+                    closeBtn.focus();
+                }
+
+                function closeModal() {
+                    var video = modalBody.querySelector('video');
+                    if (video) video.pause();
+                    modal.close();
+                    modalBody.innerHTML = '';
+                    if (lastTrigger) lastTrigger.focus();
+                }
+
+                document.addEventListener('click', function (e) {
+                    if (!(e.target instanceof Element)) return;
+
+                    var img = e.target.closest('img[data-media-modal="image"]');
+                    if (img) { openModal('image', img.currentSrc || img.src, img.alt, img); return; }
+
+                    var vid = e.target.closest('[data-media-modal="video"]');
+                    if (vid) {
+                        var src = vid.currentSrc || vid.getAttribute('src') || vid.querySelector('source')?.getAttribute('src');
+                        if (src) openModal('video', src, null, vid);
+                    }
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key !== 'Enter' && e.key !== ' ') return;
+                    var trigger = e.target.closest('img[data-media-modal="image"], [data-media-modal="video"]');
+                    if (!trigger) return;
+                    e.preventDefault();
+                    trigger.click();  // reuse the click handler above rather than duplicating logic
+                });
+
+                closeBtn.addEventListener('click', closeModal);
+                modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+                modal.addEventListener('close', function () {
+                    var video = modalBody.querySelector('video');
+                    if (video) video.pause();
+                    modalBody.innerHTML = '';
+                    if (lastTrigger) lastTrigger.focus();
+                });
             }
-
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var img = document.createElement('img');
-                img.src = e.target.result;
-                img.alt = 'Selected image preview';
-                preview.appendChild(img);
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    attachPreview('id_post_image', 'id_post_create_preview');
-    {% for post in posts %}
-    attachPreview('id_post_image_edit_{{ post.pk }}', 'id_post_edit_preview_{{ post.pk }}');
-    {% endfor %}
-})();
-</script>
+        })();
+    </script>
 {% endblock %}

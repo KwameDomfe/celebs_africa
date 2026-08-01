@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    Post Detail | CelebsAfrica
+{% endblock %}
+
+{% block content %}
+
+    {% if post.image %}
+        <img src="{{ post.image.url }}" 
+            alt="{{ post.title }}" 
+            data-media-modal="image"
+            tabindex="0"
+            role="button"
+            style="cursor: zoom-in;"
+        >
+    {% endif %}
+
+    {% if post.video %}
+        <video controls preload="metadata" 
+            data-media-modal="video"
+            tabindex="0"
+            role="button"   
+            style="cursor: pointer;"
+        >
+            <source src="{{ post.video.url }}">
+        </video>
+    {% endif %}
+
+{% endblock %}

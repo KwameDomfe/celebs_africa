@@ -1,0 +1,108 @@
+<style>
+    .posts-media-modal {
+        border: none;
+        background: transparent;
+        padding: 20px;
+        max-width: 95vw;
+        max-height: 92vh;
+    }
+    .posts-media-modal::backdrop {
+        background: rgba(0, 0, 0, 0.88);
+    }
+    .posts-media-modal img,
+    .posts-media-modal video {
+        max-width: 95vw;
+        max-height: 92vh;
+        border-radius: 8px;
+        border: 1px solid #333;
+        display: block;
+    }
+    .posts-media-close {
+        position: fixed;
+        top: 14px;
+        right: 18px;
+        font-size: 32px;
+        color: #fff;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+</style>
+
+<dialog id="postsMediaModal" class="posts-media-modal" aria-label="Media preview">
+    <button id="postsMediaClose" type="button" class="posts-media-close" aria-label="Close">×</button>
+    <div id="postsMediaModalBody"></div>
+</dialog>
+
+<script>
+    (function () {
+        var modal = document.getElementById('postsMediaModal');
+        var modalBody = document.getElementById('postsMediaModalBody');
+        var closeBtn = document.getElementById('postsMediaClose');
+
+        if (!modal || !modalBody || !closeBtn) return;
+
+        var lastTrigger = null;
+
+        function openModal(kind, src, alt, trigger) {
+            if (!src) return;
+            if (modal.open) return;
+            lastTrigger = trigger || null;
+            modalBody.innerHTML = '';
+
+            if (kind === 'video') {
+                var video = document.createElement('video');
+                video.src = src;
+                video.controls = true;
+                video.autoplay = true;
+                modalBody.appendChild(video);
+            } else {
+                var img = document.createElement('img');
+                img.src = src;
+                img.alt = alt || 'Preview';
+                modalBody.appendChild(img);
+            }
+
+            modal.showModal();
+            closeBtn.focus();
+        }
+
+        function closeModal() {
+            var video = modalBody.querySelector('video');
+            if (video) video.pause();
+            modal.close();
+            modalBody.innerHTML = '';
+            if (lastTrigger) lastTrigger.focus();
+        }
+
+        document.addEventListener('click', function (e) {
+            if (!(e.target instanceof Element)) return;
+
+            var img = e.target.closest('img[data-media-modal="image"]');
+            if (img) { openModal('image', img.currentSrc || img.src, img.alt, img); return; }
+
+            var vid = e.target.closest('[data-media-modal="video"]');
+            if (vid) {
+                var src = vid.currentSrc || vid.getAttribute('src') || vid.querySelector('source')?.getAttribute('src');
+                if (src) openModal('video', src, null, vid);
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var trigger = e.target.closest('img[data-media-modal="image"], [data-media-modal="video"]');
+            if (!trigger) return;
+            e.preventDefault();
+            trigger.click();
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+        modal.addEventListener('close', function () {
+            var video = modalBody.querySelector('video');
+            if (video) video.pause();
+            modalBody.innerHTML = '';
+            if (lastTrigger) lastTrigger.focus();
+        });
+    })();
+</script>

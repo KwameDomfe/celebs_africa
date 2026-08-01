@@ -93,7 +93,7 @@
         }
         @media (min-width: 769px) { .nav-close { display: none; } }
     </style>
-        <script type="application/ld+json">
+    <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
@@ -105,8 +105,8 @@
                 "https://facebook.com/celebsafrica"
             ]
         }
-        </script>
-        <script type="application/ld+json">
+    </script>
+    <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebSite",
@@ -117,8 +117,9 @@
                 "query-input": "required name=search_term_string"
             }
         }
-        </script>
-        {% block structured_data %}{% endblock %}
+    </script>
+        {% block structured_data %}
+        {% endblock %}
 </head>
 <body class="vh-100 flex flex-column justify-between">
     <header id="mainHeader" 
@@ -368,6 +369,7 @@
             </a>
         </p>
     </footer>
+
     <script>
         // Hamburger opens the body-level overlay
         const menuToggle = document.getElementById('menuToggle');
@@ -436,5 +438,6 @@
             });
         })();
     </script>
+    {% include 'partials/media_modal.html' %}
 </body>
 </html>
